@@ -33,6 +33,10 @@ Create your own skin at http://designer.videojs.com
 @slider-background-color: #333333;
 @slider-background-alpha: 0.9; // 1.0 = 100% opacity, 0.0 = 0% opacity
 
+// The slider handle is used for both the volume control and progress bar.
+// Setting @slider-handle to true will enable the slider.
+@show-slider-handle: true;
+
 // The "Big Play Button" is the play button that shows before the video plays.
 // To center it set the align values to center and middle. The typical location
 // of the button is the center, but there is trend towards moving it to a corner
@@ -128,7 +132,8 @@ The control icons are from a custom font. Each icon corresponds to a character
   top: 0;
 }
 
-.vjs-default-skin .vjs-slider-handle:before {
+/* Mixin for slider-handle styles so we can use a guard. */
+.slider-handle (@icon) when (@show-slider-handle) {
   content: @square-icon;
   font-family: VideoJS;
   font-size: 1em;
@@ -140,8 +145,17 @@ The control icons are from a custom font. Each icon corresponds to a character
   top: 0;
   left: 0;
 
-  /* Rotate the square icon to make a diamond *///
+  /* Rotate the square icon to make a diamond */
   .transform(rotate(-45deg));
+}
+
+/* Always under the slider-handle, but only shown if slider-handle is false */
+.default-slider-handle () when not (@show-slider-handle) {
+  background-color: darken(@slider-bar-color, 20%);
+}
+
+.vjs-default-skin .vjs-slider-handle:before {
+  .slider-handle (@square-icon);
 }
 
 /* Control Bar
@@ -311,6 +325,7 @@ fonts to show/hide properly.
 .vjs-default-skin .vjs-volume-bar .vjs-volume-handle {
   width: 0.5em;
   height: 0.5em;
+  .default-slider-handle;
 }
 
 .vjs-default-skin .vjs-volume-handle:before {
@@ -344,6 +359,11 @@ fonts to show/hide properly.
   .transition(all 0.4s);
 }
 
+.vjs-default-skin .vjs-seek-handle {
+  opacity: 0;
+  .transition(opacity 0.4s ease-in-out);
+}
+
 /* On hover, make the progress bar grow to something that's more clickable.
     This simply changes the overall font for the progress bar, and this
     updates both the em-based widths and heights, as wells as the icon font */
@@ -353,6 +373,16 @@ fonts to show/hide properly.
   /* Even though we're not changing the top/height, we need to include them in
       the transition so they're handled correctly. */
   .transition(all 0.2s);
+}
+
+/* There are weird issues with sizing the handle down and seeing progress
+    bar behind it, so it looks better hidden when samll. */
+.vjs-default-skin:hover .vjs-seek-handle {
+  opacity: 1;
+
+  /* Looks a little better if this is a tad slower than the rest
+      of the progress bar. */
+  .transition(opacity 0.3s ease-in-out);
 }
 
 /* Box containing play and load progresses. Also acts as seek scrubber. */
@@ -394,6 +424,7 @@ fonts to show/hide properly.
 .vjs-default-skin .vjs-seek-handle {
   width: 1.5em;
   height: 100%;
+  .default-slider-handle;
 }
 
 .vjs-default-skin .vjs-seek-handle:before {
