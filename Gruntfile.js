@@ -396,6 +396,13 @@ module.exports = function(grunt) {
     // grunt.file.copy('src/css/video-js.png', 'build/files/video-js.png');
     grunt.file.copy('node_modules/videojs-swf/dist/video-js.swf', 'build/files/video-js.swf');
 
+    grunt.file.copy('node_modules/videojs-font/dist/font/VideoJS.eot', 'src/css/font/VideoJS.eot');
+    grunt.file.copy('node_modules/videojs-font/dist/font/VideoJS.svg', 'src/css/font/VideoJS.svg');
+    grunt.file.copy('node_modules/videojs-font/dist/font/VideoJS.ttf', 'src/css/font/VideoJS.ttf');
+    grunt.file.copy('node_modules/videojs-font/dist/font/VideoJS.woff', 'src/css/font/VideoJS.woff');
+
+    grunt.file.copy('node_modules/videojs-font/dist/VideoJS.less', 'src/css/videojs-font.less');
+
     // Inject version number into css file
     var css = grunt.file.read('build/files/video-js.css');
     css = css.replace(/GENERATED_AT_BUILD/g, version.full);
