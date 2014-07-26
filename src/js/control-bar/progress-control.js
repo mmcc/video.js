@@ -68,7 +68,10 @@ vjs.SeekBar.prototype.updateARIAAttributes = function(){
 };
 
 vjs.SeekBar.prototype.getPercent = function(){
-  return this.player_.currentTime() / this.player_.duration();
+  if (this.player_.ended()) { return 1; }
+
+  // There are weird instances, such as odd HLS streams, where currentTime can exceed duration
+  return Math.min(this.player_.currentTime() / this.player_.duration(), 1);
 };
 
 vjs.SeekBar.prototype.onMouseDown = function(event){
