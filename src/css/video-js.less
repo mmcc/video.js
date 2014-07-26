@@ -376,11 +376,26 @@ fonts to show/hide properly.
 
   /* Shrink the bar slower than it grows. *///
   .transition(all 0.4s);
+
+  /* The seek handle gets too small to be legible anyway, but positioning also
+     starts to get unreliable at the small size. This just kills it entirely
+     when small. *///
+  .vjs-seek-handle {
+    font-size: 0;
+    .transition(all 0.4s);
+  }
 }
 
 /* On hover, make the progress bar grow to something that's more clickable.
     This simply changes the overall font for the progress bar, and this
-    updates both the em-based widths and heights, as wells as the icon font */
+    updates both the em-based widths and heights, as wells as the icon font.
+    Since the handle is coming from a smaller font size, we want to make sure
+    it "beats" everything else in the transition. */
+.vjs-default-skin:hover .vjs-seek-handle {
+  font-size: .9em;
+  .transition(all 0s);
+}
+
 .vjs-default-skin:hover .vjs-progress-control {
   font-size: .9em;
 
