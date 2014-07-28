@@ -792,7 +792,7 @@ vjs.Player.prototype.buffered = function(){
  * @return {Number} A decimal between 0 and 1 representing the percent
  */
 vjs.Player.prototype.bufferedPercent = function(){
-  return (this.duration()) ? this.buffered().end(0) / this.duration() : 0;
+  return (this.duration()) ? Math.min(this.buffered().end(0) / this.duration(), 1) : 0;
 };
 
 /**
