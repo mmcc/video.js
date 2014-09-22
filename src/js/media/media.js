@@ -18,6 +18,16 @@ vjs.MediaTechController = vjs.Component.extend({
     options.reportTouchActivity = false;
     vjs.Component.call(this, player, options, ready);
 
+    // Manually track progress in cases where the browser/flash player doesn't report it.
+    if (!this['featuresProgressEvents']) {
+      this.manualProgressOn();
+    }
+
+    // Manually track timeudpates in cases where the browser/flash player doesn't report it.
+    if (!this['featuresTimeupdateEvents']) {
+      this.manualTimeUpdatesOn();
+    }
+
     this.initControlsListeners();
   }
 });
@@ -61,6 +71,17 @@ vjs.MediaTechController.prototype.initControlsListeners = function(){
   this.ready(activateControls);
   player.on('controlsenabled', activateControls);
   player.on('controlsdisabled', deactivateControls);
+
+  // if we're loading the playback object after it has started loading or playing the
+  // video (often with autoplay on) then the loadstart event has already fired and we
+  // need to fire it manually because many things rely on it.
+  // Long term we might consider how we would do this for other events like 'canplay'
+  // that may also have fired.
+  this.ready(function(){
+    if (this.networkState && this.networkState() > 0) {
+      this.player().trigger('loadstart');
+    }
+  });
 };
 
 vjs.MediaTechController.prototype.addControlsListeners = function(){
@@ -76,8 +97,6 @@ vjs.MediaTechController.prototype.addControlsListeners = function(){
   // so we'll check if the controls were already showing before reporting user
   // activity
   this.on('touchstart', function(event) {
-    // Stop the mouse events from also happening
-    event.preventDefault();
     userWasActive = this.player_.userActive();
   });
 
@@ -85,6 +104,11 @@ vjs.MediaTechController.prototype.addControlsListeners = function(){
     if (userWasActive){
       this.player().reportUserActivity();
     }
+  });
+
+  this.on('touchend', function(event) {
+    // Stop the mouse events from also happening
+    event.preventDefault();
   });
 
   // Turn on component tap events
@@ -139,6 +163,96 @@ vjs.MediaTechController.prototype.onTap = function(){
   this.player().userActive(!this.player().userActive());
 };
 
+/* Fallbacks for unsupported event types
+================================================================================ */
+// Manually trigger progress events based on changes to the buffered amount
+// Many flash players and older HTML5 browsers don't send progress or progress-like events
+vjs.MediaTechController.prototype.manualProgressOn = function(){
+  this.manualProgress = true;
+
+  // Trigger progress watching when a source begins loading
+  this.trackProgress();
+};
+
+vjs.MediaTechController.prototype.manualProgressOff = function(){
+  this.manualProgress = false;
+  this.stopTrackingProgress();
+};
+
+vjs.MediaTechController.prototype.trackProgress = function(){
+
+  this.progressInterval = setInterval(vjs.bind(this, function(){
+    // Don't trigger unless buffered amount is greater than last time
+
+    var bufferedPercent = this.player().bufferedPercent();
+
+    if (this.bufferedPercent_ != bufferedPercent) {
+      this.player().trigger('progress');
+    }
+
+    this.bufferedPercent_ = bufferedPercent;
+
+    if (bufferedPercent === 1) {
+      this.stopTrackingProgress();
+    }
+  }), 500);
+};
+vjs.MediaTechController.prototype.stopTrackingProgress = function(){ clearInterval(this.progressInterval); };
+
+/*! Time Tracking -------------------------------------------------------------- */
+vjs.MediaTechController.prototype.manualTimeUpdatesOn = function(){
+  this.manualTimeUpdates = true;
+
+  this.player().on('play', vjs.bind(this, this.trackCurrentTime));
+  this.player().on('pause', vjs.bind(this, this.stopTrackingCurrentTime));
+  // timeupdate is also called by .currentTime whenever current time is set
+
+  // Watch for native timeupdate event
+  this.one('timeupdate', function(){
+    // Update known progress support for this playback technology
+    this['featuresTimeupdateEvents'] = true;
+    // Turn off manual progress tracking
+    this.manualTimeUpdatesOff();
+  });
+};
+
+vjs.MediaTechController.prototype.manualTimeUpdatesOff = function(){
+  this.manualTimeUpdates = false;
+  this.stopTrackingCurrentTime();
+  this.off('play', this.trackCurrentTime);
+  this.off('pause', this.stopTrackingCurrentTime);
+};
+
+vjs.MediaTechController.prototype.trackCurrentTime = function(){
+  if (this.currentTimeInterval) { this.stopTrackingCurrentTime(); }
+  this.currentTimeInterval = setInterval(vjs.bind(this, function(){
+    this.player().trigger('timeupdate');
+  }), 250); // 42 = 24 fps // 250 is what Webkit uses // FF uses 15
+};
+
+// Turn off play progress tracking (when paused or dragging)
+vjs.MediaTechController.prototype.stopTrackingCurrentTime = function(){
+  clearInterval(this.currentTimeInterval);
+
+  // #1002 - if the video ends right before the next timeupdate would happen,
+  // the progress bar won't make it all the way to the end
+  this.player().trigger('timeupdate');
+};
+
+vjs.MediaTechController.prototype.dispose = function() {
+  // Turn off any manual progress or timeupdate tracking
+  if (this.manualProgress) { this.manualProgressOff(); }
+
+  if (this.manualTimeUpdates) { this.manualTimeUpdatesOff(); }
+
+  vjs.Component.prototype.dispose.call(this);
+};
+
+vjs.MediaTechController.prototype.setCurrentTime = function() {
+  // improve the accuracy of manual timeupdates
+  if (this.manualTimeUpdates) { this.player().trigger('timeupdate'); }
+};
+
 /**
  * Provide a default setPoster method for techs
  *
@@ -147,35 +261,15 @@ vjs.MediaTechController.prototype.onTap = function(){
  */
 vjs.MediaTechController.prototype.setPoster = function(){};
 
-vjs.MediaTechController.prototype.features = {
-  'volumeControl': true,
+vjs.MediaTechController.prototype['featuresVolumeControl'] = true;
 
-  // Resizing plugins using request fullscreen reloads the plugin
-  'fullscreenResize': false,
-  'playbackRate': false,
+// Resizing plugins using request fullscreen reloads the plugin
+vjs.MediaTechController.prototype['featuresFullscreenResize'] = false;
+vjs.MediaTechController.prototype['featuresPlaybackRate'] = false;
 
-  // Optional events that we can manually mimic with timers
-  // currently not triggered by video-js-swf
-  'progressEvents': false,
-  'timeupdateEvents': false
-};
+// Optional events that we can manually mimic with timers
+// currently not triggered by video-js-swf
+vjs.MediaTechController.prototype['featuresProgressEvents'] = false;
+vjs.MediaTechController.prototype['featuresTimeupdateEvents'] = false;
 
 vjs.media = {};
-
-/**
- * List of default API methods for any MediaTechController
- * @type {String}
- */
-vjs.media.ApiMethods = 'play,pause,paused,currentTime,setCurrentTime,duration,buffered,volume,setVolume,muted,setMuted,width,height,supportsFullScreen,enterFullScreen,src,load,currentSrc,preload,setPreload,autoplay,setAutoplay,loop,setLoop,error,networkState,readyState,seeking,initialTime,startOffsetTime,played,seekable,ended,videoTracks,audioTracks,videoWidth,videoHeight,textTracks,defaultPlaybackRate,playbackRate,mediaGroup,controller,controls,defaultMuted'.split(',');
-// Create placeholder methods for each that warn when a method isn't supported by the current playback technology
-
-function createMethod(methodName){
-  return function(){
-    throw new Error('The "'+methodName+'" method is not available on the playback technology\'s API');
-  };
-}
-
-for (var i = vjs.media.ApiMethods.length - 1; i >= 0; i--) {
-  var methodName = vjs.media.ApiMethods[i];
-  vjs.MediaTechController.prototype[vjs.media.ApiMethods[i]] = createMethod(methodName);
-}

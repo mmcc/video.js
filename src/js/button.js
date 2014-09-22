@@ -45,7 +45,7 @@ vjs.Button.prototype.createEl = function(type, props){
 
     this.controlText_ = vjs.createEl('span', {
       className: 'vjs-control-text',
-      innerHTML: this.buttonText || 'Need Text'
+      innerHTML: this.localize(this.buttonText) || 'Need Text'
     });
 
     this.contentEl_.appendChild(this.controlText_);
@@ -65,7 +65,7 @@ vjs.Button.prototype.onClick = function(){};
 
   // Focus - Add keyboard functionality to element
 vjs.Button.prototype.onFocus = function(){
-  vjs.on(document, 'keyup', vjs.bind(this, this.onKeyPress));
+  vjs.on(document, 'keydown', vjs.bind(this, this.onKeyPress));
 };
 
   // KeyPress (document level) - Trigger click when keys are pressed
@@ -79,5 +79,5 @@ vjs.Button.prototype.onKeyPress = function(event){
 
 // Blur - Remove keyboard triggers
 vjs.Button.prototype.onBlur = function(){
-  vjs.off(document, 'keyup', vjs.bind(this, this.onKeyPress));
+  vjs.off(document, 'keydown', vjs.bind(this, this.onKeyPress));
 };

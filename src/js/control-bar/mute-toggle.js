@@ -13,11 +13,11 @@ vjs.MuteToggle = vjs.Button.extend({
     player.on('volumechange', vjs.bind(this, this.update));
 
     // hide mute toggle if the current tech doesn't support volume control
-    if (player.tech && player.tech.features && player.tech.features['volumeControl'] === false) {
+    if (player.tech && player.tech['featuresVolumeControl'] === false) {
       this.addClass('vjs-hidden');
     }
     player.on('loadstart', vjs.bind(this, function(){
-      if (player.tech.features && player.tech.features['volumeControl'] === false) {
+      if (player.tech['featuresVolumeControl'] === false) {
         this.addClass('vjs-hidden');
       } else {
         this.removeClass('vjs-hidden');
@@ -29,7 +29,7 @@ vjs.MuteToggle = vjs.Button.extend({
 vjs.MuteToggle.prototype.createEl = function(){
   return vjs.Button.prototype.createEl.call(this, 'div', {
     className: 'vjs-mute-control vjs-control',
-    innerHTML: '<div><span class="vjs-control-text">Mute</span></div>'
+    innerHTML: '<div><span class="vjs-control-text">' + this.localize('Mute') + '</span></div>'
   });
 };
 
@@ -53,12 +53,12 @@ vjs.MuteToggle.prototype.update = function(){
   // This causes unnecessary and confusing information for screen reader users.
   // This check is needed because this function gets called every time the volume level is changed.
   if(this.player_.muted()){
-      if(this.el_.children[0].children[0].innerHTML!='Unmute'){
-          this.el_.children[0].children[0].innerHTML = 'Unmute'; // change the button text to "Unmute"
+      if(this.el_.children[0].children[0].innerHTML!=this.localize('Unmute')){
+          this.el_.children[0].children[0].innerHTML = this.localize('Unmute'); // change the button text to "Unmute"
       }
   } else {
-      if(this.el_.children[0].children[0].innerHTML!='Mute'){
-          this.el_.children[0].children[0].innerHTML = 'Mute'; // change the button text to "Mute"
+      if(this.el_.children[0].children[0].innerHTML!=this.localize('Mute')){
+          this.el_.children[0].children[0].innerHTML = this.localize('Mute'); // change the button text to "Mute"
       }
   }
 

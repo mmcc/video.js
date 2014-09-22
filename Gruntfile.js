@@ -1,9 +1,10 @@
 module.exports = function(grunt) {
-  var pkg, s3, semver, version, verParts, uglify;
+  var pkg, s3, semver, version, verParts, uglify, exec;
 
   semver = require('semver');
   pkg = grunt.file.readJSON('package.json');
   uglify = require('uglify-js');
+  exec = require('child_process').exec;
 
   try {
     s3 = grunt.file.readJSON('.s3config.json');
@@ -30,7 +31,6 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: pkg,
-
     build: {
       src: 'src/js/dependencies.js',
       options: {
@@ -144,6 +144,24 @@ module.exports = function(grunt) {
       saucelabs: {
         browsers: ['chrome_sl']
       },
+      chrome_sl: {
+        browsers: ['chrome_sl']
+      },
+      firefox_sl: {
+        browsers: ['firefox_sl']
+      },
+      safari_sl: {
+        browsers: ['safari_sl']
+      },
+      ipad_sl: {
+        browsers: ['ipad_sl']
+      },
+      android_sl: {
+        browsers: ['android_sl']
+      },
+      ie_sl: {
+        browsers: ['ie_sl']
+      },
 
       // these are run locally on local browsers
       dev: {
@@ -237,6 +255,13 @@ module.exports = function(grunt) {
         }
       }
     },
+    vjslanguages: {
+      defaults: {
+        files: {
+          'build/files/lang': ['lang/*.json']
+        }
+      }
+    },
     zip: {
       dist: {
         router: function (filepath) {
@@ -291,6 +316,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-videojs-languages');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-qunit');
@@ -312,11 +338,11 @@ module.exports = function(grunt) {
   // grunt.loadTasks('./docs/tasks/');
   // grunt.loadTasks('../videojs-doc-generator/tasks/');
 
-  grunt.registerTask('pretask', ['jshint', 'less', 'build', 'minify', 'usebanner']);
+  grunt.registerTask('pretask', ['jshint', 'less', 'vjslanguages', 'build', 'minify', 'usebanner']);
   // Default task.
   grunt.registerTask('default', ['pretask', 'dist']);
   // Development watch task
-  grunt.registerTask('dev', ['jshint', 'less', 'build', 'qunit:source']);
+  grunt.registerTask('dev', ['jshint', 'less', 'vjslanguages', 'build', 'qunit:source']);
   grunt.registerTask('test-qunit', ['pretask', 'qunit']);
 
   // The test task will run `karma:saucelabs` when running in travis,
@@ -336,7 +362,16 @@ module.exports = function(grunt) {
     if (process.env.TRAVIS_PULL_REQUEST !== 'false') {
       grunt.task.run(['karma:phantomjs', 'karma:minified_phantomjs', 'karma:minified_api_phantomjs']);
     } else if (process.env.TRAVIS) {
-      grunt.task.run(['karma:saucelabs']);
+      grunt.task.run(['karma:phantomjs', 'karma:minified_phantomjs', 'karma:minified_api_phantomjs']);
+      //Disabling saucelabs until we figure out how to make it run reliably.
+      //grunt.task.run([
+        //'karma:chrome_sl',
+        //'karma:firefox_sl',
+        //'karma:safari_sl',
+        //'karma:ipad_sl',
+        //'karma:android_sl',
+        //'karma:ie_sl'
+      //]);
     } else {
       // if we aren't running this in a CI, but running it manually, we can
       // supply arguments to this task. These arguments are either colon (`:`)
@@ -368,15 +403,36 @@ module.exports = function(grunt) {
         return 'karma:' + task;
       });
 
-
       grunt.task.run(tasks);
     }
   });
 
-  var fs = require('fs'),
-      gzip = require('zlib').gzip;
+  grunt.registerTask('saucelabs', function() {
+    var done = this.async();
+
+    if (this.args[0] == 'connect') {
+      exec('curl https://gist.githubusercontent.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash',
+        function(error, stdout, stderr) {
+          if (error) {
+            grunt.log.error(error);
+            return done();
+          }
+
+          grunt.verbose.error(stderr.toString());
+          grunt.verbose.writeln(stdout.toString());
+          grunt.task.run(['karma:saucelabs']);
+          done();
+      });
+    } else {
+      grunt.task.run(['karma:saucelabs']);
+      done();
+    }
+  });
+
+  var fs = require('fs');
 
   grunt.registerMultiTask('build', 'Building Source', function(){
+
     // Fix windows file path delimiter issue
     var i = sourceFiles.length;
     while (i--) {
@@ -390,6 +446,7 @@ module.exports = function(grunt) {
     });
     // Replace CDN version ref in js. Use major/minor version.
     combined = combined.replace(/GENERATED_CDN_VSN/g, version.majorMinor);
+
     grunt.file.write('build/files/combined.video.js', combined);
 
     // Copy over other files
@@ -493,6 +550,15 @@ module.exports = function(grunt) {
       // Block .DS_Store files
       if ('filename'.substring(0,1) !== '.') {
         grunt.file.copy(absdir, 'dist/video-js/font/' + filename);
+      }
+    });
+
+    // Copy over language files
+    grunt.file.recurse('build/files/lang', function(absdir, rootdir, subdir, filename) {
+      // Block .DS_Store files
+      if ('filename'.substring(0,1) !== '.') {
+        grunt.file.copy(absdir, 'dist/cdn/lang/' + filename);
+        grunt.file.copy(absdir, 'dist/video-js/lang/' + filename);
       }
     });
 

@@ -113,10 +113,10 @@ test('should read tag attributes from elements, including HTML5 in all browsers'
 
   document.getElementById('qunit-fixture').innerHTML += tags;
 
-  var vid1Vals = vjs.getAttributeValues(document.getElementById('vid1'));
-  var vid2Vals = vjs.getAttributeValues(document.getElementById('vid2'));
-  var sourceVals = vjs.getAttributeValues(document.getElementById('source'));
-  var trackVals = vjs.getAttributeValues(document.getElementById('track'));
+  var vid1Vals = vjs.getElementAttributes(document.getElementById('vid1'));
+  var vid2Vals = vjs.getElementAttributes(document.getElementById('vid2'));
+  var sourceVals = vjs.getElementAttributes(document.getElementById('source'));
+  var trackVals = vjs.getElementAttributes(document.getElementById('track'));
 
   // was using deepEqual, but ie8 would send all properties as attributes
 
@@ -150,6 +150,19 @@ test('should read tag attributes from elements, including HTML5 in all browsers'
   equal(trackVals['src'], 'http://google.com');
   equal(trackVals['srclang'], 'en');
   equal(trackVals['title'], 'test');
+});
+
+test('should set element attributes from object', function(){
+  var el, vid1Vals;
+
+  el = document.createElement('div');
+  el.id = 'el1';
+
+  vjs.setElementAttributes(el, { controls: true, 'data-test': 'asdf' });
+
+  equal(el.getAttribute('id'), 'el1');
+  equal(el.getAttribute('controls'), '');
+  equal(el.getAttribute('data-test'), 'asdf');
 });
 
 test('should get the right style values for an element', function(){
@@ -281,54 +294,74 @@ test('vjs.findPosition should find top and left position', function() {
 
 // LOG TESTS
 test('should confirm logging functions work', function() {
-  var console = window['console'];
-  var origLog = console.log;
-  var origWarn = console.warn;
-  var origError = console.error;
+  var console, log, error, warn, origConsole, origLog, origWarn, origError;
 
+  origConsole = window['console'];
+  // replace the native console for testing
   // in ie8 console.log is apparently not a 'function' so sinon chokes on it
   // https://github.com/cjohansen/Sinon.JS/issues/386
-  // instead we'll temporarily replace them with functions
-  if (typeof origLog === 'object') {
-    console.log = function(){};
-    console.warn = function(){};
-    console.error = function(){};
-  }
+  // instead we'll temporarily replace them with no-op functions
+  console = window['console'] = {
+    log: function(){},
+    warn: function(){},
+    error: function(){}
+  };
 
   // stub the global log functions
-  var log = sinon.stub(console, 'log');
-  var error = sinon.stub(console, 'error');
-  var warn = sinon.stub(console, 'warn');
+  log = sinon.stub(console, 'log');
+  error = sinon.stub(console, 'error');
+  warn = sinon.stub(console, 'warn');
 
-  vjs.log('asdf', 'fdsa');
+  vjs.log('log1', 'log2');
+  vjs.log.warn('warn1', 'warn2');
+  vjs.log.error('error1', 'error2');
+
   ok(log.called, 'log was called');
   equal(log.firstCall.args[0], 'VIDEOJS:');
-  equal(log.firstCall.args[1], 'asdf');
-  equal(log.firstCall.args[2], 'fdsa');
+  equal(log.firstCall.args[1], 'log1');
+  equal(log.firstCall.args[2], 'log2');
 
-  vjs.log.warn('asdf', 'fdsa');
   ok(warn.called, 'warn was called');
   equal(warn.firstCall.args[0], 'VIDEOJS:');
   equal(warn.firstCall.args[1], 'WARN:');
-  equal(warn.firstCall.args[2], 'asdf');
-  equal(warn.firstCall.args[3], 'fdsa');
+  equal(warn.firstCall.args[2], 'warn1');
+  equal(warn.firstCall.args[3], 'warn2');
 
-  vjs.log.error('asdf', 'fdsa');
   ok(error.called, 'error was called');
   equal(error.firstCall.args[0], 'VIDEOJS:');
   equal(error.firstCall.args[1], 'ERROR:');
-  equal(error.firstCall.args[2], 'asdf');
-  equal(error.firstCall.args[3], 'fdsa');
+  equal(error.firstCall.args[2], 'error1');
+  equal(error.firstCall.args[3], 'error2');
+
+  ok(vjs.log.history.length === 3, 'there should be three messages in the log history');
 
   // tear down sinon
   log.restore();
   error.restore();
   warn.restore();
 
-  // restore ie8
-  if (typeof origLog === 'object') {
-    console.log = origLog;
-    console.warn = origWarn;
-    console.error = origError;
-  }
+  // restore the native console
+  window['console'] = origConsole;
+});
+
+test('should loop through each element of an array', function() {
+  expect(10);
+  var a = [1, 2, 3];
+  var sum = 0;
+  var i = 0;
+  var thisArg = {};
+
+  vjs.arr.forEach(a, function(item, iterator, array) {
+    sum += item;
+    deepEqual(array, a, 'The array arg should match the original array');
+    equal(i++, iterator, 'The indexes should match');
+    equal(this, thisArg, 'The context should equal the thisArg');
+  }, thisArg);
+  ok(sum, 6);
+
+  vjs.arr.forEach(a, function(){
+    if (this !== vjs) {
+      ok(false, 'default context should be vjs');
+    }
+  });
 });

@@ -5,7 +5,7 @@
  * var myPlayer = videojs('example_video_1');
  * ```
  *
- * In the follwing example, the `data-setup` attribute tells the Video.js library to create a player instance when the library is ready.
+ * In the following example, the `data-setup` attribute tells the Video.js library to create a player instance when the library is ready.
  *
  * ```html
  * <video id="example_video_1" data-setup='{}' controls>
@@ -35,12 +35,21 @@ vjs.Player = vjs.Component.extend({
     // Make sure tag ID exists
     tag.id = tag.id || 'vjs_video_' + vjs.guid++;
 
+    // Store the tag attributes used to restore html5 element
+    this.tagAttributes = tag && vjs.getElementAttributes(tag);
+
     // Set Options
     // The options argument overrides options set in the video tag
     // which overrides globally set options.
     // This latter part coincides with the load order
     // (tag must exist before Player)
     options = vjs.obj.merge(this.getTagSettings(tag), options);
+
+    // Update Current Language
+    this.language_ = options['language'] || vjs.options['language'];
+
+    // Update Supported Languages
+    this.languages_ = options['languages'] || vjs.options['languages'];
 
     // Cache for video property values.
     this.cache_ = {};
@@ -91,6 +100,41 @@ vjs.Player = vjs.Component.extend({
 });
 
 /**
+ * The players's stored language code
+ *
+ * @type {String}
+ * @private
+ */
+vjs.Player.prototype.language_;
+
+/**
+ * The player's language code
+ * @param  {String} languageCode  The locale string
+ * @return {String}             The locale string when getting
+ * @return {vjs.Player}         self, when setting
+ */
+vjs.Player.prototype.language = function (languageCode) {
+  if (languageCode === undefined) {
+    return this.language_;
+  }
+
+  this.language_ = languageCode;
+  return this;
+};
+
+/**
+ * The players's stored language dictionary
+ *
+ * @type {Object}
+ * @private
+ */
+vjs.Player.prototype.languages_;
+
+vjs.Player.prototype.languages = function(){
+  return this.languages_;
+};
+
+/**
  * Player instance options, surfaced using vjs.options
  * vjs.options = vjs.Player.prototype.options_
  * Make changes in vjs.options, not here.
@@ -119,10 +163,6 @@ vjs.Player.prototype.dispose = function(){
   if (this.tag && this.tag['player']) { this.tag['player'] = null; }
   if (this.el_ && this.el_['player']) { this.el_['player'] = null; }
 
-  // Ensure that tracking progress and time progress will stop and plater deleted
-  this.stopTrackingProgress();
-  this.stopTrackingCurrentTime();
-
   if (this.tech) { this.tech.dispose(); }
 
   // Component dispose
@@ -135,7 +175,7 @@ vjs.Player.prototype.getTagSettings = function(tag){
     'tracks': []
   };
 
-  vjs.obj.merge(options, vjs.getAttributeValues(tag));
+  vjs.obj.merge(options, vjs.getElementAttributes(tag));
 
   // Get tag children settings
   if (tag.hasChildNodes()) {
@@ -148,9 +188,9 @@ vjs.Player.prototype.getTagSettings = function(tag){
       // Change case needed: http://ejohn.org/blog/nodename-case-sensitivity/
       childName = child.nodeName.toLowerCase();
       if (childName === 'source') {
-        options['sources'].push(vjs.getAttributeValues(child));
+        options['sources'].push(vjs.getElementAttributes(child));
       } else if (childName === 'track') {
-        options['tracks'].push(vjs.getAttributeValues(child));
+        options['tracks'].push(vjs.getElementAttributes(child));
       }
     }
   }
@@ -159,8 +199,10 @@ vjs.Player.prototype.getTagSettings = function(tag){
 };
 
 vjs.Player.prototype.createEl = function(){
-  var el = this.el_ = vjs.Component.prototype.createEl.call(this, 'div');
-  var tag = this.tag;
+  var
+    el = this.el_ = vjs.Component.prototype.createEl.call(this, 'div'),
+    tag = this.tag,
+    attrs;
 
   // Remove width/height attrs from tag so CSS can make it 100% width/height
   tag.removeAttribute('width');
@@ -189,10 +231,12 @@ vjs.Player.prototype.createEl = function(){
     }
   }
 
-  // Give video tag ID and class to player div
+  // Copy over all the attributes from the tag, including ID and class
   // ID will now reference player box, not the video tag
-  el.id = tag.id;
-  el.className = tag.className;
+  attrs = vjs.getElementAttributes(tag);
+  vjs.obj.each(attrs, function(attr) {
+    el.setAttribute(attr, attrs[attr]);
+  });
 
   // Update tag id/class for use as HTML5 playback tech
   // Might think we should do this after embedding in container so .vjs-tech class
@@ -224,6 +268,10 @@ vjs.Player.prototype.createEl = function(){
   // adding children
   this.el_ = el;
   this.on('loadstart', this.onLoadStart);
+  this.on('waiting', this.onWaiting);
+  this.on(['canplay', 'canplaythrough', 'playing', 'ended'], this.onWaitEnd);
+  this.on('seeking', this.onSeeking);
+  this.on('seeked', this.onSeeked);
   this.on('ended', this.onEnded);
   this.on('play', this.onPlay);
   this.on('firstplay', this.onFirstPlay);
@@ -259,22 +307,13 @@ vjs.Player.prototype.loadTech = function(techName, source){
 
   var techReady = function(){
     this.player_.triggerReady();
-
-    // Manually track progress in cases where the browser/flash player doesn't report it.
-    if (!this.features['progressEvents']) {
-      this.player_.manualProgressOn();
-    }
-
-    // Manually track timeudpates in cases where the browser/flash player doesn't report it.
-    if (!this.features['timeupdateEvents']) {
-      this.player_.manualTimeUpdatesOn();
-    }
   };
 
   // Grab tech-specific options from player options and add source and parent element to use.
   var techOptions = vjs.obj.merge({ 'source': source, 'parentEl': this.el_ }, this.options_[techName.toLowerCase()]);
 
   if (source) {
+    this.currentType_ = source.type;
     if (source.src == this.cache_.src && this.cache_.currentTime > 0) {
       techOptions['startTime'] = this.cache_.currentTime;
     }
@@ -290,12 +329,8 @@ vjs.Player.prototype.loadTech = function(techName, source){
 
 vjs.Player.prototype.unloadTech = function(){
   this.isReady_ = false;
+
   this.tech.dispose();
-
-  // Turn off any manual progress or timeupdate tracking
-  if (this.manualProgress) { this.manualProgressOff(); }
-
-  if (this.manualTimeUpdates) { this.manualTimeUpdatesOff(); }
 
   this.tech = false;
 };
@@ -314,94 +349,6 @@ vjs.Player.prototype.unloadTech = function(){
 //   vjs.log('loadedTech')
 // },
 
-/* Fallbacks for unsupported event types
-================================================================================ */
-// Manually trigger progress events based on changes to the buffered amount
-// Many flash players and older HTML5 browsers don't send progress or progress-like events
-vjs.Player.prototype.manualProgressOn = function(){
-  this.manualProgress = true;
-
-  // Trigger progress watching when a source begins loading
-  this.trackProgress();
-
-  // Watch for a native progress event call on the tech element
-  // In HTML5, some older versions don't support the progress event
-  // So we're assuming they don't, and turning off manual progress if they do.
-  // As opposed to doing user agent detection
-  if (this.tech) {
-    this.tech.one('progress', function(){
-
-      // Update known progress support for this playback technology
-      this.features['progressEvents'] = true;
-
-      // Turn off manual progress tracking
-      this.player_.manualProgressOff();
-    });
-  }
-};
-
-vjs.Player.prototype.manualProgressOff = function(){
-  this.manualProgress = false;
-  this.stopTrackingProgress();
-};
-
-vjs.Player.prototype.trackProgress = function(){
-
-  this.progressInterval = setInterval(vjs.bind(this, function(){
-    // Don't trigger unless buffered amount is greater than last time
-    // log(this.cache_.bufferEnd, this.buffered().end(0), this.duration())
-    /* TODO: update for multiple buffered regions */
-    if (this.cache_.bufferEnd < this.buffered().end(0)) {
-      this.trigger('progress');
-    } else if (this.bufferedPercent() == 1) {
-      this.stopTrackingProgress();
-      this.trigger('progress'); // Last update
-    }
-  }), 500);
-};
-vjs.Player.prototype.stopTrackingProgress = function(){ clearInterval(this.progressInterval); };
-
-/*! Time Tracking -------------------------------------------------------------- */
-vjs.Player.prototype.manualTimeUpdatesOn = function(){
-  this.manualTimeUpdates = true;
-
-  this.on('play', this.trackCurrentTime);
-  this.on('pause', this.stopTrackingCurrentTime);
-  // timeupdate is also called by .currentTime whenever current time is set
-
-  // Watch for native timeupdate event
-  if (this.tech) {
-    this.tech.one('timeupdate', function(){
-      // Update known progress support for this playback technology
-      this.features['timeupdateEvents'] = true;
-      // Turn off manual progress tracking
-      this.player_.manualTimeUpdatesOff();
-    });
-  }
-};
-
-vjs.Player.prototype.manualTimeUpdatesOff = function(){
-  this.manualTimeUpdates = false;
-  this.stopTrackingCurrentTime();
-  this.off('play', this.trackCurrentTime);
-  this.off('pause', this.stopTrackingCurrentTime);
-};
-
-vjs.Player.prototype.trackCurrentTime = function(){
-  if (this.currentTimeInterval) { this.stopTrackingCurrentTime(); }
-  this.currentTimeInterval = setInterval(vjs.bind(this, function(){
-    this.trigger('timeupdate');
-  }), 250); // 42 = 24 fps // 250 is what Webkit uses // FF uses 15
-};
-
-// Turn off play progress tracking (when paused or dragging)
-vjs.Player.prototype.stopTrackingCurrentTime = function(){
-  clearInterval(this.currentTimeInterval);
-
-  // #1002 - if the video ends right before the next timeupdate would happen,
-  // the progress bar won't make it all the way to the end
-  this.trigger('timeupdate');
-};
 // /* Player event handlers (how the player reacts to certain events)
 // ================================================================================ */
 
@@ -472,8 +419,40 @@ vjs.Player.prototype.onLoadedAllData;
  * @event play
  */
 vjs.Player.prototype.onPlay = function(){
-  vjs.removeClass(this.el_, 'vjs-paused');
-  vjs.addClass(this.el_, 'vjs-playing');
+  this.removeClass('vjs-paused');
+  this.addClass('vjs-playing');
+};
+
+/**
+ * Fired whenever the media begins wating
+ * @event waiting
+ */
+vjs.Player.prototype.onWaiting = function(){
+  this.addClass('vjs-waiting');
+};
+
+/**
+ * A handler for events that signal that waiting has eneded
+ * which is not consistent between browsers. See #1351
+ */
+vjs.Player.prototype.onWaitEnd = function(){
+  this.removeClass('vjs-waiting');
+};
+
+/**
+ * Fired whenever the player is jumping to a new time
+ * @event seeking
+ */
+vjs.Player.prototype.onSeeking = function(){
+  this.addClass('vjs-seeking');
+};
+
+/**
+ * Fired when the player has finished jumping to a new time
+ * @event seeked
+ */
+vjs.Player.prototype.onSeeked = function(){
+  this.removeClass('vjs-seeking');
 };
 
 /**
@@ -500,8 +479,8 @@ vjs.Player.prototype.onFirstPlay = function(){
  * @event pause
  */
 vjs.Player.prototype.onPause = function(){
-  vjs.removeClass(this.el_, 'vjs-playing');
-  vjs.addClass(this.el_, 'vjs-paused');
+  this.removeClass('vjs-playing');
+  this.addClass('vjs-paused');
 };
 
 /**
@@ -532,6 +511,8 @@ vjs.Player.prototype.onEnded = function(){
   if (this.options_['loop']) {
     this.currentTime(0);
     this.play();
+  } else if (!this.paused()) {
+    this.pause();
   }
 };
 
@@ -692,9 +673,6 @@ vjs.Player.prototype.currentTime = function(seconds){
 
     this.techCall('setCurrentTime', seconds);
 
-    // improve the accuracy of manual timeupdates
-    if (this.manualTimeUpdates) { this.trigger('timeupdate'); }
-
     return this;
   }
 
@@ -742,7 +720,6 @@ vjs.Player.prototype.remainingTime = function(){
 // http://dev.w3.org/html5/spec/video.html#dom-media-buffered
 // Buffered returns a timerange object.
 // Kind of like an array of portions of the video that have been downloaded.
-// So far no browsers return more than one range (portion)
 
 /**
  * Get a TimeRange object with the times of the video that have been downloaded
@@ -765,19 +742,13 @@ vjs.Player.prototype.remainingTime = function(){
  * @return {Object} A mock TimeRange object (following HTML spec)
  */
 vjs.Player.prototype.buffered = function(){
-  var buffered = this.techGet('buffered'),
-      start = 0,
-      buflast = buffered.length - 1,
-      // Default end to 0 and store in values
-      end = this.cache_.bufferEnd = this.cache_.bufferEnd || 0;
+  var buffered = this.techGet('buffered');
 
-  if (buffered && buflast >= 0 && buffered.end(buflast) !== end) {
-    end = buffered.end(buflast);
-    // Storing values allows them be overridden by setBufferedFromProgress
-    this.cache_.bufferEnd = end;
+  if (!buffered || !buffered.length) {
+    buffered = vjs.createTimeRange(0,0);
   }
 
-  return vjs.createTimeRange(start, end);
+  return buffered;
 };
 
 /**
@@ -791,7 +762,46 @@ vjs.Player.prototype.buffered = function(){
  * @return {Number} A decimal between 0 and 1 representing the percent
  */
 vjs.Player.prototype.bufferedPercent = function(){
-  return (this.duration()) ? this.buffered().end(0) / this.duration() : 0;
+  var duration = this.duration(),
+      buffered = this.buffered(),
+      bufferedDuration = 0,
+      start, end;
+
+  if (!duration) {
+    return 0;
+  }
+
+  for (var i=0; i<buffered.length; i++){
+    start = buffered.start(i);
+    end   = buffered.end(i);
+
+    // buffered end can be bigger than duration by a very small fraction
+    if (end > duration) {
+      end = duration;
+    }
+
+    bufferedDuration += end - start;
+  }
+
+  return bufferedDuration / duration;
+};
+
+/**
+ * Get the ending time of the last buffered time range
+ *
+ * This is used in the progress bar to encapsulate all time ranges.
+ * @return {Number} The end of the last buffered time range
+ */
+vjs.Player.prototype.bufferedEnd = function(){
+  var buffered = this.buffered(),
+      duration = this.duration(),
+      end = buffered.end(buffered.length-1);
+
+  if (end > duration) {
+    end = duration;
+  }
+
+  return end;
 };
 
 /**
@@ -1102,62 +1112,76 @@ vjs.Player.prototype.src = function(source){
     return this.techGet('src');
   }
 
-  // Case: Array of source objects to choose from and pick the best to play
+  // case: Array of source objects to choose from and pick the best to play
   if (vjs.obj.isArray(source)) {
+    this.sourceList_(source);
 
-    var sourceTech = this.selectSource(source),
-        techName;
+  // case: URL String (http://myvideo...)
+  } else if (typeof source === 'string') {
+    // create a source object from the string
+    this.src({ src: source });
 
-    if (sourceTech) {
-        source = sourceTech.source;
-        techName = sourceTech.tech;
-
-      // If this technology is already loaded, set source
-      if (techName == this.techName) {
-        this.src(source); // Passing the source object
-      // Otherwise load this technology with chosen source
-      } else {
-        this.loadTech(techName, source);
-      }
-    } else {
-      // this.el_.appendChild(vjs.createEl('p', {
-      //   innerHTML: this.options()['notSupportedMessage']
-      // }));
-      this.error({ code: 4, message: this.options()['notSupportedMessage'] });
-      this.triggerReady(); // we could not find an appropriate tech, but let's still notify the delegate that this is it
-    }
-
-  // Case: Source object { src: '', type: '' ... }
+  // case: Source object { src: '', type: '' ... }
   } else if (source instanceof Object) {
-
-    if (window['videojs'][this.techName]['canPlaySource'](source)) {
-      this.src(source.src);
+    // check if the source has a type and the loaded tech cannot play the source
+    // if there's no type we'll just try the current tech
+    if (source.type && !window['videojs'][this.techName]['canPlaySource'](source)) {
+      // create a source list with the current source and send through
+      // the tech loop to check for a compatible technology
+      this.sourceList_([source]);
     } else {
-      // Send through tech loop to check for a compatible technology.
-      this.src([source]);
-    }
+      this.cache_.src = source.src;
+      this.currentType_ = source.type || '';
 
-  // Case: URL String (http://myvideo...)
-  } else {
-    // Cache for getting last set source
-    this.cache_.src = source;
-
-    if (!this.isReady_) {
+      // wait until the tech is ready to set the source
       this.ready(function(){
-        this.src(source);
+        this.techCall('src', source.src);
+
+        if (this.options_['preload'] == 'auto') {
+          this.load();
+        }
+
+        if (this.options_['autoplay']) {
+          this.play();
+        }
       });
-    } else {
-      this.techCall('src', source);
-      if (this.options_['preload'] == 'auto') {
-        this.load();
-      }
-      if (this.options_['autoplay']) {
-        this.play();
-      }
     }
   }
 
   return this;
+};
+
+/**
+ * Handle an array of source objects
+ * @param  {[type]} sources Array of source objects
+ * @private
+ */
+vjs.Player.prototype.sourceList_ = function(sources){
+  var sourceTech = this.selectSource(sources),
+      errorTimeout;
+
+  if (sourceTech) {
+    if (sourceTech.tech === this.techName) {
+      // if this technology is already loaded, set the source
+      this.src(sourceTech.source);
+    } else {
+      // load this technology with the chosen source
+      this.loadTech(sourceTech.tech, sourceTech.source);
+    }
+  } else {
+    // We need to wrap this in a timeout to give folks a chance to add error event handlers
+    errorTimeout = setTimeout(vjs.bind(this, function() {
+      this.error({ code: 4, message: this.localize(this.options()['notSupportedMessage']) });
+    }), 0);
+
+    // we could not find an appropriate tech, but let's still notify the delegate that this is it
+    // this needs a better comment about why this is needed
+    this.triggerReady();
+
+    this.on('dispose', function() {
+      clearTimeout(errorTimeout);
+    });
+  }
 };
 
 // Begin loading the src data
@@ -1170,6 +1194,16 @@ vjs.Player.prototype.load = function(){
 // http://dev.w3.org/html5/spec/video.html#dom-media-currentsrc
 vjs.Player.prototype.currentSrc = function(){
   return this.techGet('currentSrc') || this.cache_.src || '';
+};
+
+/**
+ * Get the current source type e.g. video/mp4
+ * This can allow you rebuild the current source object so that you could load the same
+ * source and tech later
+ * @return {String} The source MIME type
+ */
+vjs.Player.prototype.currentType = function(){
+    return this.currentType_ || '';
 };
 
 // Attributes/Options
@@ -1478,16 +1512,19 @@ vjs.Player.prototype.listenForUserActivity = function(){
       // Clear any existing inactivity timeout to start the timer over
       clearTimeout(inactivityTimeout);
 
-      // In X seconds, if no more activity has occurred the user will be
-      // considered inactive
-      inactivityTimeout = setTimeout(vjs.bind(this, function() {
-        // Protect against the case where the inactivityTimeout can trigger just
-        // before the next user activity is picked up by the activityCheck loop
-        // causing a flicker
-        if (!this.userActivity_) {
-          this.userActive(false);
-        }
-      }), 2000);
+      var timeout = this.options()['inactivityTimeout'];
+      if (timeout > 0) {
+          // In <timeout> milliseconds, if no more activity has occurred the
+          // user will be considered inactive
+          inactivityTimeout = setTimeout(vjs.bind(this, function () {
+              // Protect against the case where the inactivityTimeout can trigger just
+              // before the next user activity is picked up by the activityCheck loop
+              // causing a flicker
+              if (!this.userActivity_) {
+                  this.userActive(false);
+              }
+          }), timeout);
+      }
     }
   }), 250);
 
@@ -1504,7 +1541,7 @@ vjs.Player.prototype.playbackRate = function(rate) {
     return this;
   }
 
-  if (this.tech && this.tech.features && this.tech.features['playbackRate']) {
+  if (this.tech && this.tech['featuresPlaybackRate']) {
     return this.techGet('playbackRate');
   } else {
     return 1.0;

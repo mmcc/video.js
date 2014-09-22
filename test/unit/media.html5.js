@@ -11,11 +11,13 @@ module('HTML5', {
       el: function(){ return el; },
       options_: {},
       options: function(){ return {}; },
+      bufferedPercent: function() { return 0; },
       controls: function(){ return false; },
       usingNativeControls: function(){ return false; },
       on: function(){ return this; },
       off: function() { return this; },
-      ready: function(){}
+      ready: function(){},
+      trigger: function(){}
     };
     tech = new vjs.Html5(player, {});
   },
@@ -53,6 +55,12 @@ test('should re-link the player if the tech is moved', function(){
 
 test('test playbackRate', function() {
   var playbackRate;
+
+  // Android 2.3 always returns 0 for playback rate
+  if (!vjs.Html5.canControlPlaybackRate()) {
+    ok('Playback rate is not supported');
+    return;
+  }
 
   tech.createEl();
 
@@ -115,4 +123,10 @@ test('should return a maybe for mp4 on OLD ANDROID', function() {
 
   vjs.IS_OLD_ANDROID = isOldAndroid;
   vjs.Html5.unpatchCanPlayType();
+});
+
+test('error events may not set the errors property', function() {
+  equal(tech.error(), undefined, 'no tech-level error');
+  tech.trigger('error');
+  ok(true, 'no error was thrown');
 });
