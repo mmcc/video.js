@@ -14,6 +14,11 @@ Create your own skin at http://designer.videojs.com
 @base-font-size: 10px;
 @touch-device-font-size: 15px;
 
+// Settings for the font family
+@vjs-font-name: 'vjs';
+@vjs-font-path: 'font'; // no trailing slash!
+@vjs-font-cache: 'x9wnaw';
+
 // The main font color controls the color of the text and the icons (font icons)
 @main-font-color: #CCCCCC; // e.g. rgb(255, 255, 255) or #ffffff
 
@@ -73,37 +78,36 @@ e.g. <video class="video-js my-skin-name">
 The control icons are from a custom font. Each icon corresponds to a character
 (e.g. "\e001"). Font icons allow for easy scaling and coloring of icons.
 */
-@font-face{
-  font-family: 'VideoJS';
-  src: url('font/vjs.eot');
-  src: url('font/vjs.eot?#iefix') format('embedded-opentype'),
-  url('font/vjs.woff') format('woff'),
-  url('font/vjs.ttf') format('truetype'),
-  url('font/vjs.svg#icomoon') format('svg');
+@font-face {
+  font-family: @vjs-font-name;
+  src:url("@{vjs-font-path}/vjs.eot?@{vjs-font-cache}");
+  src:url("@{vjs-font-path}//vjs.eot?#iefix@{vjs-font-cache}") format('embedded-opentype'),
+    url("@{vjs-font-path}/vjs.woff?@{vjs-font-cache}") format('woff'),
+    url("@{vjs-font-path}/vjs.ttf?@{vjs-font-cache}") format('truetype'),
+    url("@{vjs-font-path}/vjs.svg?@{vjs-font-cache}#@{vjs-font-name}") format('svg');
 
   font-weight: normal;
   font-style: normal;
 }
 
 // Icon font character values
-@play-icon: "\e001";
-@pause-icon: "\e002";
-@volume-muted-icon: "\e003";
-@volume-low-icon: "\e004";
-@volume-mid-icon: "\e005";
-@volume-high-icon: "\e006";
-@fullscreen-enter-icon: "\e000";
-@fullscreen-exit-icon: "\e00b";
+@play-icon: "\25b6";
+@pause-icon: "\e830";
+@volume-muted-icon: "\e84b";
+@volume-low-icon: "\e84a";
+@volume-mid-icon: "\e849";
+@volume-high-icon: "\e84c";
+@fullscreen-enter-icon: "\e64b";
+@fullscreen-exit-icon: "\e64c";
 @square-icon: "\e009";
-@spinner-icon: "\e00a";
-@spinner2-icon: "\e00d";
-@spinner3-icon: "\e01e";
-@spinner4-icon: "\e01f";
-@subtitles-icon: "\e00c";
-@captions-icon: "\e008";
-@chapters-icon: "\e00c";
-@share-icon: "\e00e";
-@cog-icon: "\e600";
+@spinner-icon: "\e650";
+@spinner2-icon: "\e866";
+@spinner3-icon: "\e866";
+@subtitles-icon: "\e80d";
+@captions-icon: "\e81e";
+@chapters-icon: "\e891";
+@share-icon: "\e61a";
+@cog-icon: "\e8b1";
 
 /* Base UI Component Classes
 --------------------------------------------------------------------------------
@@ -133,7 +137,7 @@ The control icons are from a custom font. Each icon corresponds to a character
 
 .vjs-default-skin .vjs-slider-handle:before {
   content: @square-icon;
-  font-family: VideoJS;
+  font-family: vjs;
   font-size: 1em;
   line-height: 1;
   text-align: center;
@@ -231,7 +235,7 @@ fonts to show/hide properly.
 
 /* Font button icons */
 .vjs-default-skin .vjs-control:before {
-  font-family: VideoJS;
+  font-family: vjs;
   font-size: 1.5em;
   line-height: 2;
   position: absolute;
@@ -592,7 +596,7 @@ easily in the skin designer. http://designer.videojs.com/
 
 .vjs-default-skin .vjs-big-play-button:before {
   content: @play-icon;
-  font-family: VideoJS;
+  font-family: vjs;
   /* In order to center the play icon vertically we need to set the line height
      to the same as the button height */
   line-height: @big-play-height;
@@ -705,7 +709,7 @@ easily in the skin designer. http://designer.videojs.com/
 
 .vjs-default-skin .vjs-loading-spinner:before {
   content: @spinner3-icon;
-  font-family: VideoJS;
+  font-family: vjs;
 
   position: absolute;
   top: 0;
