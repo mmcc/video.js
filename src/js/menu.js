@@ -17,6 +17,7 @@ vjsevents = require('./events.js');
  * @constructor
  */
 Menu = Component.extend();
+Component.registerComponent('Menu', Menu);
 
 /**
  * Add a menu item to the menu
@@ -66,6 +67,7 @@ MenuItem = Button.extend({
     this.selected(options['selected']);
   }
 });
+Component.registerComponent('MenuItem', MenuItem);
 
 /** @inheritDoc */
 MenuItem.prototype.createEl = function(type, props){
@@ -123,6 +125,7 @@ MenuButton = Button.extend({
     this.el_.setAttribute('role', 'button');
   }
 });
+Component.registerComponent('MenuButton', MenuButton);
 
 /**
  * Track the state of the menu button

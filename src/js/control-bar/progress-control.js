@@ -18,6 +18,7 @@ ProgressControl = Component.extend({
     Component.call(this, player, options);
   }
 });
+Component.registerComponent('ProgressControl', ProgressControl);
 
 ProgressControl.prototype.options_ = {
   children: {
@@ -46,6 +47,7 @@ SeekBar = slider.Slider.extend({
     player.ready(vjslib.bind(this, this.updateARIAAttributes));
   }
 });
+Component.registerComponent('SeekBar', SeekBar);
 
 SeekBar.prototype.options_ = {
   children: {
@@ -128,6 +130,7 @@ LoadProgressBar = Component.extend({
     player.on('progress', vjslib.bind(this, this.update));
   }
 });
+Component.registerComponent('LoadProgressBar', LoadProgressBar);
 
 LoadProgressBar.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {
@@ -154,6 +157,7 @@ PlayProgressBar = Component.extend({
     Component.call(this, player, options);
   }
 });
+Component.registerComponent('PlayProgressBar', PlayProgressBar);
 
 PlayProgressBar.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {
@@ -176,6 +180,7 @@ SeekHandle = slider.SliderHandle.extend({
     player.on('timeupdate', vjslib.bind(this, this.updateContent));
   }
 });
+Component.registerComponent('SliderHandle', SliderHandle);
 
 /**
  * The default value for the handle content, which may be read by screen readers
@@ -205,4 +210,3 @@ module.exports = {
   SeekBar: SeekBar,
   SeekHandle: SeekHandle
 };
-

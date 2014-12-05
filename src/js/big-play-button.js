@@ -1,5 +1,6 @@
-var BigPlayButton, Button;
+var BigPlayButton, Button, Component;
 
+Component = require('./component.js');
 Button = require('./button.js');
 
 /* Big Play Button
@@ -13,6 +14,7 @@ Button = require('./button.js');
  * @constructor
  */
 BigPlayButton = Button.extend();
+Component.registerComponent('BigPlayButton', BigPlayButton);
 
 BigPlayButton.prototype.createEl = function(){
   return Button.prototype.createEl.call(this, 'div', {

@@ -29,6 +29,7 @@ VolumeControl = Component.extend({
     }));
   }
 });
+Component.registerComponent('VolumeControl', VolumeControl);
 
 VolumeControl.prototype.options_ = {
   children: {
@@ -57,6 +58,7 @@ VolumeBar = slider.Slider.extend({
     player.ready(vjslib.bind(this, this.updateARIAAttributes));
   }
 });
+Component.registerComponent('VolumeBar', VolumeBar);
 
 VolumeBar.prototype.updateARIAAttributes = function(){
   // Current value of volume bar as a percentage
@@ -119,6 +121,7 @@ VolumeLevel = Component.extend({
     Component.call(this, player, options);
   }
 });
+Component.registerComponent('VolumeLevel', VolumeLevel);
 
 VolumeLevel.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {
@@ -135,6 +138,7 @@ VolumeLevel.prototype.createEl = function(){
  * @constructor
  */
  VolumeHandle = slider.SliderHandle.extend();
+ Component.registerComponent('VolumeHandle', VolumeHandle);
 
  VolumeHandle.prototype.defaultValue = '00:00';
 

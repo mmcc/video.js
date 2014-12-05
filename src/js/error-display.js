@@ -17,6 +17,7 @@ ErrorDisplay = Component.extend({
     player.on('error', vjslib.bind(this, this.update));
   }
 });
+Component.registerComponent('ErrorDisplay', ErrorDisplay);
 
 ErrorDisplay.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {

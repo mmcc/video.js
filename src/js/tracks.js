@@ -167,6 +167,7 @@ TextTrack = Component.extend({
     this.player_.on('fullscreenchange', vjslib.bind(this, this.adjustFontSize));
   }
 });
+Component.registerComponent('TextTrack', TextTrack);
 
 /**
  * Track kind value. Captions, subtitles, etc.
@@ -698,6 +699,7 @@ TextTrack.prototype.reset = function(){
  * @constructor
  */
 CaptionsTrack = TextTrack.extend();
+Component.registerComponent('CaptionsTrack', CaptionsTrack);
 CaptionsTrack.prototype.kind_ = 'captions';
 // Exporting here because Track creation requires the track kind
 // to be available on global object. e.g. new window['videojs'][Kind + 'Track']
@@ -708,6 +710,7 @@ CaptionsTrack.prototype.kind_ = 'captions';
  * @constructor
  */
 SubtitlesTrack = TextTrack.extend();
+Component.registerComponent('SubtitlesTrack', SubtitlesTrack);
 SubtitlesTrack.prototype.kind_ = 'subtitles';
 
 /**
@@ -716,6 +719,7 @@ SubtitlesTrack.prototype.kind_ = 'subtitles';
  * @constructor
  */
 ChaptersTrack = TextTrack.extend();
+Component.registerComponent('ChaptersTrack', ChaptersTrack);
 ChaptersTrack.prototype.kind_ = 'chapters';
 
 
@@ -742,6 +746,7 @@ TextTrackDisplay = Component.extend({
     }
   }
 });
+Component.registerComponent('TextTrackDisplay', TextTrackDisplay);
 
 TextTrackDisplay.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {
@@ -768,6 +773,7 @@ TextTrackMenuItem = vjsmenu.MenuItem.extend({
     this.player_.on(track.kind() + 'trackchange', vjslib.bind(this, this.update));
   }
 });
+Component.registerComponent('TextTrackMenuItem', TextTrackMenuItem);
 
 TextTrackMenuItem.prototype.onClick = function(){
   vjsmenu.MenuItem.prototype.onClick.call(this);
@@ -799,6 +805,7 @@ OffTextTrackMenuItem = TextTrackMenuItem.extend({
     this.selected(true);
   }
 });
+Component.registerComponent('OffTextTrackMenuItem', OffTextTrackMenuItem);
 
 OffTextTrackMenuItem.prototype.onClick = function(){
   TextTrackMenuItem.prototype.onClick.call(this);
@@ -835,6 +842,7 @@ TextTrackButton = vjsmenu.MenuButton.extend({
     }
   }
 });
+Component.registerComponent('TextTrackButton', TextTrackButton);
 
 // vjs.TextTrackButton.prototype.buttonPressed = false;
 
@@ -892,6 +900,7 @@ CaptionsButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Captions Menu');
   }
 });
+Component.registerComponent('CaptionsButton', CaptionsButton);
 CaptionsButton.prototype.kind_ = 'captions';
 CaptionsButton.prototype.buttonText = 'Captions';
 CaptionsButton.prototype.className = 'vjs-captions-button';
@@ -908,6 +917,7 @@ SubtitlesButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Subtitles Menu');
   }
 });
+Component.registerComponent('CaptionsButton', CaptionsButton);
 SubtitlesButton.prototype.kind_ = 'subtitles';
 SubtitlesButton.prototype.buttonText = 'Subtitles';
 SubtitlesButton.prototype.className = 'vjs-subtitles-button';
@@ -926,6 +936,7 @@ ChaptersButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Chapters Menu');
   }
 });
+Component.registerComponent('ChaptersButton', ChaptersButton);
 ChaptersButton.prototype.kind_ = 'chapters';
 ChaptersButton.prototype.buttonText = 'Chapters';
 ChaptersButton.prototype.className = 'vjs-chapters-button';
@@ -1022,6 +1033,7 @@ ChaptersTrackMenuItem = vjsmenu.MenuItem.extend({
     track.on('cuechange', vjslib.bind(this, this.update));
   }
 });
+Component.registerComponent('ChaptersTrackMenuItem', ChaptersTrackMenuItem);
 
 ChaptersTrackMenuItem.prototype.onClick = function(){
   vjsmenu.MenuItem.prototype.onClick.call(this);

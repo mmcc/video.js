@@ -26,6 +26,7 @@ MediaTechController = Component.extend({
     this.initControlsListeners();
   }
 });
+Component.registerComponent('MediaTechController', MediaTechController);
 
 /**
  * Set up click and touch listeners for the playback element

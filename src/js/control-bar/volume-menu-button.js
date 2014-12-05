@@ -1,5 +1,6 @@
-var VolumeMenuButton, Button, MuteToggle, menu, volume, vjslib;
+var VolumeMenuButton, Button, MuteToggle, menu, volume, vjslib, Component;
 
+Component = require('../component.js');
 Button = require('../button.js');
 MuteToggle = require('./mute-toggle.js');
 menu = require('../menu.js');
@@ -32,6 +33,7 @@ VolumeMenuButton = menu.MenuButton.extend({
     this.addClass('vjs-menu-button');
   }
 });
+Component.registerComponent('VolumeMenuButton', VolumeMenuButton);
 
 VolumeMenuButton.prototype.createMenu = function(){
   var menu = new menu.Menu(this.player_, {

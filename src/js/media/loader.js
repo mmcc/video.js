@@ -38,5 +38,6 @@ MediaLoader = Component.extend({
     }
   }
 });
+Component.registerComponent('MediaLoader', MediaLoader);
 
 module.exports = MediaLoader;

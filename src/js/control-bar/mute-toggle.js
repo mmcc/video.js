@@ -1,5 +1,6 @@
 var MuteToggle, Button, vjslib;
 
+Componenent = require('../component.js');
 Button = require('../button.js');
 vjslib = require('../lib.js');
 
@@ -30,6 +31,7 @@ MuteToggle = Button.extend({
     }));
   }
 });
+Component.registerComponent('MuteToggle', MuteToggle);
 
 MuteToggle.prototype.createEl = function(){
   return Button.prototype.createEl.call(this, 'div', {

@@ -17,6 +17,7 @@ CurrentTimeDisplay = Component.extend({
     player.on('timeupdate', vjslib.bind(this, this.updateContent));
   }
 });
+Component.registerComponent('CurrentTimeDisplay', CurrentTimeDisplay);
 
 CurrentTimeDisplay.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {
@@ -58,6 +59,7 @@ DurationDisplay = Component.extend({
     player.on('timeupdate', vjslib.bind(this, this.updateContent));
   }
 });
+Component.registerComponent('DurationDisplay', DurationDisplay);
 
 DurationDisplay.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {
@@ -96,6 +98,7 @@ TimeDivider = Component.extend({
     Component.call(this, player, options);
   }
 });
+Component.registerComponent('TimeDivider', TimeDivider);
 
 TimeDivider.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {
@@ -118,6 +121,7 @@ RemainingTimeDisplay = Component.extend({
     player.on('timeupdate', vjslib.bind(this, this.updateContent));
   }
 });
+Component.registerComponent('RemainingTimeDisplay', RemainingTimeDisplay);
 
 RemainingTimeDisplay.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {

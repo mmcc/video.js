@@ -104,6 +104,7 @@ Player = Component.extend({
     this.listenForUserActivity();
   }
 });
+Component.registerComponent('Player', Player);
 
 /**
  * Player instance options, surfaced using vjs.options

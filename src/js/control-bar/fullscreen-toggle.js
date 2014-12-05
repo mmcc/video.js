@@ -1,5 +1,6 @@
-var FullscreenToggle, Button;
+var FullscreenToggle, Button, Component;
 
+Component = require('../component.js');
 Button = require('../button.js');
 
 /**
@@ -19,6 +20,7 @@ FullscreenToggle = Button.extend({
     Button.call(this, player, options);
   }
 });
+Component.registerComponent('FullscreenToggle', FullscreenToggle);
 
 FullscreenToggle.prototype.buttonText = 'Fullscreen';
 

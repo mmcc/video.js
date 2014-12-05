@@ -35,6 +35,7 @@ Slider = Component.extend({
     this.boundEvents = {};
   }
 });
+Component.registerComponent('Slider', Slider);
 
 Slider.prototype.createEl = function(type, props) {
   props = props || {};
@@ -211,6 +212,7 @@ Slider.prototype.onClick = function(event){
  * @constructor
  */
 SliderHandle = Component.extend();
+Component.registerComponent('SliderHandle', SliderHandle);
 
 /**
  * Default value of the slider

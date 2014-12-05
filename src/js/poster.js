@@ -1,5 +1,6 @@
-var PosterImage, Button, vjslib;
+var PosterImage, Button, vjslib, Component;
 
+Component = require('./component.js');
 Button = require('./button.js');
 vjslib = require('./lib.js');
 
@@ -32,6 +33,7 @@ PosterImage = Button.extend({
     player.on('play', vjslib.bind(this, this.hide));
   }
 });
+Component.registerComponent('PosterImage', PosterImage);
 
 // use the test el to check for backgroundSize style support
 var _backgroundSizeSupported = 'backgroundSize' in vjslib.TEST_VID.style;

@@ -23,6 +23,7 @@ PlaybackRateMenuButton = vjsmenu.MenuButton.extend({
     player.on('ratechange', vjslib.bind(this, this.updateLabel));
   }
 });
+Component.registerComponent('PlaybackRateMenuButton', PlaybackRateMenuButton);
 
 PlaybackRateMenuButton.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {
@@ -124,6 +125,7 @@ PlaybackRateMenuItem = vjsmenu.MenuItem.extend({
     this.player().on('ratechange', vjslib.bind(this, this.update));
   }
 });
+Component.registerComponent('PlaybackRateMenuItem', PlaybackRateMenuItem);
 
 PlaybackRateMenuItem.prototype.onClick = function(){
   vjsmenu.MenuItem.prototype.onClick.call(this);

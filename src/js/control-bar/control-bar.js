@@ -12,6 +12,7 @@ vjslib = require('../lib.js');
  * @extends vjs.Component
  */
 ControlBar = Component.extend();
+Component.registerComponent('ControlBar', ControlBar);
 
 ControlBar.prototype.options_ = {
   loadEvent: 'play',

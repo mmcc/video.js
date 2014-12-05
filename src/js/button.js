@@ -29,6 +29,7 @@ Button = Component.extend({
     this.on('blur', this.onBlur);
   }
 });
+Component.registerComponent('Button', Button);
 
 Button.prototype.createEl = function(type, props){
   var el;

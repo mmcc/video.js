@@ -1,5 +1,6 @@
-var Html5, MediaTechController, vjslib, vjsevents;
+var Html5, MediaTechController, vjslib, vjsevents, Component;
 
+Component = require('./component.js');
 MediaTechController = require('./media.js');
 vjslib = require('../lib.js');
 vjsevents = require('../events.js');
@@ -62,6 +63,7 @@ Html5 = MediaTechController.extend({
     this.triggerReady();
   }
 });
+Component.registerComponent('Html5', Html5);
 
 Html5.prototype.dispose = function(){
   MediaTechController.prototype.dispose.call(this);

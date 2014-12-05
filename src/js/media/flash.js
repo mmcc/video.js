@@ -1,5 +1,6 @@
-var Flash, MediaTechController, vjslib, vjsevents;
+var Flash, MediaTechController, vjslib, vjsevents, Component;
 
+Component = require('./component.js');
 MediaTechController = require('./media.js');
 vjslib = require('../lib.js');
 vjsevents = require('../events.js');
@@ -254,6 +255,7 @@ Flash = MediaTechController.extend({
     }
   }
 });
+Component.registerComponent('Flash', Flash);
 
 Flash.prototype.dispose = function(){
   MediaTechController.prototype.dispose.call(this);

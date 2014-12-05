@@ -1,5 +1,6 @@
-var PlayToggle, Button, vjslib;
+var PlayToggle, Button, vjslib, Component;
 
+Component = require('../component.js');
 Button = require('../button.js');
 vjslib = require('../lib.js');
 
@@ -19,6 +20,7 @@ PlayToggle = Button.extend({
     player.on('pause', vjslib.bind(this, this.onPause));
   }
 });
+Component.registerComponent('PlayToggle', PlayToggle);
 
 PlayToggle.prototype.buttonText = 'Play';
 

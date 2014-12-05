@@ -36,6 +36,7 @@ LoadingSpinner = Component.extend({
     player.on('waiting', vjslib.bind(this, this.show));
   }
 });
+Component.registerComponent('LoadingSpinner', LoadingSpinner);
 
 LoadingSpinner.prototype.createEl = function(){
   return Component.prototype.createEl.call(this, 'div', {

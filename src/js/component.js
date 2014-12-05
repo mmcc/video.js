@@ -352,9 +352,7 @@ Component.prototype.getChild = function(name){
  * @suppress {accessControls|checkRegExp|checkTypes|checkVars|const|constantProperty|deprecated|duplicate|es5Strict|fileoverviewTags|globalThis|invalidCasts|missingProperties|nonStandardJsDocs|strictModuleDepCheck|undefinedNames|undefinedVars|unknownDefines|uselessCode|visibility}
  */
 Component.prototype.addChild = function(child, options){
-  var component, componentClass, componentName, componentId, components;
-
-  components = require('./components.js');
+  var component, componentClass, componentName, componentId;
 
   // If string, create new component with options
   if (typeof child === 'string') {
@@ -374,7 +372,7 @@ Component.prototype.addChild = function(child, options){
     // If there's no .player_, this is a player
     // Closure Compiler throws an 'incomplete alias' warning if we use the vjs variable directly.
     // Every class should be exported, so this should never be a problem here.
-    component = new components[componentClass](this.player_ || this, options);
+    component = new Component.components[componentClass](this.player_ || this, options);
 
   // child is a component instance
   } else {
@@ -985,6 +983,16 @@ Component.prototype.enableTouchActivity = function() {
   this.on('touchmove', report);
   this.on('touchend', touchEnd);
   this.on('touchcancel', touchEnd);
+};
+
+Component.components = {};
+
+Component.registerComponent = function(name, comp){
+  Component.components[name] = comp;
+};
+
+Component.getComponent = function(name){
+  return Component.components[name];
 };
 
 module.exports = Component;

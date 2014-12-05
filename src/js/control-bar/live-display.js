@@ -15,6 +15,7 @@ LiveDisplay = Component.extend({
     Component.call(this, player, options);
   }
 });
+Component.registerComponent('LiveDisplay', LiveDisplay);
 
 LiveDisplay.prototype.createEl = function(){
   var el = Component.prototype.createEl.call(this, 'div', {
