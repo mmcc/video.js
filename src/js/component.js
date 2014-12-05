@@ -989,6 +989,7 @@ Component.components = {};
 
 Component.registerComponent = function(name, comp){
   Component.components[name] = comp;
+  return comp;
 };
 
 Component.getComponent = function(name){
