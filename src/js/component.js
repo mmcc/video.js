@@ -993,7 +993,14 @@ Component.registerComponent = function(name, comp){
 };
 
 Component.getComponent = function(name){
-  return Component.components[name];
+  if (Component.components[name]) {
+    return Component.components[name];
+  }
+
+  if (window && window.videojs && window.videojs[name]) {
+    vjslib.log.warn('The '+name+' component was added to the videojs object when it should be registered using videojs.registerComponent');
+    return window.videojs[name];
+  }
 };
 
 module.exports = Component;

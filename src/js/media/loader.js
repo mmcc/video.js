@@ -12,8 +12,6 @@ vjslib = require('../lib.js');
 MediaLoader = Component.extend({
   /** @constructor */
   init: function(player, options, ready){
-    var components = require('../components.js');
-
     Component.call(this, player, options, ready);
 
     // If there are no sources when the player is initialized,
@@ -21,7 +19,7 @@ MediaLoader = Component.extend({
     if (!player.options_['sources'] || player.options_['sources'].length === 0) {
       for (var i=0,j=player.options_['techOrder']; i<j.length; i++) {
         var techName = vjslib.capitalize(j[i]),
-            tech = components[techName];
+            tech = Component.getComponent(techName);
 
         // Check if the browser supports this technology
         if (tech && tech.isSupported()) {

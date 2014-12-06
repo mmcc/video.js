@@ -256,8 +256,6 @@ Player.prototype.createEl = function(){
 // Load/Create an instance of playback technlogy including element and API methods
 // And append playback element in player div.
 Player.prototype.loadTech = function(techName, source){
-  var components = require('./components.js');
-
   // Pause and remove current playback technology
   if (this.tech) {
     this.unloadTech();
@@ -265,7 +263,7 @@ Player.prototype.loadTech = function(techName, source){
 
   // get rid of the HTML5 video tag as soon as we are using another tech
   if (techName !== 'Html5' && this.tag) {
-    components.Html5.disposeMediaElement(this.tag);
+    Component.getComponent('Html5').disposeMediaElement(this.tag);
     this.tag = null;
   }
 
@@ -300,7 +298,7 @@ Player.prototype.loadTech = function(techName, source){
   }
 
   // Initialize tech instance
-  this.tech = new components[techName](this, techOptions);
+  this.tech = new Component.getComponent(techName)(this, techOptions);
 
   this.tech.ready(techReady);
 };
@@ -1058,7 +1056,7 @@ Player.prototype.selectSource = function(sources){
   // Loop through each playback technology in the options order
   for (var i=0,j=this.options_['techOrder'];i<j.length;i++) {
     var techName = vjslib.capitalize(j[i]),
-        tech = require('./components.js')[techName];
+        tech = Component.getComponent(techName);
 
     // Check if the current tech is defined before continuing
     if (!tech) {
