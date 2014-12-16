@@ -1,7 +1,8 @@
-var autoSetup, autoSetupTimeout, hasLoaded, windowLoaded, vjsJSON, vjsevents;
+var autoSetup, autoSetupTimeout, hasLoaded, windowLoaded, vjsJSON, vjsevents, window;
 
 vjsJSON = require('./json.js');
 vjsevents = require('./events.js');
+window = require('global/window');
 
 /**
  * @fileoverview Functions for automatically setting up a player

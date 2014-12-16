@@ -1,9 +1,11 @@
-var Component, CoreObject, vjslib, vjsutil, vjsevents;
+var Component, CoreObject, vjslib, vjsutil, vjsevents, window;
 
 CoreObject = require('./core-object.js');
 vjslib = require('./lib.js');
 vjsutil = require('./util.js')
 vjsevents = require('./events.js');
+
+window = require('global/window');
 
 /**
  * @fileoverview Player Component - Base class for all UI objects
