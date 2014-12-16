@@ -1,5 +1,6 @@
-var Player, players, Component, MediaError, vjslib, vjsevents, fullscreenApi, vjsoptions;
+var document, Player, players, Component, MediaError, vjslib, vjsevents, fullscreenApi, vjsoptions;
 
+document = require('global/document');
 Component = require('./component.js');
 MediaError = require('./media-error.js');
 vjslib = require('./lib.js');

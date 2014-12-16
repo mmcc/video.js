@@ -1,4 +1,6 @@
-var fullscreenAPI, apiMap, specApi, browserApi, i;
+var document, fullscreenAPI, apiMap, specApi, browserApi, i;
+
+document = require('global/document');
 
 /**
  * Store the browser-specifc methods for the fullscreen API

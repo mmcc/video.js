@@ -25,7 +25,7 @@ lib.obj.each(Component.components, function(name, component){
     lib.log.warn('Using videojs.'+name+' to access the '+name+' component has been deprecated. Please use videojs.getComponent("componentName")');
 
     return new component(player, options, ready);
-  }
+  };
 
   // Allow the prototype and class methods to be accessible still this way
   // Though anything that attempts to override class methods will no longer work

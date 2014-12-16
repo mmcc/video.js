@@ -1,5 +1,6 @@
-var Slider, SliderHandle, Component, vjslib, vjsevents;
+var document, Slider, SliderHandle, Component, vjslib, vjsevents;
 
+document = require('global/document');
 Component = require('./component.js');
 vjslib = require('./lib.js');
 vjsevents = require('./events.js');

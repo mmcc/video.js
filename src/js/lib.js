@@ -1,3 +1,4 @@
+var document = require('global/document');
 var vjs = {};
 var hasOwnProp = Object.prototype.hasOwnProperty;
 

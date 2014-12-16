@@ -1,5 +1,6 @@
-var Button, Component, vjslib, vjsevents;
+var document, Button, Component, vjslib, vjsevents;
 
+document = require('global/document');
 Component = require('./component.js');
 vjslib = require('./lib.js');
 vjsevents = require('./events.js');

@@ -2,7 +2,7 @@ var Component, CoreObject, vjslib, vjsutil, vjsevents, window;
 
 CoreObject = require('./core-object.js');
 vjslib = require('./lib.js');
-vjsutil = require('./util.js')
+vjsutil = require('./util.js');
 vjsevents = require('./events.js');
 
 window = require('global/window');

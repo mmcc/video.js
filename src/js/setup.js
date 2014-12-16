@@ -1,8 +1,10 @@
-var autoSetup, autoSetupTimeout, hasLoaded, windowLoaded, vjsJSON, vjsevents, window;
+var document, window, autoSetup, autoSetupTimeout, hasLoaded, windowLoaded, vjsJSON, vjsevents;
+
+document = require('global/document');
+window = require('global/window');
 
 vjsJSON = require('./json.js');
 vjsevents = require('./events.js');
-window = require('global/window');
 
 /**
  * @fileoverview Functions for automatically setting up a player
@@ -62,7 +64,7 @@ autoSetupTimeout = function(wait){
 // return whether window has loaded
 hasLoaded = function() {
   return windowLoaded;
-}
+};
 
 if (document.readyState === 'complete') {
   windowLoaded = true;

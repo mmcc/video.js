@@ -1,5 +1,6 @@
-var on, off, cleanUpEvents, fixEvent, trigger, one, handleMultipleEvents, vjslib;
+var document, on, off, cleanUpEvents, fixEvent, trigger, one, handleMultipleEvents, vjslib;
 
+document = require('global/document');
 vjslib = require('./lib.js');
 
 /**

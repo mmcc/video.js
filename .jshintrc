@@ -12,6 +12,8 @@
     "undef"    : true,
     "laxbreak" : true,
     "predef"   : [
+        "document",
+        "window",
         "_V_",
         "videojs",
         "vjs",

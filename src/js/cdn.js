@@ -57,4 +57,4 @@ module.exports = function sendGAEvent() {
   ;
 })(new Image(),window,navigator,encodeURIComponent);
 
-}
+};

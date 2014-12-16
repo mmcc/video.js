@@ -1,5 +1,6 @@
-var vjs, Player, CoreObject, options, vjslib, plugins;
+var document, vjs, Player, CoreObject, options, vjslib, plugins;
 
+document = require('global/document');
 Player = require('./player.js');
 plugins = require('./plugins.js');
 options = require('./options.js');
@@ -15,7 +16,7 @@ var elementShiv = function() {
   document.createElement('video');
   document.createElement('audio');
   document.createElement('track');
-}
+};
 
 /**
  * Doubles as the main function for users to create a player instance and also
