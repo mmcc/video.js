@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
   grunt.registerTask('saucelabs', function() {
+    var exec = require('child_process').exec;
     var done = this.async();
 
     if (this.args[0] == 'connect') {

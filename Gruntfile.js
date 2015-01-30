@@ -1,11 +1,7 @@
 module.exports = function(grunt) {
-  var pkg, s3, semver, version, verParts, uglify, exec, fs;
+  var pkg, s3, version, verParts;
 
-  semver = require('semver');
   pkg = grunt.file.readJSON('package.json');
-  uglify = require('uglify-js');
-  exec = require('child_process').exec;
-  fs = require('fs');
 
   try {
     s3 = grunt.file.readJSON('.s3config.json');
