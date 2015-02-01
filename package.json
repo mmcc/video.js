@@ -39,10 +39,12 @@
     "grunt-contrib-less": "~0.6.4",
     "grunt-contrib-qunit": "~0.2.1",
     "grunt-contrib-watch": "~0.1.4",
+    "grunt-fastly": "^0.1.3",
     "grunt-karma": "^0.8.3",
     "grunt-s3": "~0.2.0-alpha",
     "grunt-tagrelease": "~0.3.3",
     "grunt-version": "~0.3.0",
+    "grunt-videojs-languages": "0.0.4",
     "grunt-zip": "0.10.2",
     "karma": "^0.12.14",
     "karma-chrome-launcher": "^0.1.3",
@@ -60,7 +62,6 @@
     "semver": "~1.1.4",
     "sinon": "~1.9.1",
     "uglify-js": "~2.3.6",
-    "videojs-doc-generator": "0.0.1",
-    "grunt-videojs-languages": "0.0.4"
+    "videojs-doc-generator": "0.0.1"
   }
 }

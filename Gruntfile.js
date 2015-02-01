@@ -3,12 +3,6 @@ module.exports = function(grunt) {
 
   pkg = grunt.file.readJSON('package.json');
 
-  try {
-    s3 = grunt.file.readJSON('.s3config.json');
-  } catch(e) {
-    s3 = {};
-  }
-
   verParts = pkg.version.split('.');
   version = {
     full: pkg.version,
@@ -92,7 +86,12 @@ module.exports = function(grunt) {
       }
     },
     s3: {
-      options: s3,
+      options: {
+        "key": process.env.VJS_S3_KEY,
+        "secret": process.env.VJS_S3_SECRET,
+        "bucket": process.env.VJS_S3_BUCKET,
+        "access": process.env.VJS_S3_ACCESS
+      },
       minor: {
         upload: [
           {
@@ -116,6 +115,27 @@ module.exports = function(grunt) {
             }
           }
         ]
+      }
+    },
+    fastly: {
+      options: {
+        key: process.env.VJS_FASTLY_API_KEY
+      },
+      minor: {
+        options: {
+          host: 'vjs.zencdn.net',
+          urls: [
+            version.majorMinor+'/*'
+          ]
+        }
+      },
+      patch: {
+        options: {
+          host: 'vjs.zencdn.net',
+          urls: [
+            version.full+'/*'
+          ]
+        }
       }
     },
     cssmin: {
@@ -334,6 +354,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-version');
   grunt.loadNpmTasks('grunt-tagrelease');
   grunt.loadNpmTasks('chg');
+  grunt.loadNpmTasks('grunt-fastly');
 
   // grunt.loadTasks('./docs/tasks/');
   // grunt.loadTasks('../videojs-doc-generator/tasks/');
