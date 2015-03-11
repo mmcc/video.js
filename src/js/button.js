@@ -1,3 +1,7 @@
+import Component from './component';
+import VjsLib from './lib';
+import * as VjsEvents from './events';
+
 /* Button - Base class for all buttons
 ================================================================================ */
 /**
@@ -7,13 +11,13 @@
  * @class
  * @constructor
  */
-vjs.Button = vjs.Component.extend({
+var Button = Component.extend({
   /**
    * @constructor
    * @inheritDoc
    */
   init: function(player, options){
-    vjs.Component.call(this, player, options);
+    Component.call(this, player, options);
 
     this.emitTapEvents();
 
@@ -24,26 +28,28 @@ vjs.Button = vjs.Component.extend({
   }
 });
 
-vjs.Button.prototype.createEl = function(type, props){
+Component.registerComponent('Button', Button);
+
+Button.prototype.createEl = function(type, props){
   var el;
 
   // Add standard Aria and Tabindex info
-  props = vjs.obj.merge({
+  props = VjsLib.obj.merge({
     className: this.buildCSSClass(),
     'role': 'button',
     'aria-live': 'polite', // let the screen reader user know that the text of the button may change
     tabIndex: 0
   }, props);
 
-  el = vjs.Component.prototype.createEl.call(this, type, props);
+  el = Component.prototype.createEl.call(this, type, props);
 
   // if innerHTML hasn't been overridden (bigPlayButton), add content elements
   if (!props.innerHTML) {
-    this.contentEl_ = vjs.createEl('div', {
+    this.contentEl_ = VjsLib.createEl('div', {
       className: 'vjs-control-content'
     });
 
-    this.controlText_ = vjs.createEl('span', {
+    this.controlText_ = VjsLib.createEl('span', {
       className: 'vjs-control-text',
       innerHTML: this.localize(this.buttonText) || 'Need Text'
     });
@@ -55,21 +61,21 @@ vjs.Button.prototype.createEl = function(type, props){
   return el;
 };
 
-vjs.Button.prototype.buildCSSClass = function(){
+Button.prototype.buildCSSClass = function(){
   // TODO: Change vjs-control to vjs-button?
-  return 'vjs-control ' + vjs.Component.prototype.buildCSSClass.call(this);
+  return 'vjs-control ' + VjsLib.Component.prototype.buildCSSClass.call(this);
 };
 
   // Click - Override with specific functionality for button
-vjs.Button.prototype.onClick = function(){};
+Button.prototype.onClick = function(){};
 
   // Focus - Add keyboard functionality to element
-vjs.Button.prototype.onFocus = function(){
-  vjs.on(document, 'keydown', vjs.bind(this, this.onKeyPress));
+Button.prototype.onFocus = function(){
+  VjsEvents.on(document, 'keydown', VjsLib.bind(this, this.onKeyPress));
 };
 
   // KeyPress (document level) - Trigger click when keys are pressed
-vjs.Button.prototype.onKeyPress = function(event){
+Button.prototype.onKeyPress = function(event){
   // Check for space bar (32) or enter (13) keys
   if (event.which == 32 || event.which == 13) {
     event.preventDefault();
@@ -78,6 +84,8 @@ vjs.Button.prototype.onKeyPress = function(event){
 };
 
 // Blur - Remove keyboard triggers
-vjs.Button.prototype.onBlur = function(){
-  vjs.off(document, 'keydown', vjs.bind(this, this.onKeyPress));
+Button.prototype.onBlur = function(){
+  VjsEvents.off(document, 'keydown', VjsLib.bind(this, this.onKeyPress));
 };
+
+export default Button;

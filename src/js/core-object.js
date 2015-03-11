@@ -1,3 +1,5 @@
+import VjsLib from './lib';
+
 /**
  * Core Object/Class for objects that use inheritance + constructors
  *
@@ -49,7 +51,7 @@
  * @class
  * @constructor
  */
-vjs.CoreObject = vjs['CoreObject'] = function(){};
+var CoreObject = function(){};
 // Manually exporting vjs['CoreObject'] here for Closure Compiler
 // because of the use of the extend/create class methods
 // If we didn't do this, those functions would get flattened to something like
@@ -67,7 +69,7 @@ vjs.CoreObject = vjs['CoreObject'] = function(){};
  * @return {vjs.CoreObject} An object that inherits from CoreObject
  * @this {*}
  */
-vjs.CoreObject.extend = function(props){
+CoreObject.extend = function(props){
   var init, subObj;
 
   props = props || {};
@@ -89,15 +91,15 @@ vjs.CoreObject.extend = function(props){
   };
 
   // Inherit from this object's prototype
-  subObj.prototype = vjs.obj.create(this.prototype);
+  subObj.prototype = VjsLib.obj.create(this.prototype);
   // Reset the constructor property for subObj otherwise
   // instances of subObj would have the constructor of the parent Object
   subObj.prototype.constructor = subObj;
 
   // Make the class extendable
-  subObj.extend = vjs.CoreObject.extend;
+  subObj.extend = CoreObject.extend;
   // Make a function for creating instances
-  subObj.create = vjs.CoreObject.create;
+  subObj.create = CoreObject.create;
 
   // Extend subObj's prototype with functions and other properties from props
   for (var name in props) {
@@ -117,9 +119,9 @@ vjs.CoreObject.extend = function(props){
  * @return {vjs.CoreObject} An instance of a CoreObject subclass
  * @this {*}
  */
-vjs.CoreObject.create = function(){
+CoreObject.create = function(){
   // Create a new object that inherits from this object's prototype
-  var inst = vjs.obj.create(this.prototype);
+  var inst = VjsLib.obj.create(this.prototype);
 
   // Apply this constructor function to the new object
   this.apply(inst, arguments);
@@ -127,3 +129,5 @@ vjs.CoreObject.create = function(){
   // Return the new object
   return inst;
 };
+
+export default CoreObject;
