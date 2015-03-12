@@ -1,9 +1,11 @@
-(function() {
-  var createTrackHelper;
 /**
  * @fileoverview Media Technology Controller - Base class for media playback
  * technology controllers like Flash and HTML5
  */
+
+import Component from '../component';
+import TextTrackList from '../tracks/text-track-list';
+import * as VjsLib from '../lib';
 
 /**
  * Base class for media (HTML5 Video, Flash) controllers
@@ -11,14 +13,14 @@
  * @param {Object=} options Options object
  * @constructor
  */
-vjs.MediaTechController = vjs.Component.extend({
+var MediaTechController = Component.extend({
   /** @constructor */
   init: function(player, options, ready){
     options = options || {};
     // we don't want the tech to report user activity automatically.
     // This is done manually in addControlsListeners
     options.reportTouchActivity = false;
-    vjs.Component.call(this, player, options, ready);
+    Component.call(this, player, options, ready);
 
     // Manually track progress in cases where the browser/flash player doesn't report it.
     if (!this['featuresProgressEvents']) {
@@ -60,12 +62,10 @@ vjs.MediaTechController = vjs.Component.extend({
  * keep the controls showing, but that shouldn't be an issue. A touch and hold on
  * any controls will still keep the user active
  */
-vjs.MediaTechController.prototype.initControlsListeners = function(){
-  var player, activateControls;
+MediaTechController.prototype.initControlsListeners = function(){
+  let player = this.player();
 
-  player = this.player();
-
-  activateControls = function(){
+  let activateControls = function(){
     if (player.controls() && !player.usingNativeControls()) {
       this.addControlsListeners();
     }
@@ -89,8 +89,8 @@ vjs.MediaTechController.prototype.initControlsListeners = function(){
   });
 };
 
-vjs.MediaTechController.prototype.addControlsListeners = function(){
-  var userWasActive;
+MediaTechController.prototype.addControlsListeners = function(){
+  let userWasActive;
 
   // Some browsers (Chrome & IE) don't trigger a click on a flash swf, but do
   // trigger mousedown/up.
@@ -128,7 +128,7 @@ vjs.MediaTechController.prototype.addControlsListeners = function(){
  * Remove the listeners used for click and tap controls. This is needed for
  * toggling to controls disabled, where a tap/touch should do nothing.
  */
-vjs.MediaTechController.prototype.removeControlsListeners = function(){
+MediaTechController.prototype.removeControlsListeners = function(){
   // We don't want to just use `this.off()` because there might be other needed
   // listeners added by techs that extend this.
   this.off('tap');
@@ -144,7 +144,7 @@ vjs.MediaTechController.prototype.removeControlsListeners = function(){
 /**
  * Handle a click on the media element. By default will play/pause the media.
  */
-vjs.MediaTechController.prototype.onClick = function(event){
+MediaTechController.prototype.onClick = function(event){
   // We're using mousedown to detect clicks thanks to Flash, but mousedown
   // will also be triggered with right-clicks, so we need to prevent that
   if (event.button !== 0) return;
@@ -164,7 +164,7 @@ vjs.MediaTechController.prototype.onClick = function(event){
  * Handle a tap on the media element. By default it will toggle the user
  * activity state, which hides and shows the controls.
  */
-vjs.MediaTechController.prototype.onTap = function(){
+MediaTechController.prototype.onTap = function(){
   this.player().userActive(!this.player().userActive());
 };
 
@@ -172,19 +172,19 @@ vjs.MediaTechController.prototype.onTap = function(){
 ================================================================================ */
 // Manually trigger progress events based on changes to the buffered amount
 // Many flash players and older HTML5 browsers don't send progress or progress-like events
-vjs.MediaTechController.prototype.manualProgressOn = function(){
+MediaTechController.prototype.manualProgressOn = function(){
   this.manualProgress = true;
 
   // Trigger progress watching when a source begins loading
   this.trackProgress();
 };
 
-vjs.MediaTechController.prototype.manualProgressOff = function(){
+MediaTechController.prototype.manualProgressOff = function(){
   this.manualProgress = false;
   this.stopTrackingProgress();
 };
 
-vjs.MediaTechController.prototype.trackProgress = function(){
+MediaTechController.prototype.trackProgress = function(){
   this.progressInterval = this.setInterval(function(){
     // Don't trigger unless buffered amount is greater than last time
 
@@ -201,10 +201,10 @@ vjs.MediaTechController.prototype.trackProgress = function(){
     }
   }, 500);
 };
-vjs.MediaTechController.prototype.stopTrackingProgress = function(){ this.clearInterval(this.progressInterval); };
+MediaTechController.prototype.stopTrackingProgress = function(){ this.clearInterval(this.progressInterval); };
 
 /*! Time Tracking -------------------------------------------------------------- */
-vjs.MediaTechController.prototype.manualTimeUpdatesOn = function(){
+MediaTechController.prototype.manualTimeUpdatesOn = function(){
   var player = this.player_;
 
   this.manualTimeUpdates = true;
@@ -222,7 +222,7 @@ vjs.MediaTechController.prototype.manualTimeUpdatesOn = function(){
   });
 };
 
-vjs.MediaTechController.prototype.manualTimeUpdatesOff = function(){
+MediaTechController.prototype.manualTimeUpdatesOff = function(){
   var player = this.player_;
 
   this.manualTimeUpdates = false;
@@ -231,7 +231,7 @@ vjs.MediaTechController.prototype.manualTimeUpdatesOff = function(){
   this.off(player, 'pause', this.stopTrackingCurrentTime);
 };
 
-vjs.MediaTechController.prototype.trackCurrentTime = function(){
+MediaTechController.prototype.trackCurrentTime = function(){
   if (this.currentTimeInterval) { this.stopTrackingCurrentTime(); }
   this.currentTimeInterval = this.setInterval(function(){
     this.player().trigger('timeupdate');
@@ -239,7 +239,7 @@ vjs.MediaTechController.prototype.trackCurrentTime = function(){
 };
 
 // Turn off play progress tracking (when paused or dragging)
-vjs.MediaTechController.prototype.stopTrackingCurrentTime = function(){
+MediaTechController.prototype.stopTrackingCurrentTime = function(){
   this.clearInterval(this.currentTimeInterval);
 
   // #1002 - if the video ends right before the next timeupdate would happen,
@@ -247,39 +247,36 @@ vjs.MediaTechController.prototype.stopTrackingCurrentTime = function(){
   this.player().trigger('timeupdate');
 };
 
-vjs.MediaTechController.prototype.dispose = function() {
+MediaTechController.prototype.dispose = function() {
   // Turn off any manual progress or timeupdate tracking
   if (this.manualProgress) { this.manualProgressOff(); }
 
   if (this.manualTimeUpdates) { this.manualTimeUpdatesOff(); }
 
-  vjs.Component.prototype.dispose.call(this);
+  Component.prototype.dispose.call(this);
 };
 
-vjs.MediaTechController.prototype.setCurrentTime = function() {
+MediaTechController.prototype.setCurrentTime = function() {
   // improve the accuracy of manual timeupdates
   if (this.manualTimeUpdates) { this.player().trigger('timeupdate'); }
 };
 
 // TODO: Consider looking at moving this into the text track display directly
 // https://github.com/videojs/video.js/issues/1863
-vjs.MediaTechController.prototype.initTextTrackListeners = function() {
-  var player = this.player_,
-      tracks,
-      textTrackListChanges = function() {
-        var textTrackDisplay = player.getChild('textTrackDisplay'),
-            controlBar;
+MediaTechController.prototype.initTextTrackListeners = function() {
+  let player = this.player_;
 
-        if (textTrackDisplay) {
-          textTrackDisplay.updateDisplay();
-        }
-      };
+  let textTrackListChanges = function() {
+    let textTrackDisplay = player.getChild('textTrackDisplay');
 
-  tracks = this.textTracks();
+    if (textTrackDisplay) {
+      textTrackDisplay.updateDisplay();
+    }
+  };
 
-  if (!tracks) {
-    return;
-  }
+  let tracks = this.textTracks();
+
+  if (!tracks) return;
 
   tracks.addEventListener('removetrack', textTrackListChanges);
   tracks.addEventListener('addtrack', textTrackListChanges);
@@ -290,25 +287,22 @@ vjs.MediaTechController.prototype.initTextTrackListeners = function() {
   }));
 };
 
-vjs.MediaTechController.prototype.emulateTextTracks = function() {
-  var player = this.player_,
-      textTracksChanges,
-      tracks,
-      script;
+MediaTechController.prototype.emulateTextTracks = function() {
+  let player = this.player_;
 
   if (!window['WebVTT']) {
-    script = document.createElement('script');
+    let script = document.createElement('script');
     script.src = player.options()['vtt.js'] || '../node_modules/vtt.js/dist/vtt.js';
     player.el().appendChild(script);
     window['WebVTT'] = true;
   }
 
-  tracks = this.textTracks();
+  let tracks = this.textTracks();
   if (!tracks) {
     return;
   }
 
-  textTracksChanges = function() {
+  let textTracksChanges = function() {
     var i, track, textTrackDisplay;
 
     textTrackDisplay = player.getChild('textTrackDisplay'),
@@ -317,9 +311,9 @@ vjs.MediaTechController.prototype.emulateTextTracks = function() {
 
     for (i = 0; i < this.length; i++) {
       track = this[i];
-      track.removeEventListener('cuechange', vjs.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
+      track.removeEventListener('cuechange', VjsLib.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
       if (track.mode === 'showing') {
-        track.addEventListener('cuechange', vjs.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
+        track.addEventListener('cuechange', VjsLib.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
       }
     }
   };
@@ -342,21 +336,20 @@ vjs.MediaTechController.prototype.emulateTextTracks = function() {
  * @type {Array}
  * @private
  */
-vjs.MediaTechController.prototype.textTracks_;
+MediaTechController.prototype.textTracks_;
 
-vjs.MediaTechController.prototype.textTracks = function() {
-  this.player_.textTracks_ = this.player_.textTracks_ || new vjs.TextTrackList();
+MediaTechController.prototype.textTracks = function() {
+  this.player_.textTracks_ = this.player_.textTracks_ || new TextTrackList();
   return this.player_.textTracks_;
 };
 
-vjs.MediaTechController.prototype.remoteTextTracks = function() {
-  this.player_.remoteTextTracks_ = this.player_.remoteTextTracks_ || new vjs.TextTrackList();
+MediaTechController.prototype.remoteTextTracks = function() {
+  this.player_.remoteTextTracks_ = this.player_.remoteTextTracks_ || new TextTrackList();
   return this.player_.remoteTextTracks_;
 };
 
-createTrackHelper = function(self, kind, label, language, options) {
-  var tracks = self.textTracks(),
-      track;
+let createTrackHelper = function(self, kind, label, language, options) {
+  var tracks = self.textTracks();
 
   options = options || {};
 
@@ -369,13 +362,13 @@ createTrackHelper = function(self, kind, label, language, options) {
   }
   options['player'] = self.player_;
 
-  track = new vjs.TextTrack(options);
+  let track = new vjs.TextTrack(options);
   tracks.addTrack_(track);
 
   return track;
 };
 
-vjs.MediaTechController.prototype.addTextTrack = function(kind, label, language) {
+MediaTechController.prototype.addTextTrack = function(kind, label, language) {
   if (!kind) {
     throw new Error('TextTrack kind is required but was not provided');
   }
@@ -383,15 +376,15 @@ vjs.MediaTechController.prototype.addTextTrack = function(kind, label, language)
   return createTrackHelper(this, kind, label, language);
 };
 
-vjs.MediaTechController.prototype.addRemoteTextTrack = function(options) {
-  var track = createTrackHelper(this, options['kind'], options['label'], options['language'], options);
+MediaTechController.prototype.addRemoteTextTrack = function(options) {
+  let track = createTrackHelper(this, options['kind'], options['label'], options['language'], options);
   this.remoteTextTracks().addTrack_(track);
   return {
     track: track
   };
 };
 
-vjs.MediaTechController.prototype.removeRemoteTextTrack = function(track) {
+MediaTechController.prototype.removeRemoteTextTrack = function(track) {
   this.textTracks().removeTrack_(track);
   this.remoteTextTracks().removeTrack_(track);
 };
@@ -402,20 +395,20 @@ vjs.MediaTechController.prototype.removeRemoteTextTrack = function(track) {
  * Poster support for techs should be optional, so we don't want techs to
  * break if they don't have a way to set a poster.
  */
-vjs.MediaTechController.prototype.setPoster = function(){};
+MediaTechController.prototype.setPoster = function(){};
 
-vjs.MediaTechController.prototype['featuresVolumeControl'] = true;
+MediaTechController.prototype['featuresVolumeControl'] = true;
 
 // Resizing plugins using request fullscreen reloads the plugin
-vjs.MediaTechController.prototype['featuresFullscreenResize'] = false;
-vjs.MediaTechController.prototype['featuresPlaybackRate'] = false;
+MediaTechController.prototype['featuresFullscreenResize'] = false;
+MediaTechController.prototype['featuresPlaybackRate'] = false;
 
 // Optional events that we can manually mimic with timers
 // currently not triggered by video-js-swf
-vjs.MediaTechController.prototype['featuresProgressEvents'] = false;
-vjs.MediaTechController.prototype['featuresTimeupdateEvents'] = false;
+MediaTechController.prototype['featuresProgressEvents'] = false;
+MediaTechController.prototype['featuresTimeupdateEvents'] = false;
 
-vjs.MediaTechController.prototype['featuresNativeTextTracks'] = false;
+MediaTechController.prototype['featuresNativeTextTracks'] = false;
 
 /**
  * A functional mixin for techs that want to use the Source Handler pattern.
@@ -425,7 +418,7 @@ vjs.MediaTechController.prototype['featuresNativeTextTracks'] = false;
  *   videojs.MediaTechController.withSourceHandlers.call(MyTech);
  *
  */
-vjs.MediaTechController.withSourceHandlers = function(Tech){
+MediaTechController.withSourceHandlers = function(Tech){
   /**
    * Register a source handler
    * Source handlers are scripts for handling specific formats.
@@ -435,7 +428,7 @@ vjs.MediaTechController.withSourceHandlers = function(Tech){
    * @param  {Boolean}  first    Register it before any existing handlers
    */
   Tech.registerSourceHandler = function(handler, index){
-    var handlers = Tech.sourceHandlers;
+    let handlers = Tech.sourceHandlers;
 
     if (!handlers) {
       handlers = Tech.sourceHandlers = [];
@@ -457,8 +450,8 @@ vjs.MediaTechController.withSourceHandlers = function(Tech){
    * @returns {null}         Null if no source handler is found
    */
   Tech.selectSourceHandler = function(source){
-    var handlers = Tech.sourceHandlers || [],
-        can;
+    let handlers = Tech.sourceHandlers || [];
+    let can;
 
     for (var i = 0; i < handlers.length; i++) {
       can = handlers[i].canHandleSource(source);
@@ -528,6 +521,5 @@ vjs.MediaTechController.withSourceHandlers = function(Tech){
 
 };
 
-vjs.media = {};
-
-})();
+export default MediaTechController;
+export { media };

@@ -1,3 +1,6 @@
+import Button from './button';
+import * as VjsLib from './lib';
+e
 /* Poster Image
 ================================================================================ */
 /**
@@ -7,10 +10,10 @@
  * @param {Object=} options
  * @constructor
  */
-vjs.PosterImage = vjs.Button.extend({
+var PosterImage = Button.extend({
   /** @constructor */
   init: function(player, options){
-    vjs.Button.call(this, player, options);
+    Button.call(this, player, options);
 
     this.update();
     player.on('posterchange', vjs.bind(this, this.update));
@@ -20,17 +23,17 @@ vjs.PosterImage = vjs.Button.extend({
 /**
  * Clean up the poster image
  */
-vjs.PosterImage.prototype.dispose = function(){
+PosterImage.prototype.dispose = function(){
   this.player().off('posterchange', this.update);
-  vjs.Button.prototype.dispose.call(this);
+  Button.prototype.dispose.call(this);
 };
 
 /**
  * Create the poster image element
  * @return {Element}
  */
-vjs.PosterImage.prototype.createEl = function(){
-  var el = vjs.createEl('div', {
+PosterImage.prototype.createEl = function(){
+  var el = VjsLib.createEl('div', {
     className: 'vjs-poster',
 
     // Don't want poster to be tabbable.
@@ -41,7 +44,7 @@ vjs.PosterImage.prototype.createEl = function(){
   // ratio, use a div with `background-size` when available. For browsers that
   // do not support `background-size` (e.g. IE8), fall back on using a regular
   // img element.
-  if (!vjs.BACKGROUND_SIZE_SUPPORTED) {
+  if (!VjsLib.BACKGROUND_SIZE_SUPPORTED) {
     this.fallbackImg_ = vjs.createEl('img');
     el.appendChild(this.fallbackImg_);
   }
@@ -52,7 +55,7 @@ vjs.PosterImage.prototype.createEl = function(){
 /**
  * Event handler for updates to the player's poster source
  */
-vjs.PosterImage.prototype.update = function(){
+PosterImage.prototype.update = function(){
   var url = this.player().poster();
 
   this.setSrc(url);
@@ -69,7 +72,7 @@ vjs.PosterImage.prototype.update = function(){
 /**
  * Set the poster source depending on the display method
  */
-vjs.PosterImage.prototype.setSrc = function(url){
+PosterImage.prototype.setSrc = function(url){
   var backgroundImage;
 
   if (this.fallbackImg_) {
@@ -89,8 +92,10 @@ vjs.PosterImage.prototype.setSrc = function(url){
 /**
  * Event handler for clicks on the poster image
  */
-vjs.PosterImage.prototype.onClick = function(){
+PosterImage.prototype.onClick = function(){
   // We don't want a click to trigger playback when controls are disabled
   // but CSS should be hiding the poster to prevent that from happening
   this.player_.play();
 };
+
+export default PosterImage;

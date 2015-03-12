@@ -1,5 +1,7 @@
-(function() {
 'use strict';
+
+import Component from '../component';
+import { window } from 'global';
 
 /* Text Track Display
 ============================================================================= */
@@ -10,10 +12,10 @@
  *
  * @constructor
  */
-vjs.TextTrackDisplay = vjs.Component.extend({
+var TextTrackDisplay = Component.extend({
   /** @constructor */
   init: function(player, options, ready){
-    vjs.Component.call(this, player, options, ready);
+    Component.call(this, player, options, ready);
 
     player.on('loadstart', vjs.bind(this, this.toggleDisplay));
 
@@ -27,20 +29,18 @@ vjs.TextTrackDisplay = vjs.Component.extend({
         return;
       }
 
-      var i, tracks, track;
-
       player.on('fullscreenchange', vjs.bind(this, this.updateDisplay));
 
-      tracks = player.options_['tracks'] || [];
-      for (i = 0; i < tracks.length; i++) {
-        track = tracks[i];
+      let tracks = player.options_['tracks'] || [];
+      for (let i = 0; i < tracks.length; i++) {
+        let track = tracks[i];
         this.player_.addRemoteTextTrack(track);
       }
     }));
   }
 });
 
-vjs.TextTrackDisplay.prototype.toggleDisplay = function() {
+TextTrackDisplay.prototype.toggleDisplay = function() {
   if (this.player_.tech && this.player_.tech['featuresNativeTextTracks']) {
     this.hide();
   } else {
@@ -48,20 +48,20 @@ vjs.TextTrackDisplay.prototype.toggleDisplay = function() {
   }
 };
 
-vjs.TextTrackDisplay.prototype.createEl = function(){
-  return vjs.Component.prototype.createEl.call(this, 'div', {
+TextTrackDisplay.prototype.createEl = function(){
+  return Component.prototype.createEl.call(this, 'div', {
     className: 'vjs-text-track-display'
   });
 };
 
-vjs.TextTrackDisplay.prototype.clearDisplay = function() {
+TextTrackDisplay.prototype.clearDisplay = function() {
   if (typeof window['WebVTT'] === 'function') {
     window['WebVTT']['processCues'](window, [], this.el_);
   }
 };
 
 // Add cue HTML to display
-var constructColor = function(color, opacity) {
+let constructColor = function(color, opacity) {
   return 'rgba(' +
     // color looks like "#f0e"
     parseInt(color[1] + color[1], 16) + ',' +
@@ -69,9 +69,9 @@ var constructColor = function(color, opacity) {
     parseInt(color[3] + color[3], 16) + ',' +
     opacity + ')';
 };
-var darkGray = '#222';
-var lightGray = '#ccc';
-var fontMap = {
+const darkGray = '#222';
+const lightGray = '#ccc';
+const fontMap = {
   monospace:             'monospace',
   sansSerif:             'sans-serif',
   serif:                 'serif',
@@ -83,17 +83,15 @@ var fontMap = {
   script:                '"Monotype Corsiva", cursive',
   smallcaps:             '"Andale Mono", "Lucida Console", monospace, sans-serif'
 };
-var tryUpdateStyle = function(el, style, rule) {
+let tryUpdateStyle = function(el, style, rule) {
   // some style changes will throw an error, particularly in IE8. Those should be noops.
   try {
     el.style[style] = rule;
   } catch (e) {}
 };
 
-vjs.TextTrackDisplay.prototype.updateDisplay = function() {
-  var tracks = this.player_.textTracks(),
-      i = 0,
-      track;
+TextTrackDisplay.prototype.updateDisplay = function() {
+  var tracks = this.player_.textTracks();
 
   this.clearDisplay();
 
@@ -101,35 +99,33 @@ vjs.TextTrackDisplay.prototype.updateDisplay = function() {
     return;
   }
 
-  for (; i < tracks.length; i++) {
-    track = tracks[i];
+  for (let i=0; i < tracks.length; i++) {
+    let track = tracks[i];
     if (track['mode'] === 'showing') {
       this.updateForTrack(track);
     }
   }
 };
 
-vjs.TextTrackDisplay.prototype.updateForTrack = function(track) {
+TextTrackDisplay.prototype.updateForTrack = function(track) {
   if (typeof window['WebVTT'] !== 'function' || !track['activeCues']) {
     return;
   }
 
-  var i = 0,
-      property,
-      cueDiv,
+  let property,
       overrides = this.player_['textTrackSettings'].getValues(),
       fontSize,
       cues = [];
 
-  for (; i < track['activeCues'].length; i++) {
+  for (let i = 0; i < track['activeCues'].length; i++) {
     cues.push(track['activeCues'][i]);
   }
 
   window['WebVTT']['processCues'](window, track['activeCues'], this.el_);
 
-  i = cues.length;
+  let i = cues.length;
   while (i--) {
-    cueDiv = cues[i].displayState;
+    let cueDiv = cues[i].displayState;
     if (overrides.color) {
       cueDiv.firstChild.style.color = overrides.color;
     }
@@ -576,4 +572,3 @@ vjs.ChaptersTrackMenuItem.prototype.update = function(){
   // vjs.log(currentTime, cue.startTime);
   this.selected(cue['startTime'] <= currentTime && currentTime < cue['endTime']);
 };
-})();
