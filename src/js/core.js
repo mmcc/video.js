@@ -117,5 +117,20 @@ vjs.addLanguage = function(code, data){
   return Options['languages'];
 };
 
+/**
+ * Custom Universal Module Definition (UMD)
+ *
+ * Video.js will never be a non-browser lib so we can simplify UMD a bunch and
+ * still support requirejs and browserify. This also needs to be closure
+ * compiler compatible, so string keys are used.
+ */
+if (typeof define === 'function' && define['amd']) {
+  define('videojs', [], function(){ return videojs; });
+
+// checking that module is an object too because of umdjs/umd#35
+} else if (typeof exports === 'object' && typeof module === 'object') {
+  module['exports'] = videojs;
+}
+
 export default vjs;
 export { elementShiv };
