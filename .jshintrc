@@ -1,7 +1,7 @@
 {
     "evil" : true,
     "validthis": true,
-    "browser"  : true,
+    "node"     : true,
     "debug"    : true,
     "boss"     : true,
     "expr"     : true,

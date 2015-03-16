@@ -1002,7 +1002,7 @@ Component.prototype.dimension = function(widthOrHeight, num, skipListeners){
   // TODO: handle display:none and no dimension style using px
   } else {
 
-    return parseInt(this.el_['offset'+vjs.capitalize(widthOrHeight)], 10);
+    return parseInt(this.el_['offset'+VjsLib.capitalize(widthOrHeight)], 10);
 
     // ComputedStyle version.
     // Only difference is if the element is hidden it will return
@@ -1053,7 +1053,7 @@ Component.prototype.emitTapEvents = function(){
   this.on('touchstart', function(event) {
     // If more than one finger, don't consider treating this as a click
     if (event.touches.length === 1) {
-      firstTouch = vjs.obj.copy(event.touches[0]);
+      firstTouch = VjsLib.obj.copy(event.touches[0]);
       // Record start time so we can detect a tap vs. "touch and hold"
       touchStart = new Date().getTime();
       // Reset couldBeTap tracking

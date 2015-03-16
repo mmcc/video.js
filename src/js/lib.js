@@ -119,7 +119,7 @@ obj.deepMerge = function(obj1, obj2){
 
   // make a copy of obj1 so we're not overwriting original values.
   // like prototype.options_ and all sub options objects
-  obj1 = vjs.obj.copy(obj1);
+  obj1 = obj.copy(obj1);
 
   for (key in obj2){
     if (hasOwnProp.call(obj2, key)) {
@@ -127,8 +127,8 @@ obj.deepMerge = function(obj1, obj2){
       val2 = obj2[key];
 
       // Check if both properties are pure objects and do a deep merge if so
-      if (vjs.obj.isPlain(val1) && vjs.obj.isPlain(val2)) {
-        obj1[key] = vjs.obj.deepMerge(val1, val2);
+      if (obj.isPlain(val1) && obj.isPlain(val2)) {
+        obj1[key] = obj.deepMerge(val1, val2);
       } else {
         obj1[key] = obj2[key];
       }
@@ -144,7 +144,7 @@ obj.deepMerge = function(obj1, obj2){
  * @private
  */
 obj.copy = function(obj){
-  return vjs.obj.merge({}, obj);
+  return obj.merge({}, obj);
 };
 
 /**
@@ -382,7 +382,7 @@ var IS_IPOD = (/iPod/i).test(USER_AGENT);
 var IS_IOS = IS_IPHONE || IS_IPAD || IS_IPOD;
 
 var IOS_VERSION = (function(){
-  var match = vjs.USER_AGENT.match(/OS (\d+)_/i);
+  var match = USER_AGENT.match(/OS (\d+)_/i);
   if (match && match[1]) { return match[1]; }
 })();
 

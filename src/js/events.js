@@ -362,7 +362,7 @@ const one = function(elem, type, fn) {
     fn.apply(this, arguments);
   };
   // copy the guid to the new function so it can removed using the original function's ID
-  func.guid = fn.guid = fn.guid || vjs.guid++;
+  func.guid = fn.guid = fn.guid || VjsLib.guid++;
   on(elem, type, func);
 };
 
