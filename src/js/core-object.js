@@ -1,4 +1,4 @@
-import VjsLib from './lib';
+import * as VjsLib from './lib';
 
 /**
  * Core Object/Class for objects that use inheritance + constructors

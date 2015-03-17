@@ -4,10 +4,11 @@
  */
 
 import CoreObject from './core-object.js';
-import VjsLib from './lib.js';
-import VjsUtil from './util.js';
+import * as VjsLib from './lib.js';
+import * as VjsUtil from './util.js';
 import * as VjsEvents from './events.js';
-import window from 'global/window';
+
+let window = global.window;
 
 /**
  * Base UI Component class
@@ -45,6 +46,7 @@ var Component = CoreObject.extend({
    * @constructor
    */
   init: function(player, options, ready){
+    console.log(this);
     this.player_ = player;
 
     // Make a copy of prototype.options_ to protect against overriding global defaults
@@ -583,7 +585,7 @@ Component.prototype.buildCSSClass = function(){
 Component.prototype.on = function(first, second, third){
   var target, type, fn, removeOnDispose, cleanRemover, thisComponent;
 
-  if (typeof first === 'string' || vjs.obj.isArray(first)) {
+  if (typeof first === 'string' || VjsLib.obj.isArray(first)) {
     VjsEvents.on(this.el_, first, VjsLib.bind(this, second));
 
   // Targeting another component or element
@@ -966,7 +968,7 @@ Component.prototype.dimensions = function(width, height){
  */
 Component.prototype.dimension = function(widthOrHeight, num, skipListeners){
   if (num !== undefined) {
-    if (num === null || VjsLib.isNaN(num)) {
+    if (num === null || isNaN(num)) {
       num = 0;
     }
 
@@ -1235,6 +1237,24 @@ Component.prototype.clearInterval = function(intervalId) {
   this.off('dispose', disposeFn);
 
   return intervalId;
+};
+
+Component.components = {};
+
+Component.registerComponent = function(name, comp){
+  Component.components[name] = comp;
+  return comp;
+};
+
+Component.getComponent = function(name){
+  if (Component.components[name]) {
+    return Component.components[name];
+  }
+
+  if (window && window.videojs && window.videojs[name]) {
+    VjsLib.log.warn('The '+name+' component was added to the videojs object when it should be registered using videojs.registerComponent');
+    return window.videojs[name];
+  }
 };
 
 export default Component;

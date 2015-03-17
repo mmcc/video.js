@@ -1,6 +1,6 @@
 import Button from './button';
 import * as VjsLib from './lib';
-e
+
 /* Poster Image
 ================================================================================ */
 /**
@@ -16,7 +16,7 @@ var PosterImage = Button.extend({
     Button.call(this, player, options);
 
     this.update();
-    player.on('posterchange', vjs.bind(this, this.update));
+    player.on('posterchange', VjsLib.bind(this, this.update));
   }
 });
 
@@ -45,7 +45,7 @@ PosterImage.prototype.createEl = function(){
   // do not support `background-size` (e.g. IE8), fall back on using a regular
   // img element.
   if (!VjsLib.BACKGROUND_SIZE_SUPPORTED) {
-    this.fallbackImg_ = vjs.createEl('img');
+    this.fallbackImg_ = VjsLib.createEl('img');
     el.appendChild(this.fallbackImg_);
   }
 

@@ -61,7 +61,7 @@ let TextTrack = function(options) {
   let activeCues = new TextTrackCueList(tt.activeCues_);
 
   let changed = false;
-  let timeupdateHandler = vjs.bind(tt, function() {
+  let timeupdateHandler = VjsLib.bind(tt, function() {
     this['activeCues'];
     if (changed) {
       this['trigger']('cuechange');

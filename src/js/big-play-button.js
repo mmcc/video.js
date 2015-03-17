@@ -12,10 +12,11 @@ import Button from './button';
  * @constructor
  */
 var BigPlayButton = Button.extend();
+
 Component.registerComponent('BigPlayButton', BigPlayButton);
 
 BigPlayButton.prototype.createEl = function(){
-  return vjs.Button.prototype.createEl.call(this, 'div', {
+  return Button.prototype.createEl.call(this, 'div', {
     className: 'vjs-big-play-button',
     innerHTML: '<span aria-hidden="true"></span>',
     'aria-label': 'play video'

@@ -100,7 +100,7 @@ SeekBar.prototype.onMouseMove = function(event){
 };
 
 SeekBar.prototype.onMouseUp = function(event){
-  vjs.Slider.prototype.onMouseUp.call(this, event);
+  Slider.prototype.onMouseUp.call(this, event);
 
   this.player_.scrubbing = false;
   this.player_.removeClass('vjs-scrubbing');
@@ -163,7 +163,7 @@ LoadProgressBar.prototype.update = function(){
     part = children[i];
 
     if (!part) {
-      part = this.el_.appendChild(vjs.createEl());
+      part = this.el_.appendChild(VjsLib.createEl());
     }
 
     // set the percent based on the width of the progress bar (bufferedEnd)
@@ -184,7 +184,7 @@ LoadProgressBar.prototype.update = function(){
  * @param {Object=} options
  * @constructor
  */
-var PlayProgressBar = vjs.Component.extend({
+var PlayProgressBar = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);

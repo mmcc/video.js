@@ -1,6 +1,8 @@
 import EventEmitter from '../event-emitter';
 import * as VjsLib from '../lib';
 
+let { document } = global;
+
 /*
  * https://html.spec.whatwg.org/multipage/embedded-content.html#texttracklist
  *
@@ -17,7 +19,7 @@ import * as VjsLib from '../lib';
 let TextTrackList = function(tracks) {
   let list = this;
 
-  if (vjs.IS_IE8) {
+  if (VjsLib.IS_IE8) {
     list = document.createElement('custom');
 
     for (let prop in TextTrackList.prototype) {
@@ -38,7 +40,7 @@ let TextTrackList = function(tracks) {
     list.addTrack_(tracks[i]);
   }
 
-  if (vjs.IS_IE8) {
+  if (VjsLib.IS_IE8) {
     return list;
   }
 };

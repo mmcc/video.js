@@ -4,7 +4,9 @@ import * as VjsEvents from './events';
 import FullscreenApi from './fullscreen-api';
 import MediaError from './media-error';
 import options from './options';
-import { window } from 'globals';
+import JSON from './json';
+
+let { window } = global;
 
 /**
  * Global player list
@@ -204,7 +206,7 @@ Player.prototype.getTagSettings = function(tag){
   if (dataSetup !== null){
     // Parse options JSON
     // If empty string, make it a parsable json object.
-    VjsLib.obj.merge(tagOptions, VjsLib.JSON.parse(dataSetup || '{}'));
+    VjsLib.obj.merge(tagOptions, JSON.parse(dataSetup || '{}'));
   }
 
   VjsLib.obj.merge(baseOptions, tagOptions);
@@ -218,9 +220,9 @@ Player.prototype.getTagSettings = function(tag){
       // Change case needed: http://ejohn.org/blog/nodename-case-sensitivity/
       const childName = child.nodeName.toLowerCase();
       if (childName === 'source') {
-        options['sources'].push(vjs.getElementAttributes(child));
+        baseOptions['sources'].push(VjsLib.getElementAttributes(child));
       } else if (childName === 'track') {
-        options['tracks'].push(vjs.getElementAttributes(child));
+        baseOptions['tracks'].push(VjsLib.getElementAttributes(child));
       }
     }
   }
@@ -238,7 +240,7 @@ Player.prototype.createEl = function(){
 
   // Copy over all the attributes from the tag, including ID and class
   // ID will now reference player box, not the video tag
-  const attrs = vjs.getElementAttributes(tag);
+  const attrs = VjsLib.getElementAttributes(tag);
   VjsLib.obj.each(attrs, function(attr) {
     // workaround so we don't totally break IE7
     // http://stackoverflow.com/questions/3653444/css-styles-not-applied-on-dynamic-elements-in-internet-explorer-7
@@ -337,7 +339,7 @@ Player.prototype.loadTech = function(techName, source){
   }
 
   // Initialize tech instance
-  this.tech = new window['videojs'][techName](this, techOptions);
+  this.tech = new Component.getComponent(techName)(this, techOptions);
 
   this.tech.ready(techReady);
 };
@@ -429,16 +431,16 @@ Player.prototype.onLoadedData;
 Player.prototype.onLoadedAllData;
 
 /**
- * Fired when the user is active, e.g. moves the mouse over the player 
+ * Fired when the user is active, e.g. moves the mouse over the player
  * @event useractive
  */
-vjs.Player.prototype.onUserActive;
+Player.prototype.onUserActive;
 
 /**
  * Fired when the user is inactive, e.g. a short delay after the last mouse move or control interaction
  * @event userinactive
  */
-vjs.Player.prototype.onUserInactive;
+Player.prototype.onUserInactive;
 
 /**
  * Fired whenever the media begins or resumes playback
@@ -621,7 +623,7 @@ Player.prototype.techCall = function(method, arg){
     try {
       this.tech[method](arg);
     } catch(e) {
-      vjs.log(e);
+      VjsLib.log(e);
       throw e;
     }
   }
@@ -1645,7 +1647,7 @@ Player.prototype.playbackRate = function(rate) {
  * @type {Boolean}
  * @private
  */
-vjs.Player.prototype.isAudio_ = false;
+Player.prototype.isAudio_ = false;
 
 /**
  * Gets or sets the audio flag

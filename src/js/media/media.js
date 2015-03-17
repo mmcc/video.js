@@ -281,7 +281,7 @@ MediaTechController.prototype.initTextTrackListeners = function() {
   tracks.addEventListener('removetrack', textTrackListChanges);
   tracks.addEventListener('addtrack', textTrackListChanges);
 
-  this.on('dispose', vjs.bind(this, function() {
+  this.on('dispose', VjsLib.bind(this, function() {
     tracks.removeEventListener('removetrack', textTrackListChanges);
     tracks.removeEventListener('addtrack', textTrackListChanges);
   }));
@@ -320,7 +320,7 @@ MediaTechController.prototype.emulateTextTracks = function() {
 
   tracks.addEventListener('change', textTracksChanges);
 
-  this.on('dispose', vjs.bind(this, function() {
+  this.on('dispose', VjsLib.bind(this, function() {
     tracks.removeEventListener('change', textTracksChanges);
   }));
 };
@@ -362,7 +362,7 @@ let createTrackHelper = function(self, kind, label, language, options) {
   }
   options['player'] = self.player_;
 
-  let track = new vjs.TextTrack(options);
+  let track = new TextTrack(options);
   tracks.addTrack_(track);
 
   return track;
@@ -495,7 +495,7 @@ MediaTechController.withSourceHandlers = function(Tech){
       if (Tech.nativeSourceHandler) {
         sh = Tech.nativeSourceHandler;
       } else {
-        vjs.log.error('No source hander found for the current source.');
+        VjsLib.log.error('No source hander found for the current source.');
       }
     }
 

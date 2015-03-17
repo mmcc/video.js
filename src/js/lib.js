@@ -1,4 +1,4 @@
-import { document, navigator, isNaN } from 'global';
+let { window, document, navigator, isNaN } = global;
 
 let hasOwnProp = Object.prototype.hasOwnProperty;
 
@@ -143,8 +143,8 @@ obj.deepMerge = function(obj1, obj2){
  * @return {Object}     Copy of object
  * @private
  */
-obj.copy = function(obj){
-  return obj.merge({}, obj);
+obj.copy = function(objToCopy){
+  return obj.merge({}, objToCopy);
 };
 
 /**
@@ -169,17 +169,6 @@ obj.isPlain = function(obj){
  */
 obj.isArray = Array.isArray || function(arr) {
   return Object.prototype.toString.call(arr) === '[object Array]';
-};
-
-/**
- * Check to see whether the input is NaN or not.
- * NaN is the only JavaScript construct that isn't equal to itself
- * @param {Number} num Number to check
- * @return {Boolean} True if NaN, false otherwise
- * @private
- */
-var isNaN = isNaN || function(num) {
-  return num !== num;
 };
 
 /**
@@ -390,7 +379,7 @@ var IS_ANDROID = (/Android/i).test(USER_AGENT);
 var ANDROID_VERSION = (function() {
   // This matches Android Major.Minor.Patch versions
   // ANDROID_VERSION is Major.Minor as a Number, if Minor isn't available, then only Major is returned
-  var match = vjs.USER_AGENT.match(/Android (\d+)(?:\.(\d+))?(?:\.(\d+))*/i),
+  var match = USER_AGENT.match(/Android (\d+)(?:\.(\d+))?(?:\.(\d+))*/i),
     major,
     minor;
 
@@ -410,7 +399,7 @@ var ANDROID_VERSION = (function() {
   }
 })();
 // Old Android is defined as Version older than 2.3, and requiring a webkit version of the android browser
-var IS_OLD_ANDROID = vjs.IS_ANDROID && (/webkit/i).test(vjs.USER_AGENT) && vjs.ANDROID_VERSION < 2.3;
+var IS_OLD_ANDROID = IS_ANDROID && (/webkit/i).test(USER_AGENT) && ANDROID_VERSION < 2.3;
 
 var IS_FIREFOX = (/Firefox/i).test(USER_AGENT);
 var IS_CHROME = (/Chrome/i).test(USER_AGENT);
@@ -426,7 +415,7 @@ var BACKGROUND_SIZE_SUPPORTED = 'backgroundSize' in TEST_VID.style;
  * @private
  */
 var setElementAttributes = function(el, attributes){
-  vjs.obj.each(attributes, function(attrName, attrValue) {
+  obj.each(attributes, function(attrName, attrValue) {
     if (attrValue === null || typeof attrValue === 'undefined' || attrValue === false) {
       el.removeAttribute(attrName);
     } else {
@@ -832,9 +821,9 @@ let arr = {};
  * @private
  */
 arr.forEach = function(array, callback, thisArg) {
-  if (vjs.obj.isArray(array) && callback instanceof Function) {
+  if (obj.isArray(array) && callback instanceof Function) {
     for (var i = 0, len = array.length; i < len; ++i) {
-      callback.call(thisArg || vjs, array[i], i, array);
+      callback.call(thisArg, array[i], i, array);
     }
   }
 

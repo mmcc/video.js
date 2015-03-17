@@ -13,8 +13,6 @@
     "laxbreak" : true,
     "esnext"   : true,
     "predef"   : [
-        "document",
-        "window",
         "_V_",
         "videojs",
         "vjs",

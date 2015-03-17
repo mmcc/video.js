@@ -35,4 +35,6 @@ var MediaLoader = Component.extend({
   }
 });
 
+Component.registerComponent('MediaLoader', MediaLoader);
+
 export default MediaLoader;

@@ -1,9 +1,10 @@
 'use strict';
 
 import Component from '../component';
-import { window } from 'global';
 import Menu, { MenuItem, MenuButton } from '../menu';
 import * as VjsLib from '../lib';
+
+let { window } = global;
 
 /* Text Track Display
 ============================================================================= */
@@ -19,19 +20,19 @@ let TextTrackDisplay = Component.extend({
   init: function(player, options, ready){
     Component.call(this, player, options, ready);
 
-    player.on('loadstart', vjs.bind(this, this.toggleDisplay));
+    player.on('loadstart', VjsLib.bind(this, this.toggleDisplay));
 
     // This used to be called during player init, but was causing an error
     // if a track should show by default and the display hadn't loaded yet.
     // Should probably be moved to an external track loader when we support
     // tracks that don't need a display.
-    player.ready(vjs.bind(this, function() {
+    player.ready(VjsLib.bind(this, function() {
       if (player.tech && player.tech['featuresNativeTextTracks']) {
         this.hide();
         return;
       }
 
-      player.on('fullscreenchange', vjs.bind(this, this.updateDisplay));
+      player.on('fullscreenchange', VjsLib.bind(this, this.updateDisplay));
 
       let tracks = player.options_['tracks'] || [];
       for (let i = 0; i < tracks.length; i++) {
@@ -195,10 +196,10 @@ let TextTrackMenuItem = MenuItem.extend({
     let changeHandler;
 
     if (tracks) {
-      changeHandler = vjs.bind(this, function() {
+      changeHandler = VjsLib.bind(this, function() {
         let selected = this.track['mode'] === 'showing';
 
-        if (this instanceof vjs.OffTextTrackMenuItem) {
+        if (this instanceof OffTextTrackMenuItem) {
           selected = true;
 
           for (let i = 0, l = tracks.length; i < l; i++) {
@@ -435,7 +436,7 @@ SubtitlesButton.prototype.className = 'vjs-subtitles-button';
 let ChaptersButton = TextTrackButton.extend({
   /** @constructor */
   init: function(player, options, ready){
-    vjs.TextTrackButton.call(this, player, options, ready);
+    TextTrackButton.call(this, player, options, ready);
     this.el_.setAttribute('aria-label','Chapters Menu');
   }
 });
@@ -491,7 +492,7 @@ ChaptersButton.prototype.createMenu = function(){
   let menu = this.menu;
   if (menu === undefined) {
     menu = new Menu(this.player_);
-    menu.contentEl().appendChild(vjs.createEl('li', {
+    menu.contentEl().appendChild(VjsLib.createEl('li', {
       className: 'vjs-menu-title',
       innerHTML: VjsLib.capitalize(this.kind_),
       tabindex: -1

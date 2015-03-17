@@ -67,7 +67,7 @@ var MenuItem = Button.extend({
 
 /** @inheritDoc */
 MenuItem.prototype.createEl = function(type, props){
-  return Button.prototype.createEl.call(this, 'li', vjs.obj.merge({
+  return Button.prototype.createEl.call(this, 'li', VjsLib.obj.merge({
     className: 'vjs-menu-item',
     innerHTML: this.localize(this.options_['label'])
   }, props));

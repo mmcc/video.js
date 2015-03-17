@@ -1,4 +1,3 @@
-import Global from 'global';
 import pkg from '../../package.json';
 
 /**
@@ -13,10 +12,10 @@ import pkg from '../../package.json';
  */
 var sendGaEvent = function(image) {
   const i = new Image();
-  const w = Global.window;
-  const n = Global.navigator;
-  const l = Global.location;
-  const e = Global.encodeURIComponent;
+  const w = global.window;
+  const n = global.navigator;
+  const l = global.location;
+  const e = global.encodeURIComponent;
 
   // Google Analytics has a limit of 10 million hits per month for free accounts.
   // The Video.js CDN goes over this (by a lot) and they've asked us to stop.

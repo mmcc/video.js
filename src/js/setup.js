@@ -1,5 +1,9 @@
-import { document, window } from 'global';
-import JSON from 'json';
+import JSON from './json';
+import * as VjsEvents from './events';
+
+let { document, window } = global;
+let _windowLoaded = false;
+let videojs;
 
 /**
  * @fileoverview Functions for automatically setting up a player
@@ -53,28 +57,27 @@ var autoSetup = function(){
 
       // If getAttribute isn't defined, we need to wait for the DOM.
       } else {
-        vjs.autoSetupTimeout(1);
+        autoSetupTimeout(1);
         break;
       }
     }
 
   // No videos were found, so keep looping unless page is finished loading.
-  } else if (!vjs.windowLoaded) {
-    vjs.autoSetupTimeout(1);
+  } else if (!_windowLoaded) {
+    autoSetupTimeout(1);
   }
 };
 
 // Pause to let the DOM keep processing
-var autoSetupTimeout = function(wait){
+var autoSetupTimeout = function(wait, vjs){
+  videojs = vjs;
   setTimeout(autoSetup, wait);
 };
-
-let _windowLoaded = false;
 
 if (document.readyState === 'complete') {
   _windowLoaded = true;
 } else {
-  vjs.one(window, 'load', function(){
+  VjsEvents.one(window, 'load', function(){
     _windowLoaded = true;
   });
 }
@@ -82,9 +85,5 @@ if (document.readyState === 'complete') {
 var hasLoaded = function() {
   return _windowLoaded;
 };
-
-// Run Auto-load players
-// You have to wait at least once in case this script is loaded after your video in the DOM (weird behavior only with minified version)
-vjs.autoSetupTimeout(1);
 
 export { autoSetup, autoSetupTimeout, hasLoaded };

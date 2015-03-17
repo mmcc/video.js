@@ -15,7 +15,7 @@ var util = {};
  * @param  {Object} obj2 Overriding object
  * @return {Object}      New object -- obj1 and obj2 will be untouched
  */
-util.mergeOptions = function(obj1, obj2){
+let mergeOptions = function(obj1, obj2){
   var key, val1, val2;
 
   // make a copy of obj1 so we're not overwriting original values.
@@ -28,7 +28,7 @@ util.mergeOptions = function(obj1, obj2){
       val2 = obj2[key];
 
       // Check if both properties are pure objects and do a deep merge if so
-      if (obj.isPlain(val1) && vjs.obj.isPlain(val2)) {
+      if (obj.isPlain(val1) && obj.isPlain(val2)) {
         obj1[key] = util.mergeOptions(val1, val2);
       } else {
         obj1[key] = obj2[key];
@@ -38,4 +38,4 @@ util.mergeOptions = function(obj1, obj2){
   return obj1;
 };
 
-export default util;
+export { mergeOptions };

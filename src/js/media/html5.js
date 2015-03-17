@@ -522,9 +522,9 @@ Html5.registerSourceHandler(Html5.nativeSourceHandler);
  * @return {Boolean}
  */
 Html5.canControlVolume = function(){
-  var volume =  vjs.TEST_VID.volume;
-  vjs.TEST_VID.volume = (volume / 2) + 0.1;
-  return volume !== vjs.TEST_VID.volume;
+  var volume =  VjsLib.TEST_VID.volume;
+  VjsLib.TEST_VID.volume = (volume / 2) + 0.1;
+  return volume !== VjsLib.TEST_VID.volume;
 };
 
 /**
@@ -532,9 +532,9 @@ Html5.canControlVolume = function(){
  * @return {[type]} [description]
  */
 Html5.canControlPlaybackRate = function(){
-  var playbackRate =  vjs.TEST_VID.playbackRate;
-  vjs.TEST_VID.playbackRate = (playbackRate / 2) + 0.1;
-  return playbackRate !== vjs.TEST_VID.playbackRate;
+  var playbackRate =  VjsLib.TEST_VID.playbackRate;
+  VjsLib.TEST_VID.playbackRate = (playbackRate / 2) + 0.1;
+  return playbackRate !== VjsLib.TEST_VID.playbackRate;
 };
 
 /**

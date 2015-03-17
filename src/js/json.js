@@ -4,7 +4,7 @@
  * (Compiler doesn't like JSON not being declared)
  */
 
-import { window, JSON } from 'global';
+let { window, JSON } = global;
 
 /**
  * Javascript JSON implementation

@@ -385,6 +385,20 @@ module.exports = function(grunt) {
       files: {
         src: ['dist/video-js-'+ version.full +'.zip'] // Files that you want to attach to Release
       }
+    },
+    browserify: {
+      dist: {
+        files: {
+          'build/files/video-es6.js': ['src/js/video.js']
+        },
+        options: {
+          browserifyOptions: {
+            debug: true,
+            standalone: 'videojs'
+          },
+          transform: [require('babelify')]
+        }
+      }
     }
   });
 
@@ -408,6 +422,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-github-releaser');
   grunt.loadNpmTasks('grunt-aws-s3');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-browserify');
 
   // grunt.loadTasks('./docs/tasks/');
   // grunt.loadTasks('../videojs-doc-generator/tasks/');

@@ -5,7 +5,7 @@
  * robust as jquery's, so there's probably some differences.
  */
 
-import VjsLib from './lib';
+import * as VjsLib from './lib';
 
 var VjsEvents;
 
@@ -31,7 +31,7 @@ const on = function(elem, type, fn){
 
   if (!data.handlers[type]) data.handlers[type] = [];
 
-  if (!fn.guid) fn.guid = vjs.guid++;
+  if (!fn.guid) fn.guid = VjsLib.guid++;
 
   data.handlers[type].push(fn);
 

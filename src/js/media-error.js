@@ -15,7 +15,7 @@ var MediaError = function(code){
   }
 
   if (!this.message) {
-    this.message = vjs.MediaError.defaultMessages[this.code] || '';
+    this.message = MediaError.defaultMessages[this.code] || '';
   }
 };
 

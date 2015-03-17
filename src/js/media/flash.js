@@ -5,9 +5,10 @@
  */
 
 import MediaTechController from 'media';
-import { window } from 'global';
 import * as VjsLib from '../lib';
 import FlashRtmpDecorator from './flash-rtmp';
+
+let { window } = global;
 
 /**
  * Flash Media Controller - Wrapper for fallback SWF API
@@ -188,7 +189,7 @@ Flash.prototype.enterFullScreen = function(){
 };
 
 // Create setters and getters for attributes
-const _api = vjs.Flash.prototype;
+const _api = Flash.prototype;
 const _readWrite = 'rtmpConnection,rtmpStream,preload,defaultPlaybackRate,playbackRate,autoplay,loop,mediaGroup,controller,controls,volume,muted,defaultMuted'.split(',');
 const _readOnly = 'error,networkState,readyState,seeking,initialTime,duration,startOffsetTime,paused,played,seekable,ended,videoTracks,audioTracks,videoWidth,videoHeight'.split(',');
 

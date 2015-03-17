@@ -2,13 +2,14 @@
  * @fileoverview Main function src.
  */
 
-import { document } from 'global';
 import Player from './player';
 import Plugins from './plugins';
 import Options from './options';
-import VjsLib from './lib';
-import VjsUtil from './util';
+import * as VjsLib from './lib';
+import * as VjsUtil from './util';
 import CoreObject from './core-object';
+
+let document = global.document;
 
 // HTML5 Shiv. Must be in <head> to support older browsers.
 var elementShiv = function() {
@@ -125,12 +126,13 @@ vjs.addLanguage = function(code, data){
  * compiler compatible, so string keys are used.
  */
 if (typeof define === 'function' && define['amd']) {
-  define('videojs', [], function(){ return videojs; });
+  define('videojs', [], function(){ return vjs; });
 
 // checking that module is an object too because of umdjs/umd#35
 } else if (typeof exports === 'object' && typeof module === 'object') {
-  module['exports'] = videojs;
+  module['exports'] = vjs;
 }
 
-export default vjs;
+let videojs = vjs;
+export default videojs;
 export { elementShiv };
