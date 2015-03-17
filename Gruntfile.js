@@ -396,7 +396,11 @@ module.exports = function(grunt) {
             debug: true,
             standalone: 'videojs'
           },
-          transform: [require('babelify')]
+          transform: [
+            require('babelify').configure({
+              sourceMapRelative: './src/js'
+            })
+          ]
         }
       }
     }
