@@ -1,4 +1,5 @@
 import * as VjsLib from '../lib';
+import document from 'global/document';
 
 /*
  * https://html.spec.whatwg.org/multipage/embedded-content.html#texttrackcuelist

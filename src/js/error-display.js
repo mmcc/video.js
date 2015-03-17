@@ -7,7 +7,7 @@ import VjsLib from './lib';
  * @param {Object=} options
  * @constructor
  */
-var ErrorDisplay = Component.extend({
+let ErrorDisplay = Component.extend({
   init: function(player, options){
     Component.call(this, player, options);
 

@@ -10,7 +10,7 @@ import VjsLib from '../lib';
  * @param {Object=} options
  * @constructor
  */
-var ProgressControl = Component.extend({
+let ProgressControl = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -70,7 +70,7 @@ SeekBar.prototype.createEl = function(){
 
 SeekBar.prototype.updateARIAAttributes = function(){
     // Allows for smooth scrubbing, when player can't keep up.
-    var time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
+    let time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
     this.el_.setAttribute('aria-valuenow', VjsLib.round(this.getPercent()*100, 2)); // machine readable value of progress bar (percentage complete)
     this.el_.setAttribute('aria-valuetext', VjsLib.formatTime(time, this.player_.duration())); // human readable value of progress bar (time complete)
 };
@@ -90,7 +90,7 @@ SeekBar.prototype.onMouseDown = function(event){
 };
 
 SeekBar.prototype.onMouseMove = function(event){
-  var newTime = this.calculateDistance(event) * this.player_.duration();
+  let newTime = this.calculateDistance(event) * this.player_.duration();
 
   // Don't let video end while scrubbing.
   if (newTime == this.player_.duration()) { newTime = newTime - 0.1; }
@@ -142,25 +142,25 @@ LoadProgressBar.prototype.createEl = function(){
 };
 
 LoadProgressBar.prototype.update = function(){
-  var i, start, end, part,
-      buffered = this.player_.buffered(),
-      duration = this.player_.duration(),
-      bufferedEnd = this.player_.bufferedEnd(),
-      children = this.el_.children,
-      // get the percent width of a time compared to the total end
-      percentify = function (time, end){
-        var percent = (time / end) || 0; // no NaN
-        return (percent * 100) + '%';
-      };
+  let buffered = this.player_.buffered();
+  let duration = this.player_.duration();
+  let bufferedEnd = this.player_.bufferedEnd();
+  let children = this.el_.children;
+
+  // get the percent width of a time compared to the total end
+  let percentify = function (time, end){
+    let percent = (time / end) || 0; // no NaN
+    return (percent * 100) + '%';
+  };
 
   // update the width of the progress bar
   this.el_.style.width = percentify(bufferedEnd, duration);
 
   // add child elements to represent the individual buffered time ranges
-  for (i = 0; i < buffered.length; i++) {
-    start = buffered.start(i),
-    end = buffered.end(i),
-    part = children[i];
+  for (let i = 0; i < buffered.length; i++) {
+    let start = buffered.start(i),
+    let end = buffered.end(i),
+    let part = children[i];
 
     if (!part) {
       part = this.el_.appendChild(VjsLib.createEl());
@@ -172,7 +172,7 @@ LoadProgressBar.prototype.update = function(){
   }
 
   // remove unused buffered range elements
-  for (i = children.length; i > buffered.length; i--) {
+  for (let i = children.length; i > buffered.length; i--) {
     this.el_.removeChild(children[i-1]);
   }
 };
@@ -184,7 +184,7 @@ LoadProgressBar.prototype.update = function(){
  * @param {Object=} options
  * @constructor
  */
-var PlayProgressBar = Component.extend({
+let PlayProgressBar = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -234,7 +234,7 @@ SeekHandle.prototype.createEl = function() {
 };
 
 SeekHandle.prototype.updateContent = function() {
-  var time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
+  let time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
   this.el_.innerHTML = '<span class="vjs-control-text">' + VjsLib.formatTime(time, this.player_.duration()) + '</span>';
 };
 

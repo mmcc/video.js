@@ -6,8 +6,8 @@
  */
 
 import * as VjsLib from './lib';
-
-var VjsEvents;
+import window from 'global/window';
+import document from 'global/document';
 
 /**
  * Add an event listener to element

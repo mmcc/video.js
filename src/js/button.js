@@ -1,6 +1,7 @@
 import Component from './component';
 import VjsLib from './lib';
 import * as VjsEvents from './events';
+import document from 'global/document';
 
 /* Button - Base class for all buttons
 ================================================================================ */
@@ -31,8 +32,6 @@ var Button = Component.extend({
 Component.registerComponent('Button', Button);
 
 Button.prototype.createEl = function(type, props){
-  var el;
-
   // Add standard Aria and Tabindex info
   props = VjsLib.obj.merge({
     className: this.buildCSSClass(),
@@ -41,7 +40,7 @@ Button.prototype.createEl = function(type, props){
     tabIndex: 0
   }, props);
 
-  el = Component.prototype.createEl.call(this, type, props);
+  let el = Component.prototype.createEl.call(this, type, props);
 
   // if innerHTML hasn't been overridden (bigPlayButton), add content elements
   if (!props.innerHTML) {

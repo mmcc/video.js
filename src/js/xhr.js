@@ -1,7 +1,6 @@
 import VjsUtils from './utils';
 import * as VjsLib from './lib';
-
-let { window } = global;
+import window from 'global/window';
 
 /**
  * Simple http request for retrieving external files (e.g. text tracks)

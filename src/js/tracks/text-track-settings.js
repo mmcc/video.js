@@ -3,6 +3,7 @@
 import Component from '../component';
 import * as VjsLib from '../lib';
 import * as VjsEvents from '../events';
+import window from 'global/window';
 
 let TextTrackSettings = Component.extend({
   init: function(player, options) {
@@ -42,6 +43,8 @@ let TextTrackSettings = Component.extend({
     }
   }
 });
+
+Component.registerComponent('TextTrackSettings', TextTrackSettings);
 
 TextTrackSettings.prototype.createEl = function() {
   return Component.prototype.createEl.call(this, 'div', {

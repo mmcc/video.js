@@ -3,8 +3,7 @@
 import Component from '../component';
 import Menu, { MenuItem, MenuButton } from '../menu';
 import * as VjsLib from '../lib';
-
-let { window } = global;
+import window from 'global/window';
 
 /* Text Track Display
 ============================================================================= */
@@ -42,6 +41,8 @@ let TextTrackDisplay = Component.extend({
     }));
   }
 });
+
+Component.registerComponent('TextTrackDisplay', TextTrackDisplay);
 
 TextTrackDisplay.prototype.toggleDisplay = function() {
   if (this.player_.tech && this.player_.tech['featuresNativeTextTracks']) {
@@ -252,6 +253,8 @@ let TextTrackMenuItem = MenuItem.extend({
   }
 });
 
+Component.registerComponent('TextTrackMenuItem', TextTrackMenuItem);
+
 TextTrackMenuItem.prototype.onClick = function(){
   let kind = this.track['kind'];
   let tracks = this.player_.textTracks();
@@ -297,6 +300,8 @@ let OffTextTrackMenuItem = TextTrackMenuItem.extend({
   }
 });
 
+Component.registerComponent('OffTextTrackMenuItem', OffTextTrackMenuItem);
+
 let CaptionSettingsMenuItem = TextTrackMenuItem.extend({
   init: function(player, options) {
     options['track'] = {
@@ -311,6 +316,8 @@ let CaptionSettingsMenuItem = TextTrackMenuItem.extend({
     this.addClass('vjs-texttrack-settings');
   }
 });
+
+Component.registerComponent('CaptionSettingsMenuItem', CaptionSettingsMenuItem);
 
 CaptionSettingsMenuItem.prototype.onClick = function() {
   this.player().getChild('textTrackSettings').show();
@@ -346,6 +353,8 @@ let TextTrackButton = MenuButton.extend({
     });
   }
 });
+
+Component.registerComponent('TextTrackButton', TextTrackButton);
 
 // Create a menu item for each text track
 TextTrackButton.prototype.createItems = function(){
@@ -390,6 +399,9 @@ let CaptionsButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Captions Menu');
   }
 });
+
+Component.registerComponent('CaptionsButton', CaptionsButton);
+
 CaptionsButton.prototype.kind_ = 'captions';
 CaptionsButton.prototype.buttonText = 'Captions';
 CaptionsButton.prototype.className = 'vjs-captions-button';
@@ -422,6 +434,9 @@ let SubtitlesButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Subtitles Menu');
   }
 });
+
+Component.registerComponent('SubtitlesButton', SubtitlesButton);
+
 SubtitlesButton.prototype.kind_ = 'subtitles';
 SubtitlesButton.prototype.buttonText = 'Subtitles';
 SubtitlesButton.prototype.className = 'vjs-subtitles-button';
@@ -440,13 +455,16 @@ let ChaptersButton = TextTrackButton.extend({
     this.el_.setAttribute('aria-label','Chapters Menu');
   }
 });
+
+Component.registerComponent('ChaptersButton', ChaptersButton);
+
 ChaptersButton.prototype.kind_ = 'chapters';
 ChaptersButton.prototype.buttonText = 'Chapters';
 ChaptersButton.prototype.className = 'vjs-chapters-button';
 
 // Create a menu item for each text track
 ChaptersButton.prototype.createItems = function(){
-  var items = [];
+  let items = [];
 
   let tracks = this.player_.textTracks();
 
@@ -454,7 +472,7 @@ ChaptersButton.prototype.createItems = function(){
     return items;
   }
 
-  for (var i = 0; i < tracks.length; i++) {
+  for (let i = 0; i < tracks.length; i++) {
     let track = tracks[i];
     if (track['kind'] === this.kind_) {
       items.push(new TextTrackMenuItem(this.player_, {
@@ -543,6 +561,8 @@ let ChaptersTrackMenuItem = MenuItem.extend({
     track.addEventListener('cuechange', VjsLib.bind(this, this.update));
   }
 });
+
+Component.registerComponent('LiveDisplay', ChaptersTrackMenuItem);
 
 ChaptersTrackMenuItem.prototype.onClick = function(){
   MenuItem.prototype.onClick.call(this);

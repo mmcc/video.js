@@ -9,7 +9,7 @@ import { VolumeBar } from './volume-control';
  * Menu button with a popup for showing the volume slider.
  * @constructor
  */
-var VolumeMenuButton = MenuButton.extend({
+let VolumeMenuButton = MenuButton.extend({
   /** @constructor */
   init: function(player, options){
     MenuButton.call(this, player, options);
@@ -35,10 +35,10 @@ var VolumeMenuButton = MenuButton.extend({
 Component.registerComponent('VolumeMenuButton', VolumeMenuButton);
 
 VolumeMenuButton.prototype.createMenu = function(){
-  var menu = new Menu(this.player_, {
+  let menu = new Menu(this.player_, {
     contentElType: 'div'
   });
-  var vc = new VolumeBar(this.player_, this.options_['volumeBar']);
+  let vc = new VolumeBar(this.player_, this.options_['volumeBar']);
   vc.on('focus', function() {
     menu.lockShowing();
   });

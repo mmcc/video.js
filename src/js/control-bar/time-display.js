@@ -7,7 +7,7 @@ import VjsLib from '../lib';
  * @param {Object=} options
  * @constructor
  */
-var CurrentTimeDisplay = Component.extend({
+let CurrentTimeDisplay = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -19,7 +19,7 @@ var CurrentTimeDisplay = Component.extend({
 Component.registerComponent('CurrentTimeDisplay', CurrentTimeDisplay);
 
 CurrentTimeDisplay.prototype.createEl = function(){
-  var el = Component.prototype.createEl.call(this, 'div', {
+  let el = Component.prototype.createEl.call(this, 'div', {
     className: 'vjs-current-time vjs-time-controls vjs-control'
   });
 
@@ -35,7 +35,7 @@ CurrentTimeDisplay.prototype.createEl = function(){
 
 CurrentTimeDisplay.prototype.updateContent = function(){
   // Allows for smooth scrubbing, when player can't keep up.
-  var time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
+  let time = (this.player_.scrubbing) ? this.player_.getCache().currentTime : this.player_.currentTime();
   this.contentEl_.innerHTML = '<span class="vjs-control-text">' + this.localize('Current Time') + '</span> ' + VjsLib.formatTime(time, this.player_.duration());
 };
 
@@ -45,7 +45,7 @@ CurrentTimeDisplay.prototype.updateContent = function(){
  * @param {Object=} options
  * @constructor
  */
-var DurationDisplay = Component.extend({
+let DurationDisplay = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -62,7 +62,7 @@ var DurationDisplay = Component.extend({
 Component.registerComponent('DurationDisplay', DurationDisplay);
 
 DurationDisplay.prototype.createEl = function(){
-  var el = Component.prototype.createEl.call(this, 'div', {
+  let el = Component.prototype.createEl.call(this, 'div', {
     className: 'vjs-duration vjs-time-controls vjs-control'
   });
 
@@ -77,9 +77,9 @@ DurationDisplay.prototype.createEl = function(){
 };
 
 DurationDisplay.prototype.updateContent = function(){
-  var duration = this.player_.duration();
+  let duration = this.player_.duration();
   if (duration) {
-      this.contentEl_.innerHTML = '<span class="vjs-control-text">' + this.localize('Duration Time') + '</span> ' + VjsLib.formatTime(duration); // label the duration time for screen reader users
+    this.contentEl_.innerHTML = '<span class="vjs-control-text">' + this.localize('Duration Time') + '</span> ' + VjsLib.formatTime(duration); // label the duration time for screen reader users
   }
 };
 
@@ -92,7 +92,7 @@ DurationDisplay.prototype.updateContent = function(){
  * @param {Object=} options
  * @constructor
  */
-var TimeDivider = Component.extend({
+let TimeDivider = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -114,7 +114,7 @@ TimeDivider.prototype.createEl = function(){
  * @param {Object=} options
  * @constructor
  */
-var RemainingTimeDisplay = Component.extend({
+let RemainingTimeDisplay = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -126,7 +126,7 @@ var RemainingTimeDisplay = Component.extend({
 Component.registerComponent('RemainingTimeDisplay', RemainingTimeDisplay);
 
 RemainingTimeDisplay.prototype.createEl = function(){
-  var el = Component.prototype.createEl.call(this, 'div', {
+  let el = Component.prototype.createEl.call(this, 'div', {
     className: 'vjs-remaining-time vjs-time-controls vjs-control'
   });
 

@@ -1,4 +1,4 @@
-let document = global.document;
+import document from 'global/document';
 
 /**
  * Store the browser-specific methods for the fullscreen API

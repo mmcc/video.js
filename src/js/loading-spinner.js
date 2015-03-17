@@ -9,7 +9,7 @@ import Component from './component';
  * @class
  * @constructor
  */
-var LoadingSpinner = Component.extend({
+let LoadingSpinner = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);

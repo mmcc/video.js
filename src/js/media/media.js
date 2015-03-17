@@ -4,8 +4,11 @@
  */
 
 import Component from '../component';
+import TextTrack from '../tracks/text-track';
 import TextTrackList from '../tracks/text-track-list';
 import * as VjsLib from '../lib';
+import window from 'global/window';
+import document from 'global/document';
 
 /**
  * Base class for media (HTML5 Video, Flash) controllers
@@ -13,7 +16,7 @@ import * as VjsLib from '../lib';
  * @param {Object=} options Options object
  * @constructor
  */
-var MediaTechController = Component.extend({
+let MediaTechController = Component.extend({
   /** @constructor */
   init: function(player, options, ready){
     options = options || {};
@@ -41,6 +44,8 @@ var MediaTechController = Component.extend({
     this.initTextTrackListeners();
   }
 });
+
+Component.registerComponent('MediaTechController', MediaTechController);
 
 /**
  * Set up click and touch listeners for the playback element
@@ -188,7 +193,7 @@ MediaTechController.prototype.trackProgress = function(){
   this.progressInterval = this.setInterval(function(){
     // Don't trigger unless buffered amount is greater than last time
 
-    var bufferedPercent = this.player().bufferedPercent();
+    let bufferedPercent = this.player().bufferedPercent();
 
     if (this.bufferedPercent_ != bufferedPercent) {
       this.player().trigger('progress');
@@ -205,7 +210,7 @@ MediaTechController.prototype.stopTrackingProgress = function(){ this.clearInter
 
 /*! Time Tracking -------------------------------------------------------------- */
 MediaTechController.prototype.manualTimeUpdatesOn = function(){
-  var player = this.player_;
+  let player = this.player_;
 
   this.manualTimeUpdates = true;
 
@@ -223,7 +228,7 @@ MediaTechController.prototype.manualTimeUpdatesOn = function(){
 };
 
 MediaTechController.prototype.manualTimeUpdatesOff = function(){
-  var player = this.player_;
+  let player = this.player_;
 
   this.manualTimeUpdates = false;
   this.stopTrackingCurrentTime();
@@ -303,14 +308,12 @@ MediaTechController.prototype.emulateTextTracks = function() {
   }
 
   let textTracksChanges = function() {
-    var i, track, textTrackDisplay;
-
-    textTrackDisplay = player.getChild('textTrackDisplay'),
+    let textTrackDisplay = player.getChild('textTrackDisplay');
 
     textTrackDisplay.updateDisplay();
 
-    for (i = 0; i < this.length; i++) {
-      track = this[i];
+    for (let i = 0; i < this.length; i++) {
+      let track = this[i];
       track.removeEventListener('cuechange', VjsLib.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
       if (track.mode === 'showing') {
         track.addEventListener('cuechange', VjsLib.bind(textTrackDisplay, textTrackDisplay.updateDisplay));
@@ -349,7 +352,7 @@ MediaTechController.prototype.remoteTextTracks = function() {
 };
 
 let createTrackHelper = function(self, kind, label, language, options) {
-  var tracks = self.textTracks();
+  let tracks = self.textTracks();
 
   options = options || {};
 
@@ -453,7 +456,7 @@ MediaTechController.withSourceHandlers = function(Tech){
     let handlers = Tech.sourceHandlers || [];
     let can;
 
-    for (var i = 0; i < handlers.length; i++) {
+    for (let i = 0; i < handlers.length; i++) {
       can = handlers[i].canHandleSource(source);
 
       if (can) {
@@ -470,7 +473,7 @@ MediaTechController.withSourceHandlers = function(Tech){
   * @return {String}         'probably', 'maybe', or '' (empty string)
   */
   Tech.canPlaySource = function(srcObj){
-    var sh = Tech.selectSourceHandler(srcObj);
+    let sh = Tech.selectSourceHandler(srcObj);
 
     if (sh) {
       return sh.canHandleSource(srcObj);
@@ -487,7 +490,7 @@ MediaTechController.withSourceHandlers = function(Tech){
    * @return {vjs.MediaTechController} self
    */
   Tech.prototype.setSource = function(source){
-    var sh = Tech.selectSourceHandler(source);
+    let sh = Tech.selectSourceHandler(source);
 
     if (!sh) {
       // Fall back to a native source hander when unsupported sources are

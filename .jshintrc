@@ -14,8 +14,6 @@
     "esnext"   : true,
     "predef"   : [
         "_V_",
-        "videojs",
-        "vjs",
         "goog",
         "console",
 

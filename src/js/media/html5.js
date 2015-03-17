@@ -3,8 +3,10 @@
  */
 
 import MediaTechController from './media';
+import Component from '../component';
 import * as VjsLib from '../lib';
 import VjsUtil from '../util';
+import document from 'global/document';
 
 /**
  * HTML5 Media Controller - Wrapper for HTML5 Media API
@@ -87,6 +89,8 @@ var Html5 = MediaTechController.extend({
     this.triggerReady();
   }
 });
+
+Component.registerComponent('Html5', Html5);
 
 Html5.prototype.dispose = function(){
   Html5.disposeMediaElement(this.el_);

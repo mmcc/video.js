@@ -1,4 +1,6 @@
-let { window, document, navigator, isNaN } = global;
+import window from 'global/window';
+import document from 'global/document';
+let navigator = window.navigator;
 
 let hasOwnProp = Object.prototype.hasOwnProperty;
 
@@ -9,7 +11,7 @@ let hasOwnProp = Object.prototype.hasOwnProperty;
  * @return {Element}
  * @private
  */
-var createEl = function(tagName, properties){
+let createEl = function(tagName, properties){
   tagName = tagName || 'div';
   properties = properties || {};
 

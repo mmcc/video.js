@@ -1,7 +1,8 @@
 import JSON from './json';
 import * as VjsEvents from './events';
+import document from 'global/document';
+import window from 'global/window';
 
-let { document, window } = global;
 let _windowLoaded = false;
 let videojs;
 
@@ -11,7 +12,7 @@ let videojs;
  */
 
 // Automatically set up any tags that have a data-setup attribute
-var autoSetup = function(){
+let autoSetup = function(){
   // One day, when we stop supporting IE8, go back to this, but in the meantime...*hack hack hack*
   // var vids = Array.prototype.slice.call(document.getElementsByTagName('video'));
   // var audios = Array.prototype.slice.call(document.getElementsByTagName('audio'));

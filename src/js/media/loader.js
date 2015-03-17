@@ -1,5 +1,6 @@
 import Component from '../component';
 import * as VjsLib from '../lib';
+import window from 'global/window';
 
 /**
  * The Media Loader is the component that decides which playback technology to load
@@ -16,8 +17,8 @@ var MediaLoader = Component.extend({
     // load the first supported playback technology.
     if (!player.options_['sources'] || player.options_['sources'].length === 0) {
       for (let i=0, j=player.options_['techOrder']; i<j.length; i++) {
-        var techName = VjsLib.capitalize(j[i]),
-            tech = window['videojs'][techName];
+        let techName = VjsLib.capitalize(j[i]);
+        let tech = window['videojs'][techName];
 
         // Check if the browser supports this technology
         if (tech && tech.isSupported()) {

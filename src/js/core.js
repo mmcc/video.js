@@ -8,15 +8,14 @@ import Options from './options';
 import * as VjsLib from './lib';
 import * as VjsUtil from './util';
 import CoreObject from './core-object';
-
-let document = global.document;
+import document from 'global/document';
 
 // HTML5 Shiv. Must be in <head> to support older browsers.
 var elementShiv = function() {
   document.createElement('video');
   document.createElement('audio');
   document.createElement('track');
-}
+};
 
 /**
  * Doubles as the main function for users to create a player instance and also
@@ -133,6 +132,5 @@ if (typeof define === 'function' && define['amd']) {
   module['exports'] = vjs;
 }
 
-let videojs = vjs;
-export default videojs;
+export default vjs;
 export { elementShiv };

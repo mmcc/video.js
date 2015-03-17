@@ -9,7 +9,7 @@ import * as VjsLib from '../lib';
  * @param {Object=} options
  * @constructor
  */
-var PlaybackRateMenuButton = MenuButton.extend({
+let PlaybackRateMenuButton = MenuButton.extend({
   /** @constructor */
   init: function(player, options){
     MenuButton.call(this, player, options);
@@ -28,7 +28,7 @@ PlaybackRateMenuButton.prototype.buttonText = 'Playback Rate';
 PlaybackRateMenuButton.prototype.className = 'vjs-playback-rate';
 
 PlaybackRateMenuButton.prototype.createEl = function(){
-  var el = MenuButton.prototype.createEl.call(this);
+  let el = MenuButton.prototype.createEl.call(this);
 
   this.labelEl_ = VjsLib.createEl('div', {
     className: 'vjs-playback-rate-value',
@@ -42,11 +42,11 @@ PlaybackRateMenuButton.prototype.createEl = function(){
 
 // Menu creation
 PlaybackRateMenuButton.prototype.createMenu = function(){
-  var menu = new Menu(this.player());
-  var rates = this.player().options()['playbackRates'];
+  let menu = new Menu(this.player());
+  let rates = this.player().options()['playbackRates'];
 
   if (rates) {
-    for (var i = rates.length - 1; i >= 0; i--) {
+    for (let i = rates.length - 1; i >= 0; i--) {
       menu.addChild(
         new PlaybackRateMenuItem(this.player(), { 'rate': rates[i] + 'x'})
       );
@@ -63,11 +63,11 @@ PlaybackRateMenuButton.prototype.updateARIAAttributes = function(){
 
 PlaybackRateMenuButton.prototype.onClick = function(){
   // select next rate option
-  var currentRate = this.player().playbackRate();
-  var rates = this.player().options()['playbackRates'];
+  let currentRate = this.player().playbackRate();
+  let rates = this.player().options()['playbackRates'];
   // this will select first one if the last one currently selected
-  var newRate = rates[0];
-  for (var i = 0; i <rates.length ; i++) {
+  let newRate = rates[0];
+  for (let i = 0; i <rates.length ; i++) {
     if (rates[i] > currentRate) {
       newRate = rates[i];
       break;
@@ -109,12 +109,12 @@ PlaybackRateMenuButton.prototype.updateLabel = function(){
  *
  * @constructor
  */
-PlaybackRateMenuItem = MenuItem.extend({
+let PlaybackRateMenuItem = MenuItem.extend({
   contentElType: 'button',
   /** @constructor */
   init: function(player, options){
-    var label = this.label = options['rate'];
-    var rate = this.rate = parseFloat(label, 10);
+    let label = this.label = options['rate'];
+    let rate = this.rate = parseFloat(label, 10);
 
     // Modify options for parent MenuItem class's init.
     options['label'] = label;

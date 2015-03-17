@@ -4,7 +4,7 @@ import * as VjsLib from './lib';
  * Custom MediaError to mimic the HTML5 MediaError
  * @param {Number} code The media error code
  */
-var MediaError = function(code){
+let MediaError = function(code){
   if (typeof code === 'number') {
     this.code = code;
   } else if (typeof code === 'string') {

@@ -7,8 +7,7 @@ import CoreObject from './core-object.js';
 import * as VjsLib from './lib.js';
 import * as VjsUtil from './util.js';
 import * as VjsEvents from './events.js';
-
-let window = global.window;
+import window from 'global/window';
 
 /**
  * Base UI Component class
@@ -46,7 +45,6 @@ var Component = CoreObject.extend({
    * @constructor
    */
   init: function(player, options, ready){
-    console.log(this);
     this.player_ = player;
 
     // Make a copy of prototype.options_ to protect against overriding global defaults

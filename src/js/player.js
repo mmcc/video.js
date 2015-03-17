@@ -5,8 +5,8 @@ import FullscreenApi from './fullscreen-api';
 import MediaError from './media-error';
 import options from './options';
 import JSON from './json';
-
-let { window } = global;
+import window from 'global/window';
+import document from 'global/document';
 
 /**
  * Global player list
@@ -34,7 +34,7 @@ var players = {};
  * @class
  * @extends vjs.Component
  */
-var Player = Component.extend({
+let Player = Component.extend({
 
   /**
    * player's constructor function
@@ -122,6 +122,8 @@ var Player = Component.extend({
     this.listenForUserActivity();
   }
 });
+
+Component.registerComponent('Player', Player);
 
 /**
  * The player's stored language code
@@ -1591,6 +1593,8 @@ Player.prototype.listenForUserActivity = function(){
   // then gets picked up by this loop
   // http://ejohn.org/blog/learning-from-twitter/
   let activityCheck = this.setInterval(function() {
+    let inactivityTimeout;
+
     // Check to see if mouse/touch activity has happened
     if (this.userActivity_) {
       // Reset the activity tracker

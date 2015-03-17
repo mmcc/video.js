@@ -1,5 +1,6 @@
 import Button from './button';
 import * as VjsLib from './lib';
+import Component from './component';
 
 /* Poster Image
 ================================================================================ */
@@ -10,7 +11,7 @@ import * as VjsLib from './lib';
  * @param {Object=} options
  * @constructor
  */
-var PosterImage = Button.extend({
+let PosterImage = Button.extend({
   /** @constructor */
   init: function(player, options){
     Button.call(this, player, options);
@@ -19,6 +20,8 @@ var PosterImage = Button.extend({
     player.on('posterchange', VjsLib.bind(this, this.update));
   }
 });
+
+Component.registerComponent('PosterImage', PosterImage);
 
 /**
  * Clean up the poster image
@@ -33,7 +36,7 @@ PosterImage.prototype.dispose = function(){
  * @return {Element}
  */
 PosterImage.prototype.createEl = function(){
-  var el = VjsLib.createEl('div', {
+  let el = VjsLib.createEl('div', {
     className: 'vjs-poster',
 
     // Don't want poster to be tabbable.
@@ -56,7 +59,7 @@ PosterImage.prototype.createEl = function(){
  * Event handler for updates to the player's poster source
  */
 PosterImage.prototype.update = function(){
-  var url = this.player().poster();
+  let url = this.player().poster();
 
   this.setSrc(url);
 
@@ -73,12 +76,10 @@ PosterImage.prototype.update = function(){
  * Set the poster source depending on the display method
  */
 PosterImage.prototype.setSrc = function(url){
-  var backgroundImage;
-
   if (this.fallbackImg_) {
     this.fallbackImg_.src = url;
   } else {
-    backgroundImage = '';
+    let backgroundImage = '';
     // Any falsey values should stay as an empty string, otherwise
     // this will throw an extra error
     if (url) {

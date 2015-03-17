@@ -77,7 +77,7 @@ function FlashRtmpDecorator(Flash) {
    * @param  {vjs.Flash} tech   The instance of the Flash tech
    */
   Flash.rtmpSourceHandler.handleSource = function(source, tech){
-    var srcParts = Flash.streamToParts(source.src);
+    let srcParts = Flash.streamToParts(source.src);
 
     tech['setRtmpConnection'](srcParts.connection);
     tech['setRtmpStream'](srcParts.stream);

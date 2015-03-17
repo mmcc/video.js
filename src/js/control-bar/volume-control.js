@@ -9,7 +9,7 @@ import Slider, { SliderHandle } from '../slider';
  * @param {Object=} options
  * @constructor
  */
-var VolumeControl = Component.extend({
+let VolumeControl = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -49,7 +49,7 @@ VolumeControl.prototype.createEl = function(){
  * @param {Object=} options
  * @constructor
  */
-var VolumeBar = Slider.extend({
+let VolumeBar = Slider.extend({
   /** @constructor */
   init: function(player, options){
     Slider.call(this, player, options);
@@ -115,7 +115,7 @@ VolumeBar.prototype.stepBack = function(){
  * @param {Object=} options
  * @constructor
  */
-var VolumeLevel = Component.extend({
+let VolumeLevel = Component.extend({
   /** @constructor */
   init: function(player, options){
     Component.call(this, player, options);
@@ -138,7 +138,7 @@ VolumeLevel.prototype.createEl = function(){
  * @param {Object=} options
  * @constructor
  */
-var VolumeHandle = SliderHandle.extend();
+let VolumeHandle = SliderHandle.extend();
 
 Component.registerComponent('VolumeHandle', VolumeHandle);
 

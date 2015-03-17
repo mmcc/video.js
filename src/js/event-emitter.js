@@ -8,7 +8,7 @@ EventEmitter.prototype.allowedEvents_ = {};
 EventEmitter.prototype.on = function(type, fn) {
   // Remove the addEventListener alias before calling vjs.on
   // so we don't get into an infinite type loop
-  var ael = this.addEventListener;
+  let ael = this.addEventListener;
   this.addEventListener = Function.prototype;
   VjsEvents.on(this, type, fn);
   this.addEventListener = ael;
@@ -25,7 +25,7 @@ EventEmitter.prototype.one = function(type, fn) {
 };
 
 EventEmitter.prototype.trigger = function(event) {
-  var type = event.type || event;
+  let type = event.type || event;
 
   if (typeof event === 'string') {
     event = {

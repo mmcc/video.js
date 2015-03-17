@@ -1,5 +1,6 @@
 import Component from './component';
 import * as VjsLib from './lib';
+import document from 'global/document';
 
 /* Slider
 ================================================================================ */

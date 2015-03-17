@@ -1,4 +1,5 @@
 import pkg from '../../package.json';
+import window from 'global/window';
 
 /**
  * Google Analytics tracking pixel for the freely hosted version of Video.js
@@ -11,11 +12,11 @@ import pkg from '../../package.json';
  * @type {Image}
  */
 var sendGaEvent = function(image) {
-  const i = new Image();
-  const w = global.window;
-  const n = global.navigator;
-  const l = global.location;
-  const e = global.encodeURIComponent;
+  const i = new window.Image();
+  const w = window;
+  const n = window.navigator;
+  const l = window.location;
+  const e = window.encodeURIComponent;
 
   // Google Analytics has a limit of 10 million hits per month for free accounts.
   // The Video.js CDN goes over this (by a lot) and they've asked us to stop.

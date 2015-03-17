@@ -14,7 +14,9 @@ import * as VjsEvents from './events';
  * @class
  * @constructor
  */
-var Menu = Component.extend();
+let Menu = Component.extend();
+
+Component.registerComponent('Menu', Menu);
 
 /**
  * Add a menu item to the menu
@@ -29,7 +31,7 @@ Menu.prototype.addItem = function(component){
 
 /** @inheritDoc */
 Menu.prototype.createEl = function(){
-  var contentElType = this.options().contentElType || 'ul';
+  let contentElType = this.options().contentElType || 'ul';
   this.contentEl_ = VjsLib.createEl(contentElType, {
     className: 'vjs-menu-content'
   });
@@ -101,7 +103,7 @@ MenuItem.prototype.selected = function(selected){
  * @param {Object=} options
  * @constructor
  */
-var MenuButton = Button.extend({
+let MenuButton = Button.extend({
   /** @constructor */
   init: function(player, options){
     Button.call(this, player, options);
@@ -114,8 +116,10 @@ var MenuButton = Button.extend({
   }
 });
 
+Component.registerComponent('MenuButton', MenuButton);
+
 MenuButton.prototype.update = function() {
-  var menu = this.createMenu();
+  let menu = this.createMenu();
 
   if (this.menu) {
     this.removeChild(this.menu);

@@ -2,6 +2,7 @@ import TextTrackCueList from './text-track-cue-list';
 import * as VjsLib from '../lib';
 import * as TextTrackEnum from './text-track-enum';
 import EventEmitter from '../event-emitter';
+import document from 'global/document';
 
 /*
  * https://html.spec.whatwg.org/multipage/embedded-content.html#texttrack

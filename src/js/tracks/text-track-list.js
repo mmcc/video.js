@@ -1,7 +1,6 @@
 import EventEmitter from '../event-emitter';
 import * as VjsLib from '../lib';
-
-let { document } = global;
+import document from 'global/document';
 
 /*
  * https://html.spec.whatwg.org/multipage/embedded-content.html#texttracklist

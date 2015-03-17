@@ -23,51 +23,50 @@ var Flash = MediaTechController.extend({
   init: function(player, options, ready){
     MediaTechController.call(this, player, options, ready);
 
-    var source = options['source'],
+    let source = options['source'];
 
-        // Which element to embed in
-        parentEl = options['parentEl'],
+    // Which element to embed in
+    let parentEl = options['parentEl'];
 
-        // Create a temporary element to be replaced by swf object
-        placeHolder = this.el_ = VjsLib.createEl('div', { id: player.id() + '_temp_flash' }),
+    // Create a temporary element to be replaced by swf object
+    let placeHolder = this.el_ = VjsLib.createEl('div', { id: player.id() + '_temp_flash' });
 
-        // Generate ID for swf object
-        objId = player.id()+'_flash_api',
+    // Generate ID for swf object
+    let objId = player.id()+'_flash_api';
 
-        // Store player options in local var for optimization
-        // TODO: switch to using player methods instead of options
-        // e.g. player.autoplay();
-        playerOptions = player.options_,
+    // Store player options in local var for optimization
+    // TODO: switch to using player methods instead of options
+    // e.g. player.autoplay();
+    let playerOptions = player.options_;
 
-        // Merge default flashvars with ones passed in to init
-        flashVars = VjsLib.obj.merge({
+    // Merge default flashvars with ones passed in to init
+    let flashVars = VjsLib.obj.merge({
 
-          // SWF Callback Functions
-          'readyFunction': 'videojs.Flash.onReady',
-          'eventProxyFunction': 'videojs.Flash.onEvent',
-          'errorEventProxyFunction': 'videojs.Flash.onError',
+      // SWF Callback Functions
+      'readyFunction': 'videojs.Flash.onReady',
+      'eventProxyFunction': 'videojs.Flash.onEvent',
+      'errorEventProxyFunction': 'videojs.Flash.onError',
 
-          // Player Settings
-          'autoplay': playerOptions.autoplay,
-          'preload': playerOptions.preload,
-          'loop': playerOptions.loop,
-          'muted': playerOptions.muted
+      // Player Settings
+      'autoplay': playerOptions.autoplay,
+      'preload': playerOptions.preload,
+      'loop': playerOptions.loop,
+      'muted': playerOptions.muted
 
-        }, options['flashVars']),
+    }, options['flashVars']);
 
-        // Merge default parames with ones passed in
-        params = VjsLib.obj.merge({
-          'wmode': 'opaque', // Opaque is needed to overlay controls, but can affect playback performance
-          'bgcolor': '#000000' // Using bgcolor prevents a white flash when the object is loading
-        }, options['params']),
+    // Merge default parames with ones passed in
+    let params = VjsLib.obj.merge({
+      'wmode': 'opaque', // Opaque is needed to overlay controls, but can affect playback performance
+      'bgcolor': '#000000' // Using bgcolor prevents a white flash when the object is loading
+    }, options['params']);
 
-        // Merge default attributes with ones passed in
-        attributes = VjsLib.obj.merge({
-          'id': objId,
-          'name': objId, // Both ID and Name needed or swf to identify itself
-          'class': 'vjs-tech'
-        }, options['attributes'])
-    ;
+    // Merge default attributes with ones passed in
+    let attributes = VjsLib.obj.merge({
+      'id': objId,
+      'name': objId, // Both ID and Name needed or swf to identify itself
+      'class': 'vjs-tech'
+    }, options['attributes']);
 
     // If source was supplied pass as a flash var.
     if (source) {
@@ -107,6 +106,8 @@ var Flash = MediaTechController.extend({
     this.el_ = Flash.embed(options['swf'], placeHolder, flashVars, params, attributes);
   }
 });
+
+Component.registerComponent('Flash', Flash);
 
 Flash.prototype.dispose = function(){
   MediaTechController.prototype.dispose.call(this);
@@ -317,7 +318,7 @@ Flash['checkReady'] = function(tech){
 
 // Trigger events from the swf on the player
 Flash['onEvent'] = function(swfID, eventName){
-  var player = VjsLib.el(swfID)['player'];
+  let player = VjsLib.el(swfID)['player'];
   player.trigger(eventName);
 };
 
@@ -337,7 +338,7 @@ Flash['onError'] = function(swfID, err){
 
 // Flash Version Check
 Flash.version = function(){
-  var version = '0,0,0';
+  let version = '0,0,0';
 
   // IE
   try {
