@@ -1,5 +1,5 @@
 import * as VjsEvents from './events';
-import VjsLib from './lib';
+import * as VjsLib from './lib';
 
 var EventEmitter = function() {};
 

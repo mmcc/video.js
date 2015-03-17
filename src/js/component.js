@@ -366,18 +366,17 @@ Component.prototype.getChild = function(name){
  * @suppress {accessControls|checkRegExp|checkTypes|checkVars|const|constantProperty|deprecated|duplicate|es5Strict|fileoverviewTags|globalThis|invalidCasts|missingProperties|nonStandardJsDocs|strictModuleDepCheck|undefinedNames|undefinedVars|unknownDefines|uselessCode|visibility}
  */
 Component.prototype.addChild = function(child, options){
-  var component, componentClass, componentName;
-
-  // If child is a string, create new component with options
+  let component, componentName;
+  // If child is a string, create nt with options
   if (typeof child === 'string') {
-    componentName = child;
+    let componentName = child;
 
     // Make sure options is at least an empty object to protect against errors
     options = options || {};
 
     // If no componentClass in options, assume componentClass is the name lowercased
     // (e.g. playButton)
-    componentClass = options['componentClass'] || VjsLib.capitalize(componentName);
+    let componentClassName = options['componentClass'] || VjsLib.capitalize(componentName);
 
     // Set name through options
     options['name'] = componentName;
@@ -386,7 +385,9 @@ Component.prototype.addChild = function(child, options){
     // If there's no .player_, this is a player
     // Closure Compiler throws an 'incomplete alias' warning if we use the vjs variable directly.
     // Every class should be exported, so this should never be a problem here.
-    component = new Component.getComponent(componentClass)(this.player_ || this, options);
+  console.log(componentClassName);
+    let componentClass = Component.getComponent(componentClassName);
+    component = new componentClass(this.player_ || this, options);
 
   // child is a component instance
   } else {
@@ -485,12 +486,11 @@ Component.prototype.removeChild = function(component){
  *
  */
 Component.prototype.initChildren = function(){
-  var parent, parentOptions, children, child, name, opts, handleAdd;
+  let parent = this;
+  let parentOptions = parent.options();
+  let children = parentOptions['children'];
 
-  parent = this;
-  parentOptions = parent.options();
-  children = parentOptions['children'];
-
+  let handleAdd;
   if (children) {
     handleAdd = function(name, opts){
       // Allow options for children to be set at the parent options
@@ -514,8 +514,9 @@ Component.prototype.initChildren = function(){
     // Allow for an array of children details to passed in the options
     if (VjsLib.obj.isArray(children)) {
       for (var i = 0; i < children.length; i++) {
-        child = children[i];
+        let child = children[i];
 
+        let name, opts;
         if (typeof child == 'string') {
           // ['myComponent']
           name = child;

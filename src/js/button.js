@@ -1,5 +1,5 @@
 import Component from './component';
-import VjsLib from './lib';
+import * as VjsLib from './lib';
 import * as VjsEvents from './events';
 import document from 'global/document';
 
@@ -62,7 +62,7 @@ Button.prototype.createEl = function(type, props){
 
 Button.prototype.buildCSSClass = function(){
   // TODO: Change vjs-control to vjs-button?
-  return 'vjs-control ' + VjsLib.Component.prototype.buildCSSClass.call(this);
+  return 'vjs-control ' + Component.prototype.buildCSSClass.call(this);
 };
 
   // Click - Override with specific functionality for button

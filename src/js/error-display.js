@@ -1,5 +1,5 @@
 import Component from './component';
-import VjsLib from './lib';
+import * as VjsLib from './lib';
 
 /**
  * Display that an error has occurred making the video unplayable

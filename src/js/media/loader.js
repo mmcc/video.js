@@ -8,7 +8,7 @@ import window from 'global/window';
  *
  * @constructor
  */
-var MediaLoader = Component.extend({
+let MediaLoader = Component.extend({
   /** @constructor */
   init: function(player, options, ready){
     Component.call(this, player, options, ready);
@@ -18,7 +18,7 @@ var MediaLoader = Component.extend({
     if (!player.options_['sources'] || player.options_['sources'].length === 0) {
       for (let i=0, j=player.options_['techOrder']; i<j.length; i++) {
         let techName = VjsLib.capitalize(j[i]);
-        let tech = window['videojs'][techName];
+        let tech = Component.getComponent(techName);
 
         // Check if the browser supports this technology
         if (tech && tech.isSupported()) {

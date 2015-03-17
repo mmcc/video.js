@@ -1,6 +1,6 @@
 import Component from '../component';
 import Slider, { SliderHandle } from '../slider';
-import VjsLib from '../lib';
+import * as VjsLib from '../lib';
 
 /**
  * The Progress Control component contains the seek bar, load progress,
@@ -158,8 +158,8 @@ LoadProgressBar.prototype.update = function(){
 
   // add child elements to represent the individual buffered time ranges
   for (let i = 0; i < buffered.length; i++) {
-    let start = buffered.start(i),
-    let end = buffered.end(i),
+    let start = buffered.start(i);
+    let end = buffered.end(i);
     let part = children[i];
 
     if (!part) {

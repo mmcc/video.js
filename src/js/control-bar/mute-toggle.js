@@ -1,6 +1,6 @@
 import Button from '../button';
 import Component from '../component';
-import VjsLib from '../lib';
+import * as VjsLib from '../lib';
 
 /**
  * A button component for muting the audio

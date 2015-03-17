@@ -186,8 +186,8 @@ Html5.prototype.hideCaptions = function() {
 // May seem verbose here, but makes other APIs possible.
 // Triggers removed using this.off when disposed
 Html5.prototype.setupTriggers = function(){
-  for (var i = VjsLib.Html5.Events.length - 1; i >= 0; i--) {
-    this.on(VjsLib.Html5.Events[i], this.eventHandler);
+  for (let i = Html5.Events.length - 1; i >= 0; i--) {
+    this.on(Html5.Events[i], this.eventHandler);
   }
 };
 

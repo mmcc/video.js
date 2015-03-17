@@ -1,3 +1,5 @@
+'use strict';
+
 import * as VjsLib from './lib';
 
 /**
@@ -70,13 +72,11 @@ var CoreObject = function(){};
  * @this {*}
  */
 CoreObject.extend = function(props){
-  var init, subObj;
-
   props = props || {};
   // Set up the constructor using the supplied init method
   // or using the init of the parent object
   // Make sure to check the unobfuscated version for external libs
-  init = props['init'] || props.init || this.prototype['init'] || this.prototype.init || function(){};
+  let init = props['init'] || props.init || this.prototype['init'] || this.prototype.init || function(){};
   // In Resig's simple class inheritance (previously used) the constructor
   //  is a function that calls `this.init.apply(arguments)`
   // However that would prevent us from using `ParentObject.call(this);`
@@ -86,7 +86,7 @@ CoreObject.extend = function(props){
   //    `ParentObject.prototype.init.apply(this, arguments);`
   //  Bleh. We're not creating a _super() function, so it's good to keep
   //  the parent constructor reference simple.
-  subObj = function(){
+  let subObj = function(){
     init.apply(this, arguments);
   };
 

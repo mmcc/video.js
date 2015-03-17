@@ -285,3 +285,6 @@ SliderHandle.prototype.createEl = function(type, props) {
 
   return Component.prototype.createEl.call(this, 'div', props);
 };
+
+export default Slider;
+export { SliderHandle };

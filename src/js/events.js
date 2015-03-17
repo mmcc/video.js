@@ -10,167 +10,12 @@ import window from 'global/window';
 import document from 'global/document';
 
 /**
- * Add an event listener to element
- * It stores the handler function in a separate cache object
- * and adds a generic handler to the element's event,
- * along with a unique id (guid) to the element.
- * @param  {Element|Object}   elem Element or object to bind listeners to
- * @param  {String|Array}   type Type of event to bind to.
- * @param  {Function} fn   Event listener.
- * @private
- */
-const on = function(elem, type, fn){
-  if (VjsLib.obj.isArray(type)) {
-    return _handleMultipleEvents(on, elem, type, fn);
-  }
-
-  var data = VjsLib.getData(elem);
-
-  // We need a place to store all our handler data
-  if (!data.handlers) data.handlers = {};
-
-  if (!data.handlers[type]) data.handlers[type] = [];
-
-  if (!fn.guid) fn.guid = VjsLib.guid++;
-
-  data.handlers[type].push(fn);
-
-  if (!data.dispatcher) {
-    data.disabled = false;
-
-    data.dispatcher = function (event){
-
-      if (data.disabled) return;
-      event = fixEvent(event);
-
-      var handlers = data.handlers[event.type];
-
-      if (handlers) {
-        // Copy handlers so if handlers are added/removed during the process it doesn't throw everything off.
-        var handlersCopy = handlers.slice(0);
-
-        for (var m = 0, n = handlersCopy.length; m < n; m++) {
-          if (event.isImmediatePropagationStopped()) {
-            break;
-          } else {
-            handlersCopy[m].call(elem, event);
-          }
-        }
-      }
-    };
-  }
-
-  if (data.handlers[type].length == 1) {
-    if (elem.addEventListener) {
-      elem.addEventListener(type, data.dispatcher, false);
-    } else if (elem.attachEvent) {
-      elem.attachEvent('on' + type, data.dispatcher);
-    }
-  }
-};
-
-/**
- * Removes event listeners from an element
- * @param  {Element|Object}   elem Object to remove listeners from
- * @param  {String|Array=}   type Type of listener to remove. Don't include to remove all events from element.
- * @param  {Function} fn   Specific listener to remove. Don't include to remove listeners for an event type.
- * @private
- */
-const off = function(elem, type, fn) {
-  // Don't want to add a cache object through getData if not needed
-  if (!VjsLib.hasData(elem)) return;
-
-  var data = VjsLib.getData(elem);
-
-  // If no events exist, nothing to unbind
-  if (!data.handlers) { return; }
-
-  if (VjsLib.obj.isArray(type)) {
-    return _handleMultipleEvents(off, elem, type, fn);
-  }
-
-  // Utility function
-  var removeType = function(t){
-     data.handlers[t] = [];
-     cleanUpEvents(elem,t);
-  };
-
-  // Are we removing all bound events?
-  if (!type) {
-    for (var t in data.handlers) removeType(t);
-    return;
-  }
-
-  var handlers = data.handlers[type];
-
-  // If no handlers exist, nothing to unbind
-  if (!handlers) return;
-
-  // If no listener was provided, remove all listeners for type
-  if (!fn) {
-    removeType(type);
-    return;
-  }
-
-  // We're only removing a single handler
-  if (fn.guid) {
-    for (var n = 0; n < handlers.length; n++) {
-      if (handlers[n].guid === fn.guid) {
-        handlers.splice(n--, 1);
-      }
-    }
-  }
-
-  cleanUpEvents(elem, type);
-};
-
-/**
- * Clean up the listener cache and dispatchers
- * @param  {Element|Object} elem Element to clean up
- * @param  {String} type Type of event to clean up
- * @private
- */
-const cleanUpEvents = function(elem, type) {
-  var data = VjsLib.getData(elem);
-
-  // Remove the events of a particular type if there are none left
-  if (data.handlers[type].length === 0) {
-    delete data.handlers[type];
-    // data.handlers[type] = null;
-    // Setting to null was causing an error with data.handlers
-
-    // Remove the meta-handler from the element
-    if (elem.removeEventListener) {
-      elem.removeEventListener(type, data.dispatcher, false);
-    } else if (elem.detachEvent) {
-      elem.detachEvent('on' + type, data.dispatcher);
-    }
-  }
-
-  // Remove the events object if there are no types left
-  if (VjsLib.isEmpty(data.handlers)) {
-    delete data.handlers;
-    delete data.dispatcher;
-    delete data.disabled;
-
-    // data.handlers = null;
-    // data.dispatcher = null;
-    // data.disabled = null;
-  }
-
-  // Finally remove the expando if there is no data left
-  if (VjsLib.isEmpty(data)) {
-    VjsLib.removeData(elem);
-  }
-};
-
-/**
  * Fix a native event to have standard property values
  * @param  {Object} event Event object to fix
  * @return {Object}
  * @private
  */
-const fixEvent = function(event) {
+let fixEvent = function(event) {
 
   function returnTrue() { return true; }
   function returnFalse() { return false; }
@@ -275,12 +120,167 @@ const fixEvent = function(event) {
 };
 
 /**
+ * Add an event listener to element
+ * It stores the handler function in a separate cache object
+ * and adds a generic handler to the element's event,
+ * along with a unique id (guid) to the element.
+ * @param  {Element|Object}   elem Element or object to bind listeners to
+ * @param  {String|Array}   type Type of event to bind to.
+ * @param  {Function} fn   Event listener.
+ * @private
+ */
+let on = function(elem, type, fn){
+  if (VjsLib.obj.isArray(type)) {
+    return _handleMultipleEvents(on, elem, type, fn);
+  }
+
+  let data = VjsLib.getData(elem);
+
+  // We need a place to store all our handler data
+  if (!data.handlers) data.handlers = {};
+
+  if (!data.handlers[type]) data.handlers[type] = [];
+
+  if (!fn.guid) fn.guid = VjsLib.guid++;
+
+  data.handlers[type].push(fn);
+
+  if (!data.dispatcher) {
+    data.disabled = false;
+
+    data.dispatcher = function (event){
+
+      if (data.disabled) return;
+      event = fixEvent(event);
+
+      var handlers = data.handlers[event.type];
+
+      if (handlers) {
+        // Copy handlers so if handlers are added/removed during the process it doesn't throw everything off.
+        var handlersCopy = handlers.slice(0);
+
+        for (var m = 0, n = handlersCopy.length; m < n; m++) {
+          if (event.isImmediatePropagationStopped()) {
+            break;
+          } else {
+            handlersCopy[m].call(elem, event);
+          }
+        }
+      }
+    };
+  }
+
+  if (data.handlers[type].length == 1) {
+    if (elem.addEventListener) {
+      elem.addEventListener(type, data.dispatcher, false);
+    } else if (elem.attachEvent) {
+      elem.attachEvent('on' + type, data.dispatcher);
+    }
+  }
+};
+
+/**
+ * Removes event listeners from an element
+ * @param  {Element|Object}   elem Object to remove listeners from
+ * @param  {String|Array=}   type Type of listener to remove. Don't include to remove all events from element.
+ * @param  {Function} fn   Specific listener to remove. Don't include to remove listeners for an event type.
+ * @private
+ */
+let off = function(elem, type, fn) {
+  // Don't want to add a cache object through getData if not needed
+  if (!VjsLib.hasData(elem)) return;
+
+  let data = VjsLib.getData(elem);
+
+  // If no events exist, nothing to unbind
+  if (!data.handlers) { return; }
+
+  if (VjsLib.obj.isArray(type)) {
+    return _handleMultipleEvents(off, elem, type, fn);
+  }
+
+  // Utility function
+  var removeType = function(t){
+     data.handlers[t] = [];
+     cleanUpEvents(elem,t);
+  };
+
+  // Are we removing all bound events?
+  if (!type) {
+    for (let t in data.handlers) removeType(t);
+    return;
+  }
+
+  var handlers = data.handlers[type];
+
+  // If no handlers exist, nothing to unbind
+  if (!handlers) return;
+
+  // If no listener was provided, remove all listeners for type
+  if (!fn) {
+    removeType(type);
+    return;
+  }
+
+  // We're only removing a single handler
+  if (fn.guid) {
+    for (let n = 0; n < handlers.length; n++) {
+      if (handlers[n].guid === fn.guid) {
+        handlers.splice(n--, 1);
+      }
+    }
+  }
+
+  cleanUpEvents(elem, type);
+};
+
+/**
+ * Clean up the listener cache and dispatchers
+ * @param  {Element|Object} elem Element to clean up
+ * @param  {String} type Type of event to clean up
+ * @private
+ */
+let cleanUpEvents = function(elem, type) {
+  var data = VjsLib.getData(elem);
+
+  // Remove the events of a particular type if there are none left
+  if (data.handlers[type].length === 0) {
+    delete data.handlers[type];
+    // data.handlers[type] = null;
+    // Setting to null was causing an error with data.handlers
+
+    // Remove the meta-handler from the element
+    if (elem.removeEventListener) {
+      elem.removeEventListener(type, data.dispatcher, false);
+    } else if (elem.detachEvent) {
+      elem.detachEvent('on' + type, data.dispatcher);
+    }
+  }
+
+  // Remove the events object if there are no types left
+  if (VjsLib.isEmpty(data.handlers)) {
+    delete data.handlers;
+    delete data.dispatcher;
+    delete data.disabled;
+
+    // data.handlers = null;
+    // data.dispatcher = null;
+    // data.disabled = null;
+  }
+
+  // Finally remove the expando if there is no data left
+  if (VjsLib.isEmpty(data)) {
+    VjsLib.removeData(elem);
+  }
+};
+
+/**
  * Trigger an event for an element
  * @param  {Element|Object}      elem  Element to trigger an event on
  * @param  {Event|Object|String} event A string (the type) or an event object with a type attribute
  * @private
  */
-const trigger = function(elem, event) {
+let trigger = function(elem, event) {
   // Fetches element data and a reference to the parent (for bubbling).
   // Don't want to add a data object to cache for every parent,
   // so checking hasData first.
@@ -294,7 +294,7 @@ const trigger = function(elem, event) {
     event = { type:event, target:elem };
   }
   // Normalizes the event properties.
-  event = VjsLib.fixEvent(event);
+  event = fixEvent(event);
 
   // If the passed element has a dispatcher, executes the established handlers.
   if (elemData.dispatcher) {
@@ -304,7 +304,7 @@ const trigger = function(elem, event) {
   // Unless explicitly stopped or the event does not bubble (e.g. media events)
     // recursively calls this function to bubble the event up the DOM.
     if (parent && !event.isPropagationStopped() && event.bubbles !== false) {
-    VjsLib.trigger(parent, event);
+    trigger(parent, event);
 
   // If at the top of the DOM, triggers the default action unless disabled.
   } else if (!parent && !event.defaultPrevented) {
@@ -353,7 +353,7 @@ const trigger = function(elem, event) {
  * @param  {Function} fn
  * @private
  */
-const one = function(elem, type, fn) {
+let one = function(elem, type, fn) {
   if (VjsLib.obj.isArray(type)) {
     return _handleMultipleEvents(one, elem, type, fn);
   }

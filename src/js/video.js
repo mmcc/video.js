@@ -1,8 +1,25 @@
+import MediaLoader from './media/loader';
+import Html5 from './media/html5';
+import Flash from './media/flash';
+import PosterImage from './poster';
+import { TextTrackDisplay } from './tracks/text-track-controls';
+import LoadingSpinner from './loading-spinner';
+import BigPlayButton from './big-play-button';
+import ControlBar from './control-bar/control-bar';
+import PlayToggle from './control-bar/play-toggle';
+import CurrentTimeDisplay from './control-bar/time-display';
+import LiveDisplay from './control-bar/live-display';
+import ProgressControl from './control-bar/progress-control';
+import FullscreenToggle from './control-bar/fullscreen-toggle';
+import VolumeControl from './control-bar/volume-control';
+import MuteToggle from './control-bar/mute-toggle';
+import PlaybackRateMenuButton from './control-bar/playback-rate-menu-button';
+import ErrorDisplay from './error-display';
+
 import videojs, { elementShiv } from './core';
 import * as setup from './setup';
 import Component from './component';
 import * as VjsLib from './lib';
-import MediaLoader from './media/loader';
 
 if (typeof HTMLVideoElement === 'undefined') {
   elementShiv();
@@ -12,8 +29,8 @@ if (typeof HTMLVideoElement === 'undefined') {
 // You have to wait at least once in case this script is loaded after your video in the DOM (weird behavior only with minified version)
 setup.autoSetupTimeout(1, videojs);
 
-export let getComponent = Component.getComponent;
-export let registerComponent = Component.registerComponent;
+let getComponent = Component.getComponent;
+let registerComponent = Component.registerComponent;
 
 // Expose but deprecate the window[componentName] method for accessing components
 VjsLib.obj.each(Component.components, function(name, component){

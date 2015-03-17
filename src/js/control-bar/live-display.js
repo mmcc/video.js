@@ -1,5 +1,5 @@
 import Component from '../component';
-import VjsLib from '../lib';
+import * as VjsLib from '../lib';
 
 /**
  * Displays the live indicator

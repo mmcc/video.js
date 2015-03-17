@@ -2,7 +2,7 @@ import Button from '../button';
 import Component from '../component';
 import Menu, { MenuButton } from '../menu';
 import MuteToggle from '../mute-toggle';
-import VjsLib from '../lib';
+import * as VjsLib from '../lib';
 import { VolumeBar } from './volume-control';
 
 /**

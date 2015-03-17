@@ -4,11 +4,11 @@
  * Not using setupTriggers. Using global onEvent func to distribute events
  */
 
-import MediaTechController from 'media';
+import MediaTechController from './media';
 import * as VjsLib from '../lib';
 import FlashRtmpDecorator from './flash-rtmp';
-
-let { window } = global;
+import Component from '../component';
+import window from 'global/window';
 
 /**
  * Flash Media Controller - Wrapper for fallback SWF API

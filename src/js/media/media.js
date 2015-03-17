@@ -525,4 +525,3 @@ MediaTechController.withSourceHandlers = function(Tech){
 };
 
 export default MediaTechController;
-export { media };

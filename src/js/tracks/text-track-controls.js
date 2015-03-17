@@ -562,7 +562,7 @@ let ChaptersTrackMenuItem = MenuItem.extend({
   }
 });
 
-Component.registerComponent('LiveDisplay', ChaptersTrackMenuItem);
+Component.registerComponent('ChaptersTrackMenuItem', ChaptersTrackMenuItem);
 
 ChaptersTrackMenuItem.prototype.onClick = function(){
   MenuItem.prototype.onClick.call(this);
