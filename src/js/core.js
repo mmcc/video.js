@@ -10,13 +10,6 @@ import * as VjsUtil from './util';
 import CoreObject from './core-object';
 import document from 'global/document';
 
-// HTML5 Shiv. Must be in <head> to support older browsers.
-var elementShiv = function() {
-  document.createElement('video');
-  document.createElement('audio');
-  document.createElement('track');
-};
-
 /**
  * Doubles as the main function for users to create a player instance and also
  * the main library object.
@@ -33,7 +26,7 @@ var elementShiv = function() {
  * @return {vjs.Player}             A player instance
  * @namespace
  */
-var vjs = function(id, options, ready){
+var videojs = function(id, options, ready){
   var tag; // Element of ID
 
   // Allow for element or ID to be passed in
@@ -83,19 +76,19 @@ var vjs = function(id, options, ready){
 // var videojs = window['videojs'] = vjs;
 
 // CDN Version. Used to target right flash swf.
-vjs.CDN_VERSION = 'GENERATED_CDN_VSN';
-vjs.ACCESS_PROTOCOL = ('https:' == document.location.protocol ? 'https://' : 'http://');
+videojs.CDN_VERSION = 'GENERATED_CDN_VSN';
+videojs.ACCESS_PROTOCOL = ('https:' == document.location.protocol ? 'https://' : 'http://');
 
 /**
 * Full player version
 * @type {string}
 */
-vjs['VERSION'] = 'GENERATED_FULL_VSN';
+videojs['VERSION'] = 'GENERATED_FULL_VSN';
 
 // Set CDN Version of swf
 // The added (+) blocks the replace from changing this GENERATED_CDN_VSN string
-if (vjs.CDN_VERSION !== 'GENERATED'+'_CDN_VSN') {
-  Options['flash']['swf'] = vjs.ACCESS_PROTOCOL + 'vjs.zencdn.net/'+vjs.CDN_VERSION+'/video-js.swf';
+if (videojs.CDN_VERSION !== 'GENERATED'+'_CDN_VSN') {
+  Options['flash']['swf'] = videojs.ACCESS_PROTOCOL + 'vjs.zencdn.net/'+videojs.CDN_VERSION+'/video-js.swf';
 }
 
 /**
@@ -108,7 +101,7 @@ if (vjs.CDN_VERSION !== 'GENERATED'+'_CDN_VSN') {
  * @param  {Object} data The data values to be translated
  * @return {Object} The resulting global languages dictionary object
  */
-vjs.addLanguage = function(code, data){
+videojs.addLanguage = function(code, data){
   if(Options['languages'][code] !== undefined) {
     Options['languages'][code] = VjsUtil.mergeOptions(Options['languages'][code], data);
   } else {
@@ -125,12 +118,11 @@ vjs.addLanguage = function(code, data){
  * compiler compatible, so string keys are used.
  */
 if (typeof define === 'function' && define['amd']) {
-  define('videojs', [], function(){ return vjs; });
+  define('videojs', [], function(){ return videojs; });
 
 // checking that module is an object too because of umdjs/umd#35
 } else if (typeof exports === 'object' && typeof module === 'object') {
-  module['exports'] = vjs;
+  module['exports'] = videojs;
 }
 
-export default vjs;
-export { elementShiv };
+export default videojs;

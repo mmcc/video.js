@@ -1,5 +1,3 @@
-'use strict';
-
 import Component from '../component';
 import Menu, { MenuItem, MenuButton } from '../menu';
 import * as VjsLib from '../lib';

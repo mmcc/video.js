@@ -1,6 +1,15 @@
 import Component from '../component';
 import * as VjsLib from '../lib';
 
+import PlayToggle from './play-toggle';
+import CurrentTimeDisplay from './time-display';
+import LiveDisplay from './live-display';
+import ProgressControl from './progress-control';
+import FullscreenToggle from './fullscreen-toggle';
+import VolumeControl from './volume-control';
+import MuteToggle from './mute-toggle';
+import PlaybackRateMenuButton from './playback-rate-menu-button';
+
 /**
  * Container of main controls
  * @param {vjs.Player|Object} player

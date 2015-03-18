@@ -982,12 +982,12 @@ Player.prototype.requestFullscreen = function(){
     // when canceling fullscreen. Otherwise if there's multiple
     // players on a page, they would all be reacting to the same fullscreen
     // events
-    VjsEvents.on(document, fsApi['fullscreenchange'], VjsLib.bind(this, function(e){
+    VjsEvents.on(document, fsApi['fullscreenchange'], VjsLib.bind(this, function documentFullscreenChange(e){
       this.isFullscreen(document[fsApi.fullscreenElement]);
 
       // If cancelling fullscreen, remove event listener.
       if (this.isFullscreen() === false) {
-        VjsEvents.off(document, fsApi['fullscreenchange'], arguments.callee);
+        VjsEvents.off(document, fsApi['fullscreenchange'], documentFullscreenChange);
       }
 
       this.trigger('fullscreenchange');
@@ -1609,16 +1609,16 @@ Player.prototype.listenForUserActivity = function(){
 
       var timeout = this.options()['inactivityTimeout'];
       if (timeout > 0) {
-          // In <timeout> milliseconds, if no more activity has occurred the
-          // user will be considered inactive
-          let inactivityTimeout = this.setTimeout(function () {
-              // Protect against the case where the inactivityTimeout can trigger just
-              // before the next user activity is picked up by the activityCheck loop
-              // causing a flicker
-              if (!this.userActivity_) {
-                  this.userActive(false);
-              }
-          }, timeout);
+        // In <timeout> milliseconds, if no more activity has occurred the
+        // user will be considered inactive
+        inactivityTimeout = this.setTimeout(function () {
+          // Protect against the case where the inactivityTimeout can trigger just
+          // before the next user activity is picked up by the activityCheck loop
+          // causing a flicker
+          if (!this.userActivity_) {
+              this.userActive(false);
+          }
+        }, timeout);
       }
     }
   }, 250);

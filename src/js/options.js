@@ -19,6 +19,9 @@ export default {
   // defaultVolume: 0.85,
   'defaultVolume': 0.00, // The freakin seaguls are driving me crazy!
 
+  // default inactivity timeout
+  'inactivityTimeout': 2000,
+
   // default playback rates
   'playbackRates': [],
   // Add playback rate selection by adding rates

@@ -1,5 +1,3 @@
-'use strict';
-
 import Component from '../component';
 import * as VjsLib from '../lib';
 import * as VjsEvents from '../events';
