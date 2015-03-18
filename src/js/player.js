@@ -9,12 +9,6 @@ import window from 'global/window';
 import document from 'global/document';
 
 /**
- * Global player list
- * @type {Object}
- */
-var players = {};
-
-/**
  * An instance of the `vjs.Player` class is created when any of the Video.js setup methods are used to initialize a video.
  *
  * ```js
@@ -111,7 +105,7 @@ let Player = Component.extend({
     // }
 
     // Make player easily findable by ID
-    players[this.id_] = this;
+    Player.players[this.id_] = this;
 
     if (options['plugins']) {
       VjsLib.obj.each(options['plugins'], function(key, val){
@@ -124,6 +118,12 @@ let Player = Component.extend({
 });
 
 Component.registerComponent('Player', Player);
+
+/**
+ * Global player list
+ * @type {Object}
+ */
+Player.players = {};
 
 /**
  * The player's stored language code
@@ -185,7 +185,7 @@ Player.prototype.dispose = function(){
   this.off('dispose');
 
   // Kill reference to this player
-  players[this.id_] = null;
+  Player.players[this.id_] = null;
   if (this.tag && this.tag['player']) { this.tag['player'] = null; }
   if (this.el_ && this.el_['player']) { this.el_['player'] = null; }
 
@@ -1780,4 +1780,3 @@ Player.prototype.removeRemoteTextTrack = function(track) {
 // playList: array of source lists in order of playback
 
 export default Player;
-export { players };
