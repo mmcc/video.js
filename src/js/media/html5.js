@@ -5,7 +5,7 @@
 import MediaTechController from './media';
 import Component from '../component';
 import * as VjsLib from '../lib';
-import VjsUtil from '../util';
+import * as VjsUtil from '../util';
 import document from 'global/document';
 
 /**

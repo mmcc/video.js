@@ -823,6 +823,8 @@ let arr = {};
  * @private
  */
 arr.forEach = function(array, callback, thisArg) {
+  thisArg = thisArg || videojs;
+
   if (obj.isArray(array) && callback instanceof Function) {
     for (var i = 0, len = array.length; i < len; ++i) {
       callback.call(thisArg, array[i], i, array);

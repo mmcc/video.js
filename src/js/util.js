@@ -29,7 +29,7 @@ let mergeOptions = function(obj1, obj2){
 
       // Check if both properties are pure objects and do a deep merge if so
       if (obj.isPlain(val1) && obj.isPlain(val2)) {
-        obj1[key] = util.mergeOptions(val1, val2);
+        obj1[key] = mergeOptions(val1, val2);
       } else {
         obj1[key] = obj2[key];
       }
