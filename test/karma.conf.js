@@ -78,11 +78,11 @@ module.exports = function(config) {
     files: [
       '../build/files/video-js.css',
       '../test/karma-qunit-shim.js',
-      '../test/unit/tracks/text-track-cue-list.js'
+      '../test/unit/**/*.js'
     ],
 
     preprocessors: {
-      '../test/unit/tracks/text-track-cue-list.js': [ 'browserify' ]
+      '../test/unit/**/*.js': [ 'browserify' ]
     },
 
     browserify: {

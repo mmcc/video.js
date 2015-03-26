@@ -1,13 +1,14 @@
-module('Button');
+var Button = require('../../src/js/button.js');
+var TestHelpers = require('./test-helpers.js');
 
-var Button = vjs.Button;
+q.module('Button');
 
 test('should localize its text', function(){
   expect(1);
 
   var player, testButton, el;
 
-  player = PlayerTest.makePlayer({
+  player = TestHelpers.makePlayer({
     'language': 'es',
     'languages': {
       'es': {

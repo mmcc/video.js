@@ -31,8 +31,6 @@ var MuteToggle = Button.extend({
   }
 });
 
-Component.registerComponent('MuteToggle', MuteToggle);
-
 MuteToggle.prototype.createEl = function(){
   return Button.prototype.createEl.call(this, 'div', {
     className: 'vjs-mute-control vjs-control',
@@ -76,4 +74,5 @@ MuteToggle.prototype.update = function(){
   VjsLib.addClass(this.el_, 'vjs-vol-'+level);
 };
 
+Component.registerComponent('MuteToggle', MuteToggle);
 export default MuteToggle;

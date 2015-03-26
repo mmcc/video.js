@@ -1,17 +1,22 @@
-module('Text Track List');
+var TTL = require('../../../src/js/tracks/text-track-list.js');
+var TextTrack = require('../../../src/js/tracks/text-track.js');
+var EventEmitter = require('../../../src/js/event-emitter.js');
 
-var TTL = vjs.TextTrackList,
-    noop = Function.prototype,
-    genericTracks = [{
-      id: '1',
-      addEventListener: noop
-    }, {
-      id: '2',
-      addEventListener: noop
-    }, {
-      id: '3',
-      addEventListener: noop
-    }];
+var noop = Function.prototype;
+var genericTracks = [
+  {
+    id: '1',
+    addEventListener: noop
+  }, {
+    id: '2',
+    addEventListener: noop
+  }, {
+    id: '3',
+    addEventListener: noop
+  }
+];
+
+q.module('Text Track List');
 
 test('TextTrackList\'s length is set correctly', function() {
   var ttl = new TTL(genericTracks);
@@ -141,7 +146,7 @@ test('a "removetrack" event is triggered when tracks are removed', function() {
 });
 
 test('trigger "change" event when "modechange" is fired on a track', function() {
-  var tt = new vjs.EventEmitter(),
+  var tt = new EventEmitter(),
       ttl = new TTL([tt]),
       changes = 0,
       changeHandler = function() {
@@ -162,7 +167,7 @@ test('trigger "change" event when "modechange" is fired on a track', function() 
 });
 
 test('trigger "change" event when mode changes on a TextTracl', function() {
-  var tt = new vjs.TextTrack({
+  var tt = new TextTrack({
         player: {
           on: noop
         }

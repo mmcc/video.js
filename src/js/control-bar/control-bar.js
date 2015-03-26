@@ -7,6 +7,7 @@ import LiveDisplay from './live-display';
 import ProgressControl from './progress-control';
 import FullscreenToggle from './fullscreen-toggle';
 import VolumeControl from './volume-control';
+import VolumeMenuButton from './volume-menu-button';
 import MuteToggle from './mute-toggle';
 import PlaybackRateMenuButton from './playback-rate-menu-button';
 

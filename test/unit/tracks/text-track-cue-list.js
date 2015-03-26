@@ -57,8 +57,6 @@ test('can access new items by index', function() {
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}]));
 
-  console.log(ttcl);
-
   equal(ttcl[3].id, '100', 'id of item at index 3 is 100');
   ttcl.setCues_(genericTracks.concat([{id: '100'}, {id: '101'}]));
   equal(ttcl[4].id, '101', 'id of item at index 4 is 101');

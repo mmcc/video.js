@@ -105,7 +105,7 @@ TextTrackList.prototype.removeTrack_ = function(rtrack) {
 TextTrackList.prototype.getTrackById = function(id) {
   let result = null;
 
-  for (let i = 0, i = this.length; i < l; i++) {
+  for (let i = 0, l = this.length; i < l; i++) {
     let track = this[i];
     if (track.id === id) {
       result = track;

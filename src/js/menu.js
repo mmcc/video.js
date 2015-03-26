@@ -16,8 +16,6 @@ import * as VjsEvents from './events';
  */
 let Menu = Component.extend();
 
-Component.registerComponent('Menu', Menu);
-
 /**
  * Add a menu item to the menu
  * @param {Object|String} component Component or component type to add
@@ -115,8 +113,6 @@ let MenuButton = Button.extend({
     this.el_.setAttribute('role', 'button');
   }
 });
-
-Component.registerComponent('MenuButton', MenuButton);
 
 MenuButton.prototype.update = function() {
   let menu = this.createMenu();
@@ -232,6 +228,10 @@ MenuButton.prototype.unpressButton = function(){
   this.menu.unlockShowing();
   this.el_.setAttribute('aria-pressed', false);
 };
+
+Component.registerComponent('Menu', Menu);
+Component.registerComponent('MenuButton', MenuButton);
+Component.registerComponent('MenuItem', MenuItem);
 
 export default Menu;
 export { MenuItem, MenuButton };
