@@ -1,6 +1,6 @@
-module('Events');
+var Events = require('../../src/js/events.js');
 
-var Events = vjs.Events;
+q.module('Events');
 
 test('should add and remove an event listener to an element', function(){
   expect(1);

@@ -1,14 +1,15 @@
-(function() {
-module('Text Track Cue List');
+q.module('Text Track Cue List');
 
-var TTCL = vjs.TextTrackCueList,
-    genericTracks = [{
-      id: '1'
-    }, {
-      id: '2'
-    }, {
-      id: '3'
-    }];
+let TTCL = require('../../../src/js/tracks/text-track-cue-list.js');
+let genericTracks = [
+  {
+    id: '1'
+  }, {
+    id: '2'
+  }, {
+    id: '3'
+  }
+];
 
 test('TextTrackCueList\'s length is set correctly', function() {
   var ttcl = new TTCL(genericTracks);
@@ -55,6 +56,9 @@ test('can access new items by index', function() {
   var ttcl = new TTCL(genericTracks);
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}]));
+
+  console.log(ttcl);
+
   equal(ttcl[3].id, '100', 'id of item at index 3 is 100');
   ttcl.setCues_(genericTracks.concat([{id: '100'}, {id: '101'}]));
   equal(ttcl[4].id, '101', 'id of item at index 4 is 101');
@@ -85,5 +89,3 @@ test('new item available at old index', function() {
   ttcl.setCues_(genericTracks.concat([{id: '101'}]));
   equal(ttcl[3].id, '101', 'id of new item at index 3 is now 101');
 });
-
-})();

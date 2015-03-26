@@ -1,4 +1,4 @@
-import VjsUtils from './utils';
+import * as VjsUtils from './util';
 import * as VjsLib from './lib';
 import window from 'global/window';
 

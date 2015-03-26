@@ -372,7 +372,9 @@ Component.prototype.addChild = function(child, options){
     let componentName = child;
 
     // Make sure options is at least an empty object to protect against errors
-    options = options || {};
+    if (!options || options === true) {
+      options = {};
+    }
 
     // If no componentClass in options, assume componentClass is the name lowercased
     // (e.g. playButton)
@@ -386,6 +388,7 @@ Component.prototype.addChild = function(child, options){
     // Closure Compiler throws an 'incomplete alias' warning if we use the vjs variable directly.
     // Every class should be exported, so this should never be a problem here.
     let componentClass = Component.getComponent(componentClassName);
+
     component = new componentClass(this.player_ || this, options);
 
   // child is a component instance
@@ -966,7 +969,8 @@ Component.prototype.dimensions = function(width, height){
  */
 Component.prototype.dimension = function(widthOrHeight, num, skipListeners){
   if (num !== undefined) {
-    if (num === null || isNaN(num)) {
+    // Set to zero if null or literally NaN (NaN !== NaN)
+    if (num === null || num !== num) {
       num = 0;
     }
 
@@ -1255,4 +1259,5 @@ Component.getComponent = function(name){
   }
 };
 
+Component.registerComponent('Component', Component);
 export default Component;

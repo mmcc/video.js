@@ -1,19 +1,19 @@
 var fs = require('fs');
 var vm = require('vm');
 var babelify = require('babelify');
-var sourceLoader = fs.readFileSync('./build/source-loader.js', 'utf8');
-var sandbox = {
-  blockSourceLoading: true,
-  document: {},
-  window: {}
-};
-var sourceFiles = [];
-
-
-vm.runInNewContext(sourceLoader, sandbox, 'build/source-loader.js');
-sourceFiles = sandbox.sourceFiles.map(function(src) {
-  return '../' + src;
-});
+// var sourceLoader = fs.readFileSync('./build/source-loader.js', 'utf8');
+// var sandbox = {
+//   blockSourceLoading: true,
+//   document: {},
+//   window: {}
+// };
+// var sourceFiles = [];
+//
+//
+// vm.runInNewContext(sourceLoader, sandbox, 'build/source-loader.js');
+// sourceFiles = sandbox.sourceFiles.map(function(src) {
+//   return '../' + src;
+// });
 
 module.exports = function(config) {
   var customLaunchers = {
@@ -78,11 +78,11 @@ module.exports = function(config) {
     files: [
       '../build/files/video-js.css',
       '../test/karma-qunit-shim.js',
-      '../test/unit/**/*.js'
+      '../test/unit/tracks/text-track-cue-list.js'
     ],
 
     preprocessors: {
-      'test/**/*.js': [ 'browserify' ]
+      '../test/unit/tracks/text-track-cue-list.js': [ 'browserify' ]
     },
 
     browserify: {
