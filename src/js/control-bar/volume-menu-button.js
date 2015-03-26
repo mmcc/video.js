@@ -1,7 +1,7 @@
 import Button from '../button';
 import Component from '../component';
 import Menu, { MenuButton } from '../menu';
-import MuteToggle from '../mute-toggle';
+import MuteToggle from './mute-toggle';
 import * as VjsLib from '../lib';
 import { VolumeBar } from './volume-control';
 
@@ -32,8 +32,6 @@ let VolumeMenuButton = MenuButton.extend({
   }
 });
 
-Component.registerComponent('VolumeMenuButton', VolumeMenuButton);
-
 VolumeMenuButton.prototype.createMenu = function(){
   let menu = new Menu(this.player_, {
     contentElType: 'div'
@@ -63,4 +61,5 @@ VolumeMenuButton.prototype.createEl = function(){
 
 VolumeMenuButton.prototype.volumeUpdate = MuteToggle.prototype.update;
 
+Component.registerComponent('VolumeMenuButton', VolumeMenuButton);
 export default VolumeMenuButton;

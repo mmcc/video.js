@@ -1,4 +1,10 @@
-module('Controls');
+var VolumeControl = require('../../src/js/control-bar/volume-control.js').default;
+var MuteToggle = require('../../src/js/control-bar/mute-toggle.js');
+var PlaybackRateMenuButton = require('../../src/js/control-bar/playback-rate-menu-button.js').default;
+var Slider = require('../../src/js/slider.js').default;
+var TestHelpers = require('./test-helpers.js');
+
+q.module('Controls');
 
 test('should hide volume control if it\'s not supported', function(){
   expect(2);
@@ -19,8 +25,8 @@ test('should hide volume control if it\'s not supported', function(){
     reportUserActivity: function(){}
   };
 
-  volumeControl = new vjs.VolumeControl(player);
-  muteToggle = new vjs.MuteToggle(player);
+  volumeControl = new VolumeControl(player);
+  muteToggle = new MuteToggle(player);
 
   ok(volumeControl.el().className.indexOf('vjs-hidden') >= 0, 'volumeControl is not hidden');
   ok(muteToggle.el().className.indexOf('vjs-hidden') >= 0, 'muteToggle is not hidden');
@@ -53,8 +59,8 @@ test('should test and toggle volume control on `loadstart`', function(){
     reportUserActivity: function(){}
   };
 
-  volumeControl = new vjs.VolumeControl(player);
-  muteToggle = new vjs.MuteToggle(player);
+  volumeControl = new VolumeControl(player);
+  muteToggle = new MuteToggle(player);
 
   equal(volumeControl.hasClass('vjs-hidden'), false, 'volumeControl is hidden initially');
   equal(muteToggle.hasClass('vjs-hidden'), false, 'muteToggle is hidden initially');
@@ -85,7 +91,7 @@ test('calculateDistance should use changedTouches, if available', function() {
     ready: noop,
     reportUserActivity: noop
   };
-  slider = new vjs.Slider(player);
+  slider = new Slider(player);
   document.body.appendChild(slider.el_);
   slider.el_.style.position = 'absolute';
   slider.el_.style.width = '200px';
@@ -104,8 +110,8 @@ test('calculateDistance should use changedTouches, if available', function() {
 test('should hide playback rate control if it\'s not supported', function(){
   expect(1);
 
-  var player = PlayerTest.makePlayer();
-  var playbackRate = new vjs.PlaybackRateMenuButton(player);
+  var player = TestHelpers.makePlayer();
+  var playbackRate = new PlaybackRateMenuButton(player);
 
   ok(playbackRate.el().className.indexOf('vjs-hidden') >= 0, 'playbackRate is not hidden');
 });

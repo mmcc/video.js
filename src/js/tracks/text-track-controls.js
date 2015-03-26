@@ -576,4 +576,4 @@ ChaptersTrackMenuItem.prototype.update = function(){
   this.selected(cue['startTime'] <= currentTime && currentTime < cue['endTime']);
 };
 
-export { TextTrackDisplay, TextTrackButton, CaptionsButton, SubtitlesButton, ChaptersButton, ChaptersTrackMenuItem };
+export { TextTrackDisplay, TextTrackButton, CaptionsButton, SubtitlesButton, ChaptersButton, TextTrackMenuItem, ChaptersTrackMenuItem };

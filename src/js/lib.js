@@ -823,7 +823,7 @@ let arr = {};
  * @private
  */
 arr.forEach = function(array, callback, thisArg) {
-  thisArg = thisArg || videojs;
+  thisArg = thisArg || this;
 
   if (obj.isArray(array) && callback instanceof Function) {
     for (var i = 0, len = array.length; i < len; ++i) {

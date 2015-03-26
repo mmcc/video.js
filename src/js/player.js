@@ -1,12 +1,24 @@
-import Component from './component';
-import * as VjsLib from './lib';
-import * as VjsEvents from './events';
-import FullscreenApi from './fullscreen-api';
-import MediaError from './media-error';
-import options from './options';
-import JSON from './json';
+import Component from './component.js';
+import * as VjsLib from './lib.js';
+import * as VjsEvents from './events.js';
+import FullscreenApi from './fullscreen-api.js';
+import MediaError from './media-error.js';
+import options from './options.js';
+import JSON from './json.js';
 import window from 'global/window';
 import document from 'global/document';
+
+// Include required child components
+import MediaLoader from './media/loader.js';
+import Poster from './poster.js';
+import TextTrackDisplay from './tracks/text-track-controls.js';
+import LoadingSpinner from './loading-spinner.js';
+import BigPlayButton from './big-play-button.js';
+import controlBar from './control-bar/control-bar.js';
+import ErrorDisplay from './error-display.js';
+import TextTrackSettings from './tracks/text-track-settings.js';
+// Require html5 for disposing the original video tag
+import Html5 from './media/html5.js';
 
 /**
  * An instance of the `vjs.Player` class is created when any of the Video.js setup methods are used to initialize a video.

@@ -1,4 +1,8 @@
-module('PosterImage', {
+var PosterImage = require('../../src/js/poster.js');
+var Lib = require('../../src/js/lib.js');
+var TestHelpers = require('./test-helpers.js');
+
+q.module('PosterImage', {
   'setup': function(){
     // Store the original background support so we can test different vals
     this.origVal = Lib.BACKGROUND_SIZE_SUPPORTED;
@@ -25,8 +29,6 @@ module('PosterImage', {
   }
 });
 
-var PosterImage = vjs.PosterImage;
-
 test('should create and update a poster image', function(){
   var posterImage;
 
@@ -35,7 +37,7 @@ test('should create and update a poster image', function(){
     return url.replace(new RegExp('\\"', 'g'),'');
   }
 
-  vjs.BACKGROUND_SIZE_SUPPORTED = true;
+  Lib.BACKGROUND_SIZE_SUPPORTED = true;
   posterImage = new PosterImage(this.mockPlayer);
   equal(normalizeUrl(posterImage.el().style.backgroundImage), 'url('+this.poster1+')', 'Background image used');
 
@@ -48,7 +50,7 @@ test('should create and update a poster image', function(){
 test('should create and update a fallback image in older browsers', function(){
   var posterImage;
 
-  vjs.BACKGROUND_SIZE_SUPPORTED = false;
+  Lib.BACKGROUND_SIZE_SUPPORTED = false;
   posterImage = new PosterImage(this.mockPlayer);
   equal(posterImage.fallbackImg_.src, this.poster1, 'Fallback image created');
 

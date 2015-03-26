@@ -3,6 +3,7 @@ import * as VjsLib from '../lib';
 import * as TextTrackEnum from './text-track-enums';
 import EventEmitter from '../event-emitter';
 import document from 'global/document';
+import XHR from '../xhr.js';
 
 /*
  * https://html.spec.whatwg.org/multipage/embedded-content.html#texttrack
@@ -247,7 +248,7 @@ let parseCues = function(srcContent, track) {
 };
 
 let loadTrack = function(src, track) {
-  VjsLib.xhr(src, VjsLib.bind(this, function(err, response, responseBody){
+  XHR(src, VjsLib.bind(this, function(err, response, responseBody){
     if (err) {
       return VjsLib.log.error(err);
     }

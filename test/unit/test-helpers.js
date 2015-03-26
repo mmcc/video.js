@@ -1,14 +1,18 @@
-var PlayerTest = {
+var Player = require('../../src/js/player.js');
+var MediaFaker = require('./mediafaker.js');
+
+var TestHelpers = {
   makeTag: function(){
     var videoTag = document.createElement('video');
     videoTag.id = 'example_1';
     videoTag.className = 'video-js vjs-default-skin';
     return videoTag;
   },
+
   makePlayer: function(playerOptions, videoTag){
     var player;
 
-    videoTag = videoTag || PlayerTest.makeTag();
+    videoTag = videoTag || TestHelpers.makeTag();
 
     var fixture = document.getElementById('qunit-fixture');
     fixture.appendChild(videoTag);
@@ -16,11 +20,9 @@ var PlayerTest = {
     playerOptions = playerOptions || {};
     playerOptions['techOrder'] = playerOptions['techOrder'] || ['mediaFaker'];
 
-    return player = new vjs.Player(videoTag, playerOptions);
-  }
-};
+    return player = new Player(videoTag, playerOptions);
+  },
 
-var TestHelpers = {
   getComputedStyle: function(el, rule){
     var val;
 
@@ -34,3 +36,5 @@ var TestHelpers = {
     return val;
   }
 };
+
+module.exports = TestHelpers;
