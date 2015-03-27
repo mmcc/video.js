@@ -22,3 +22,5 @@ sandbox/*
 
 *results.xml
 *.log
+
+test/coverage/*
