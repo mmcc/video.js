@@ -1,4 +1,4 @@
-var TestHelpers = require('./test-helpers.js');
+import TestHelpers from './test-helpers.js';
 
 q.module('Setup');
 

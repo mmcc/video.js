@@ -1,8 +1,9 @@
-var VolumeControl = require('../../src/js/control-bar/volume-control.js').default;
-var MuteToggle = require('../../src/js/control-bar/mute-toggle.js');
-var PlaybackRateMenuButton = require('../../src/js/control-bar/playback-rate-menu-button.js').default;
-var Slider = require('../../src/js/slider.js').default;
-var TestHelpers = require('./test-helpers.js');
+import VolumeControl from '../../src/js/control-bar/volume-control.js';
+import MuteToggle from '../../src/js/control-bar/mute-toggle.js';
+import PlaybackRateMenuButton from '../../src/js/control-bar/playback-rate-menu-button.js';
+import Slider from '../../src/js/slider.js';
+import TestHelpers from './test-helpers.js';
+import document from 'global/document';
 
 q.module('Controls');
 

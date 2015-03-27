@@ -14,6 +14,7 @@ import videojs from './core';
 import * as setup from './setup';
 import Component from './component';
 import * as Lib from './lib';
+import * as Util from './util.js';
 
 
 if (typeof HTMLVideoElement === 'undefined') {
@@ -32,7 +33,7 @@ videojs.registerComponent = Component.registerComponent;
 // APIs that will be removed with 5.0, but need them to get tests passing
 // in ES6 transition
 videojs.TOUCH_ENABLED = Lib.TOUCH_ENABLED;
-videojs.util = require('./util');
+videojs.util = Util;
 
 // Probably want to keep this one for 5.0?
 import Player from './player';

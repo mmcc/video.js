@@ -1,7 +1,7 @@
 import Button from './button';
 import Component from './component';
-import * as VjsLib from './lib';
-import * as VjsEvents from './events';
+import * as Lib from './lib';
+import * as Events from './events';
 
 /* Menu
 ================================================================================ */
@@ -22,7 +22,7 @@ let Menu = Component.extend();
  */
 Menu.prototype.addItem = function(component){
   this.addChild(component);
-  component.on('click', VjsLib.bind(this, function(){
+  component.on('click', Lib.bind(this, function(){
     this.unlockShowing();
   }));
 };
@@ -30,7 +30,7 @@ Menu.prototype.addItem = function(component){
 /** @inheritDoc */
 Menu.prototype.createEl = function(){
   let contentElType = this.options().contentElType || 'ul';
-  this.contentEl_ = VjsLib.createEl(contentElType, {
+  this.contentEl_ = Lib.createEl(contentElType, {
     className: 'vjs-menu-content'
   });
   var el = Component.prototype.createEl.call(this, 'div', {
@@ -41,7 +41,7 @@ Menu.prototype.createEl = function(){
 
   // Prevent clicks from bubbling up. Needed for Menu Buttons,
   // where a click on the parent is significant
-  VjsEvents.on(el, 'click', function(event){
+  Events.on(el, 'click', function(event){
     event.preventDefault();
     event.stopImmediatePropagation();
   });
@@ -67,7 +67,7 @@ var MenuItem = Button.extend({
 
 /** @inheritDoc */
 MenuItem.prototype.createEl = function(type, props){
-  return Button.prototype.createEl.call(this, 'li', VjsLib.obj.merge({
+  return Button.prototype.createEl.call(this, 'li', Lib.obj.merge({
     className: 'vjs-menu-item',
     innerHTML: this.localize(this.options_['label'])
   }, props));
@@ -101,7 +101,7 @@ MenuItem.prototype.selected = function(selected){
  * @param {Object=} options
  * @constructor
  */
-let MenuButton = Button.extend({
+var MenuButton = Button.extend({
   /** @constructor */
   init: function(player, options){
     Button.call(this, player, options);
@@ -143,9 +143,9 @@ MenuButton.prototype.createMenu = function(){
 
   // Add a title list item to the top
   if (this.options().title) {
-    menu.contentEl().appendChild(VjsLib.createEl('li', {
+    menu.contentEl().appendChild(Lib.createEl('li', {
       className: 'vjs-menu-title',
-      innerHTML: VjsLib.capitalize(this.options().title),
+      innerHTML: Lib.capitalize(this.options().title),
       tabindex: -1
     }));
   }
@@ -184,7 +184,7 @@ MenuButton.prototype.onClick = function(){
   // When you click the button it adds focus, which will show the menu indefinitely.
   // So we'll remove focus when the mouse leaves the button.
   // Focus is needed for tab navigation.
-  this.one('mouseout', VjsLib.bind(this, function(){
+  this.one('mouseout', Lib.bind(this, function(){
     this.menu.unlockShowing();
     this.el_.blur();
   }));

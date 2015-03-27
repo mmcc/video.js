@@ -1,4 +1,4 @@
-var Util = require('../../src/js/util.js');
+import * as Util from '../../src/js/util.js';
 
 q.module('Util');
 

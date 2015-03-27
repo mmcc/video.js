@@ -1,16 +1,17 @@
+import { CaptionsButton } from '../../../src/js/tracks/text-track-controls.js';
+import { SubtitlesButton } from '../../../src/js/tracks/text-track-controls.js';
+import { ChaptersButton } from '../../../src/js/tracks/text-track-controls.js';
+import { TextTrackDisplay } from '../../../src/js/tracks/text-track-controls.js';
+import Html5 from '../../../src/js/media/html5.js';
+import Flash from '../../../src/js/media/flash.js';
+import MediaTechController from '../../../src/js/media/media.js';
+import Component from '../../../src/js/component.js';
+
+import * as Lib from '../../../src/js/lib.js';
+import TestHelpers from '../test-helpers.js';
+import document from 'global/document';
+
 q.module('Tracks');
-
-var CaptionsButton = require('../../../src/js/tracks/text-track-controls.js').CaptionsButton;
-var SubtitlesButton = require('../../../src/js/tracks/text-track-controls.js').SubtitlesButton;
-var ChaptersButton = require('../../../src/js/tracks/text-track-controls.js').ChaptersButton;
-var TextTrackDisplay = require('../../../src/js/tracks/text-track-controls.js').TextTrackDisplay;
-var Html5 = require('../../../src/js/media/html5.js');
-var Flash = require('../../../src/js/media/flash.js');
-var MediaTechController = require('../../../src/js/media/media.js');
-var Component = require('../../../src/js/component.js');
-
-var Lib = require('../../../src/js/lib.js');
-var TestHelpers = require('../test-helpers.js');
 
 test('should place title list item into ul', function() {
   var player, chaptersButton;

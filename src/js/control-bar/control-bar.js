@@ -1,5 +1,5 @@
 import Component from '../component';
-import * as VjsLib from '../lib';
+import * as Lib from '../lib';
 
 import PlayToggle from './play-toggle';
 import CurrentTimeDisplay from './time-display';
@@ -45,7 +45,7 @@ ControlBar.prototype.options_ = {
 };
 
 ControlBar.prototype.createEl = function(){
-  return VjsLib.createEl('div', {
+  return Lib.createEl('div', {
     className: 'vjs-control-bar'
   });
 };

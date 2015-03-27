@@ -1,5 +1,5 @@
-var Button = require('../../src/js/button.js');
-var TestHelpers = require('./test-helpers.js');
+import Button from '../../src/js/button.js';
+import TestHelpers from './test-helpers.js';
 
 q.module('Button');
 

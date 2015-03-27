@@ -1,9 +1,9 @@
 // Fake a media playback tech controller so that player tests
 // can run without HTML5 or Flash, of which PhantomJS supports neither.
 
-var MediaTechController = require('../../src/js/media/media.js');
-var Lib = require('../../src/js/lib.js');
-var Component = require('../../src/js/component.js');
+import MediaTechController from '../../src/js/media/media.js';
+import * as Lib from '../../src/js/lib.js';
+import Component from '../../src/js/component.js';
 
 /**
  * @constructor

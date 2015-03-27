@@ -1,6 +1,7 @@
-var TextTrackSettings = require('../../../src/js/tracks/text-track-settings.js');
-var TestHelpers = require('../test-helpers.js');
-var Events = require('../../../src/js/events.js');
+import TextTrackSettings from '../../../src/js/tracks/text-track-settings.js';
+import TestHelpers from '../test-helpers.js';
+import * as Events from '../../../src/js/events.js';
+import window from 'global/window';
 
 var tracks = [{
   kind: 'captions',

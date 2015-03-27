@@ -1,5 +1,7 @@
-var Player = require('../../src/js/player.js');
-var MediaFaker = require('./mediafaker.js');
+import Player from '../../src/js/player.js';
+import MediaFaker from './mediafaker.js';
+import window from 'global/window';
+import document from 'global/document';
 
 var TestHelpers = {
   makeTag: function(){

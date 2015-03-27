@@ -1,4 +1,5 @@
-var Flash = require('../../src/js/media/flash.js');
+import Flash from '../../src/js/media/flash.js';
+import document from 'global/document';
 
 q.module('Flash');
 
@@ -83,7 +84,7 @@ test('currentTime is the seek target during seeking', function() {
         el: function(){
           return {
             appendChild: noop
-          }
+          };
         }
       }, {
         'parentEl': parentEl

@@ -1,6 +1,5 @@
-q.module('Text Track Cue List');
+import TextTrackCueList from '../../../src/js/tracks/text-track-cue-list.js';
 
-let TTCL = require('../../../src/js/tracks/text-track-cue-list.js');
 let genericTracks = [
   {
     id: '1'
@@ -11,14 +10,16 @@ let genericTracks = [
   }
 ];
 
+q.module('Text Track Cue List');
+
 test('TextTrackCueList\'s length is set correctly', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   equal(ttcl.length, genericTracks.length, 'the length is ' + genericTracks.length);
 });
 
 test('can get cues by id', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   equal(ttcl.getCueById('1').id, 1, 'id "1" has id of "1"');
   equal(ttcl.getCueById('2').id, 2, 'id "2" has id of "2"');
@@ -27,7 +28,7 @@ test('can get cues by id', function() {
 });
 
 test('length is updated when new tracks are added or removed', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}]));
   equal(ttcl.length, genericTracks.length + 1, 'the length is ' + (genericTracks.length + 1));
@@ -41,7 +42,7 @@ test('length is updated when new tracks are added or removed', function() {
 });
 
 test('can access items by index', function() {
-  var ttcl = new TTCL(genericTracks),
+  var ttcl = new TextTrackCueList(genericTracks),
       i = 0,
       length = ttcl.length;
 
@@ -53,7 +54,7 @@ test('can access items by index', function() {
 });
 
 test('can access new items by index', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}]));
 
@@ -63,7 +64,7 @@ test('can access new items by index', function() {
 });
 
 test('cannot access removed items by index', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}, {id: '101'}]));
   equal(ttcl[3].id, '100', 'id of item at index 3 is 100');
@@ -76,7 +77,7 @@ test('cannot access removed items by index', function() {
 });
 
 test('new item available at old index', function() {
-  var ttcl = new TTCL(genericTracks);
+  var ttcl = new TextTrackCueList(genericTracks);
 
   ttcl.setCues_(genericTracks.concat([{id: '100'}]));
   equal(ttcl[3].id, '100', 'id of item at index 3 is 100');

@@ -1,3 +1,7 @@
+import document from 'global/document';
+import window from 'global/window';
+let navigator = window.navigator;
+
 /**
  * Global Player instance options, surfaced from vjs.Player.prototype.options_
  * vjs.options = vjs.Player.prototype.options_

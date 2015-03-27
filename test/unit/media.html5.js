@@ -1,7 +1,8 @@
 var player, tech, el;
 
-var Html5 = require('../../src/js/media/html5.js');
-var Lib = require('../../src/js/lib.js');
+import Html5 from '../../src/js/media/html5.js';
+import * as Lib from '../../src/js/lib.js';
+import document from 'global/document';
 
 q.module('HTML5', {
   'setup': function() {

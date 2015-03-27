@@ -1,6 +1,6 @@
-var TextTrackMenuItem = require('../../../src/js/tracks/text-track-controls').TextTrackMenuItem;
-var TestHelpers = require('../test-helpers.js');
-var Lib = require('../../../src/js/lib.js');
+import { TextTrackMenuItem } from '../../../src/js/tracks/text-track-controls';
+import TestHelpers from '../test-helpers.js';
+import * as Lib from '../../../src/js/lib.js';
 
 q.module('Text Track Controls');
 

@@ -1,6 +1,7 @@
-var Component = require('../../src/js/component.js');
-var Lib = require('../../src/js/lib.js');
-var Events = require('../../src/js/events.js');
+import Component from '../../src/js/component.js';
+import * as Lib from '../../src/js/lib.js';
+import * as Events from '../../src/js/events.js';
+import document from 'global/document';
 
 q.module('Component', {
   'setup': function() {

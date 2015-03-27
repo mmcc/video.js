@@ -1,6 +1,7 @@
-var PosterImage = require('../../src/js/poster.js');
-var Lib = require('../../src/js/lib.js');
-var TestHelpers = require('./test-helpers.js');
+import PosterImage from '../../src/js/poster.js';
+import * as Lib from '../../src/js/lib.js';
+import TestHelpers from './test-helpers.js';
+import document from 'global/document';
 
 q.module('PosterImage', {
   'setup': function(){
