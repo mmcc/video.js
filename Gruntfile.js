@@ -94,7 +94,7 @@ module.exports = function(grunt) {
       es6: ['test/es6.html']
     },
     watch: {
-      files: [ 'src/**/*', 'test/unit/*.js', 'Gruntfile.js' ],
+      files: [ 'src/**/*', 'test/unit/**/*.js', 'Gruntfile.js' ],
       tasks: 'dev'
     },
     connect: {
@@ -449,7 +449,7 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['pretask', 'dist']);
   // Development watch task
-  grunt.registerTask('dev', ['jshint', 'less', 'vjslanguages', 'build', 'usebanner', 'qunit:source']);
+  grunt.registerTask('dev', ['jshint', 'less', 'vjslanguages', 'browserify:dist', 'usebanner', 'karma:chrome']);
   grunt.registerTask('test-qunit', ['pretask', 'qunit']);
 
   grunt.registerTask('dist', 'Creating distribution', ['dist-copy', 'zip:dist']);

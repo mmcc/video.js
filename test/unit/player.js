@@ -1,11 +1,11 @@
-var Player = require('../../src/js/player.js');
-var videojs = require('../../src/js/core.js');
-var Options = require('../../src/js/options.js');
-var Lib = require('../../src/js/lib.js');
-var MediaError = require('../../src/js/media-error.js');
-var Html5 = require('../../src/js/media/html5.js');
-var TestHelpers = require('./test-helpers.js');
-var document = require('global/document');
+import Player from '../../src/js/player.js';
+import videojs from '../../src/js/core.js';
+import Options from '../../src/js/options.js';
+import * as Lib from '../../src/js/lib.js';
+import MediaError from '../../src/js/media-error.js';
+import Html5 from '../../src/js/media/html5.js';
+import TestHelpers from './test-helpers.js';
+import document from 'global/document';
 
 q.module('Player', {
   'setup': function() {

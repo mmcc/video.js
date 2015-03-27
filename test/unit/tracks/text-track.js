@@ -1,6 +1,6 @@
-var TextTrack = require('../../../src/js/tracks/text-track.js');
-var window = require('global/window');
-var TestHelpers = require('../test-helpers.js');
+import TextTrack from '../../../src/js/tracks/text-track.js';
+import window from 'global/window';
+import TestHelpers from '../test-helpers.js';
 
 var noop = Function.prototype;
 var defaultPlayer = {

@@ -1,6 +1,6 @@
-var Plugin = require('../../src/js/plugins.js');
-var Player = require('../../src/js/player.js');
-var TestHelpers = require('./test-helpers.js');
+import Plugin from '../../src/js/plugins.js';
+import Player from '../../src/js/player.js';
+import TestHelpers from './test-helpers.js';
 
 q.module('Plugins');
 

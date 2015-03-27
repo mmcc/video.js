@@ -1,5 +1,5 @@
-var Events = require('../../src/js/events.js');
-var document = require('global/document');
+import * as Events from '../../src/js/events.js';
+import document from 'global/document';
 
 q.module('Events');
 

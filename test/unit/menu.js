@@ -1,5 +1,5 @@
-var MenuButton = require('../../src/js/menu.js').MenuButton;
-var TestHelpers = require('./test-helpers.js');
+import { MenuButton } from '../../src/js/menu.js';
+import TestHelpers from './test-helpers.js';
 
 q.module('MenuButton');
 

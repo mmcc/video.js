@@ -1,5 +1,5 @@
-var Flash = require('../../src/js/media/flash.js');
-var document = require('global/document');
+import Flash from '../../src/js/media/flash.js';
+import document from 'global/document';
 
 q.module('Flash');
 

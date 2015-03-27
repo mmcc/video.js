@@ -1,4 +1,4 @@
-var CoreObject = require('../../src/js/core-object.js');
+import CoreObject from '../../src/js/core-object.js';
 
 q.module('Core Object');
 

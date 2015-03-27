@@ -1,8 +1,8 @@
-var videojs = require('../../src/js/core.js');
-var Player = require('../../src/js/player.js');
-var Lib = require('../../src/js/lib.js');
-var Options = require('../../src/js/options.js');
-var document = require('global/document');
+import videojs from '../../src/js/core.js';
+import Player from '../../src/js/player.js';
+import * as Lib from '../../src/js/lib.js';
+import Options from '../../src/js/options.js';
+import document from 'global/document';
 
 q.module('Core');
 

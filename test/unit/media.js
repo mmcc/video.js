@@ -1,6 +1,6 @@
 var noop = function() {}, clock, oldTextTracks;
 
-var MediaTechController = require('../../src/js/media/media.js');
+import MediaTechController from '../../src/js/media/media.js';
 
 q.module('Media Tech', {
   'setup': function() {
