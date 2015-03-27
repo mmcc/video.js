@@ -2,6 +2,7 @@ var player, tech, el;
 
 var Html5 = require('../../src/js/media/html5.js');
 var Lib = require('../../src/js/lib.js');
+var document = require('global/document');
 
 q.module('HTML5', {
   'setup': function() {

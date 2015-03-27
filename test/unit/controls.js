@@ -3,6 +3,7 @@ var MuteToggle = require('../../src/js/control-bar/mute-toggle.js');
 var PlaybackRateMenuButton = require('../../src/js/control-bar/playback-rate-menu-button.js').default;
 var Slider = require('../../src/js/slider.js').default;
 var TestHelpers = require('./test-helpers.js');
+var document = require('global/document');
 
 q.module('Controls');
 

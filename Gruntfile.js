@@ -445,16 +445,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
 
-  // grunt.loadTasks('./docs/tasks/');
-  // grunt.loadTasks('../videojs-doc-generator/tasks/');
-
   grunt.registerTask('pretask', ['jshint', 'less', 'vjslanguages', 'build', 'usebanner', 'uglify']);
   // Default task.
   grunt.registerTask('default', ['pretask', 'dist']);
   // Development watch task
   grunt.registerTask('dev', ['jshint', 'less', 'vjslanguages', 'build', 'usebanner', 'qunit:source']);
   grunt.registerTask('test-qunit', ['pretask', 'qunit']);
-  grunt.registerTask('test-es6', ['browserify:test', 'qunit:es6']);
 
   grunt.registerTask('dist', 'Creating distribution', ['dist-copy', 'zip:dist']);
 

@@ -1,5 +1,3 @@
-q.module('Tracks');
-
 var CaptionsButton = require('../../../src/js/tracks/text-track-controls.js').CaptionsButton;
 var SubtitlesButton = require('../../../src/js/tracks/text-track-controls.js').SubtitlesButton;
 var ChaptersButton = require('../../../src/js/tracks/text-track-controls.js').ChaptersButton;
@@ -11,6 +9,9 @@ var Component = require('../../../src/js/component.js');
 
 var Lib = require('../../../src/js/lib.js');
 var TestHelpers = require('../test-helpers.js');
+var document = require('global/document');
+
+q.module('Tracks');
 
 test('should place title list item into ul', function() {
   var player, chaptersButton;

@@ -2,6 +2,7 @@ var videojs = require('../../src/js/core.js');
 var Player = require('../../src/js/player.js');
 var Lib = require('../../src/js/lib.js');
 var Options = require('../../src/js/options.js');
+var document = require('global/document');
 
 q.module('Core');
 

@@ -1,4 +1,5 @@
 var Events = require('../../src/js/events.js');
+var document = require('global/document');
 
 q.module('Events');
 

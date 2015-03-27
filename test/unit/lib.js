@@ -1,4 +1,6 @@
 var Lib = require('../../src/js/lib.js');
+var window = require('global/window');
+var document = require('global/document');
 
 q.module('Lib', {
   'setup': function() {

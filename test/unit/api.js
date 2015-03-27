@@ -1,5 +1,6 @@
 var videojs = require('../../src/js/video.js');
 var TestHelpers = require('./test-helpers.js');
+var document = require('global/document');
 
 q.module('Player Minified');
 

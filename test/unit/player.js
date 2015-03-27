@@ -5,6 +5,7 @@ var Lib = require('../../src/js/lib.js');
 var MediaError = require('../../src/js/media-error.js');
 var Html5 = require('../../src/js/media/html5.js');
 var TestHelpers = require('./test-helpers.js');
+var document = require('global/document');
 
 q.module('Player', {
   'setup': function() {

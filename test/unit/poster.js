@@ -1,6 +1,7 @@
 var PosterImage = require('../../src/js/poster.js');
 var Lib = require('../../src/js/lib.js');
 var TestHelpers = require('./test-helpers.js');
+var document = require('global/document');
 
 q.module('PosterImage', {
   'setup': function(){

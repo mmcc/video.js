@@ -1,5 +1,7 @@
 var Player = require('../../src/js/player.js');
 var MediaFaker = require('./mediafaker.js');
+var window = require('global/window');
+var document = require('global/document');
 
 var TestHelpers = {
   makeTag: function(){
