@@ -406,8 +406,7 @@ module.exports = function(grunt) {
       }
     },
     coveralls: {
-      options: {
-        // LCOV coverage file relevant to every target
+      all: {
         src: 'test/coverage/lcov.info'
       }
     }
