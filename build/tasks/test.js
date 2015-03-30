@@ -11,8 +11,10 @@ module.exports = function(grunt) {
     tasksMinified,
     tasksMinifiedApi;
 
-    if (process.env.TRAVIS_PULL_REQUEST !== 'false') {
-      grunt.task.run(['karma:firefox']);
+    // I believe this was done originally because of security implications around running
+    // Saucelabs automatically on PRs.
+    if (process.env.TRAVIS && process.env.TRAVIS_PULL_REQUEST !== 'false') {
+      grunt.task.run(['karma:firefox', 'coveralls']);
     } else if (process.env.TRAVIS) {
       grunt.task.run(['karma:firefox', 'coveralls']);
       //Disabling saucelabs until we figure out how to make it run reliably.
