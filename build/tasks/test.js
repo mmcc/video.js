@@ -31,9 +31,7 @@ module.exports = function(grunt) {
       // supply arguments to this task. These arguments are either colon (`:`)
       // separated which is the default grunt separator for arguments, or they
       // are comma (`,`) separated to make it easier.
-      // The arguments are the names of which browsers you want. It'll then
-      // make sure you have the `minified` and `minified_api` for those browsers
-      // as well.
+      // The arguments are the names of which browsers you want.
       if (tasks.length === 0) {
         tasks.push('chrome');
       }
@@ -41,18 +39,6 @@ module.exports = function(grunt) {
         tasks = tasks[0].split(',');
       }
 
-      tasksMinified = tasks.slice();
-      tasksMinifiedApi = tasks.slice();
-
-      tasksMinified = tasksMinified.map(function(task) {
-        return 'minified_' + task;
-      });
-
-      tasksMinifiedApi = tasksMinifiedApi.map(function(task) {
-        return 'minified_api_' + task;
-      });
-
-      tasks = tasks.concat(tasksMinified).concat(tasksMinifiedApi);
       tasks = tasks.map(function(task) {
         return 'karma:' + task;
       });
