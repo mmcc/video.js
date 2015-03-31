@@ -73,7 +73,8 @@ test('should be able to access expected player API methods', function() {
 });
 
 test('should be able to access expected component API methods', function() {
-  var comp = videojs.getComponent('Component').create({ id: function(){ return 1; }, reportUserActivity: function(){} });
+  var Component = videojs.getComponent('Component');
+  var comp = new Component({ id: function(){ return 1; }, reportUserActivity: function(){} });
 
   // Component methods
   ok(comp.player, 'player exists');
