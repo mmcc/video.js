@@ -1,4 +1,4 @@
-.video-js .vjs-big-play-button {
+.vjs-big-play-button {
   font-size: 3em;
   line-height: $big-play-button--height;
   height: $big-play-button--height;
@@ -28,7 +28,7 @@
 }
 
 // Allow people that hate their poster image to center the big play button.
-.video-js.vjs-big-play-centered .vjs-big-play-button {
+.vjs-big-play-centered .vjs-big-play-button {
   top: 50%;
   left: 50%;
   margin-top: -($big-play-button--height / 2);
@@ -36,14 +36,14 @@
 }
 
 // Hide if controls are disabled, the video is playing, or native controls are used.
-.video-js.vjs-controls-disabled .vjs-big-play-button,
-.video-js.vjs-has-started .vjs-big-play-button,
-.video-js.vjs-using-native-controls .vjs-big-play-button {
+.vjs-controls-disabled .vjs-big-play-button,
+.vjs-has-started .vjs-big-play-button,
+.vjs-using-native-controls .vjs-big-play-button {
   display: none;
 }
 
 .video-js:hover .vjs-big-play-button,
-.video-js .vjs-big-play-button:focus {
+.vjs-big-play-button:focus {
   outline: 0;
   border-color: $primary-text;
 
