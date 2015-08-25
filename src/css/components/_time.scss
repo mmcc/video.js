@@ -5,6 +5,6 @@
 }
 
 /* We need the extra specificity that referencing .vjs-no-flex provides. */
-.vjs-current-time, .video-js.vjs-no-flex .vjs-current-time { display: none; }
-.vjs-duration, .video-js.vjs-no-flex .vjs-duration { display: none; }
+.vjs-current-time, .vjs-no-flex .vjs-current-time { display: none; }
+.vjs-duration, .vjs-no-flex .vjs-duration { display: none; }
 .vjs-time-divider { display: none; line-height: 3em; }

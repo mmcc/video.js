@@ -11,12 +11,12 @@
 }
 
 /* IE 8 + 9 Support */
-.vjs-has-started.vjs-no-flex .vjs-control-bar {
+&.vjs-has-started.vjs-no-flex .vjs-control-bar {
   display: table;
 }
 
 // Video has started playing
-.vjs-has-started .vjs-control-bar {
+&.vjs-has-started .vjs-control-bar {
   @include display-flex;
   visibility: visible;
   opacity: 1;
@@ -26,7 +26,7 @@
 }
 
 // Video has started playing AND user is inactive
-.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+&.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   visibility: hidden;
   opacity: 0;
 
@@ -34,14 +34,14 @@
   @include transition($trans);
 }
 
-.vjs-controls-disabled .vjs-control-bar,
-.vjs-using-native-controls .vjs-control-bar,
-.vjs-error .vjs-control-bar {
+&.vjs-controls-disabled .vjs-control-bar,
+&.vjs-using-native-controls .vjs-control-bar,
+&.vjs-error .vjs-control-bar {
   display: none;
 }
 
 // Don't hide the control bar if it's audio
-.vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+&.vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   opacity: 1;
   visibility: visible;
 }
@@ -52,6 +52,6 @@ fonts to show/hide properly.
 - Found in XP IE8 from http://modern.ie. Does not show up in "IE8 mode" in IE9
 */
 $ie8screen: "\0screen";
-.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
+&.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
   @media #{$ie8screen} { content: ""; }
 }
